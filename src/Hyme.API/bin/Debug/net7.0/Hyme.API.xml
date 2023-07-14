@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Hyme.API</name>
+    </assembly>
+    <members>
+        <member name="T:Hyme.API.Configurations.SwaggerConfiguration">
+            <summary>
+            Configure swagger options
+            </summary>
+        </member>
+        <member name="M:Hyme.API.Configurations.SwaggerConfiguration.#ctor(Microsoft.AspNetCore.Mvc.ApiExplorer.IApiVersionDescriptionProvider)">
+            <summary>
+            
+            </summary>
+            <param name="apiVersionDescriptionProvider"></param>
+        </member>
+        <member name="M:Hyme.API.Configurations.SwaggerConfiguration.Configure(Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenOptions)">
+            <summary>
+            
+            </summary>
+            <param name="options"></param>
+        </member>
+        <member name="T:Hyme.API.Controllers.V1.AuthenticationController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Hyme.API.Controllers.V1.AuthenticationController.#ctor(MediatR.ISender)">
+            <summary>
+            
+            </summary>
+            <param name="sender">MediatR</param>
+        </member>
+        <member name="M:Hyme.API.Controllers.V1.AuthenticationController.ConnectToWallet(Hyme.Application.Commands.Authentication.ConnectToWalletCommand)">
+            <summary>
+            Token
+            </summary>
+            <param name="walletRequest">Authentication Data</param>
+            <returns></returns>
+            <response code="400">Invalid Signature</response>
+            <response code="200">Success</response>
+        </member>
+        <member name="T:Hyme.API.Controllers.V1.UserProfilesController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Hyme.API.Controllers.V1.UserProfilesController.#ctor(MediatR.ISender)">
+            <summary>
+            
+            </summary>
+            <param name="sender">MediatR</param>
+        </member>
+        <member name="M:Hyme.API.Controllers.V1.UserProfilesController.GetMyProfile">
+            <summary>
+            Profile of currently login user
+            </summary>
+            <returns></returns>
+            <response code="404">Profile not found</response>
+            <response code="401">No user id in the token</response>
+            <response code="200">Success</response>
+        </member>
+        <member name="M:Hyme.API.Controllers.V1.UserProfilesController.UpdateProfile(Hyme.Application.DTOs.Request.UpdateUserProfileRequest)">
+            <summary>
+            Complete user profile
+            </summary>
+            <param name="updateRequest">update data</param>
+            <returns></returns>
+            <response code="404">User profile not found</response>
+            <response code="401">Invalid token</response>
+            <resopnse code="204">Update successful</resopnse>
+        </member>
+    </members>
+</doc>
