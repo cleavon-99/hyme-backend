@@ -32,7 +32,12 @@ namespace Hyme.Infrastructure.Data.Repositories
 
         public async Task<User?> GetByWalletAddress(WalletAddress walletAddress)
         {
-            return await _context.UserProfiles.Where(u => u.WalletAddress == walletAddress).FirstOrDefaultAsync();
+            return await _context.UserProfiles
+                .Where(u => u.WalletAddress == walletAddress)
+                .Include(u => u.Roles)
+                .FirstOrDefaultAsync();
         }
+
+       
     }
 }

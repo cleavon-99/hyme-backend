@@ -1,9 +1,4 @@
 ﻿using Hyme.Domain.ValueObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Hyme.Domain.Entities
 {
@@ -17,6 +12,10 @@ namespace Hyme.Domain.Entities
         public DateTime? DateLastLogout { get; private set; }
         public DateTime? DateLastUpdated { get; private set; }
         public DateTime? DateDeleted { get; private set; }
+        
+        public readonly List<Role> _roles = new();
+        public IReadOnlyCollection<Role> Roles => _roles;
+
         public string Ref { get; private set; } = null!;
 
         public User(
@@ -35,5 +34,9 @@ namespace Hyme.Domain.Entities
             Name = name;  
         }
 
+        public void AddRole(Role role)
+        {
+            _roles.Add(role);
+        }
     }
 }

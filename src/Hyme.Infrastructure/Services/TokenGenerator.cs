@@ -25,6 +25,11 @@ namespace Hyme.Infrastructure.Services
                 new Claim(JwtRegisteredClaimNames.Sub, userProfile.Id.Value.ToString()),
             };
 
+            foreach (var item in userProfile.Roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, item.Name));
+            }
+
             SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(_jwtSettings.Secret));
             JwtSecurityToken token = new(
                 issuer: _jwtSettings.Issuer,

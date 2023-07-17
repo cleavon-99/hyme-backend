@@ -2,6 +2,7 @@
 using Hyme.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Org.BouncyCastle.Crypto.Tls;
 
 namespace Hyme.Infrastructure.Configuration
 {
@@ -16,6 +17,7 @@ namespace Hyme.Infrastructure.Configuration
                 .HasConversion(walletAddress => walletAddress.Value, value => new WalletAddress(value));
             builder.Property(u => u.Name).HasMaxLength(50);
             builder.Property(u => u.WalletAddress).HasMaxLength(42);
+            builder.HasIndex(u => u.WalletAddress);
         }
     }
 }
