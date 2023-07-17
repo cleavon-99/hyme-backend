@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "e+3hq95xP0+3pZZkLhUiozWgzNOfznA1H2dAGC1sgs1SyM3qQVuCAXvUK0G92d3lJmy1cGH+vYZCIw9YuWvKnA==",
+  "dgSpecHash": "H7xjdcwAn99OmHOefPR/YTASIZc17zp0RWMHUsU6LoHHC0Ez7qM/kBLC0Mi8X9Re3kgvXD6Smiz/Iit+QbwEag==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Admin\\Desktop\\Github\\hyme\\hyme-backend\\HymeSolution\\src\\Hyme.Application\\Hyme.Application.csproj",
+  "projectFilePath": "C:\\Users\\Admin\\Desktop\\Github\\hyme-backend\\src\\Hyme.Application\\Hyme.Application.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Admin\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",

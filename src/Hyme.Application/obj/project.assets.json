@@ -568,11 +568,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Admin\\Desktop\\Github\\hyme\\hyme-backend\\HymeSolution\\src\\Hyme.Application\\Hyme.Application.csproj",
+      "projectUniqueName": "C:\\Users\\Admin\\Desktop\\Github\\hyme-backend\\src\\Hyme.Application\\Hyme.Application.csproj",
       "projectName": "Hyme.Application",
-      "projectPath": "C:\\Users\\Admin\\Desktop\\Github\\hyme\\hyme-backend\\HymeSolution\\src\\Hyme.Application\\Hyme.Application.csproj",
+      "projectPath": "C:\\Users\\Admin\\Desktop\\Github\\hyme-backend\\src\\Hyme.Application\\Hyme.Application.csproj",
       "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Admin\\Desktop\\Github\\hyme\\hyme-backend\\HymeSolution\\src\\Hyme.Application\\obj\\",
+      "outputPath": "C:\\Users\\Admin\\Desktop\\Github\\hyme-backend\\src\\Hyme.Application\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -589,11 +589,11 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "C:\\Users\\Admin\\Desktop\\Github\\hyme\\hyme-backend\\HymeSolution\\src\\Hyme.Domain\\Hyme.Domain.csproj": {
-              "projectPath": "C:\\Users\\Admin\\Desktop\\Github\\hyme\\hyme-backend\\HymeSolution\\src\\Hyme.Domain\\Hyme.Domain.csproj"
+            "C:\\Users\\Admin\\Desktop\\Github\\hyme-backend\\src\\Hyme.Domain\\Hyme.Domain.csproj": {
+              "projectPath": "C:\\Users\\Admin\\Desktop\\Github\\hyme-backend\\src\\Hyme.Domain\\Hyme.Domain.csproj"
             },
-            "C:\\Users\\Admin\\Desktop\\Github\\hyme\\hyme-backend\\HymeSolution\\src\\Hyme.Shared\\Hyme.Shared.csproj": {
-              "projectPath": "C:\\Users\\Admin\\Desktop\\Github\\hyme\\hyme-backend\\HymeSolution\\src\\Hyme.Shared\\Hyme.Shared.csproj"
+            "C:\\Users\\Admin\\Desktop\\Github\\hyme-backend\\src\\Hyme.Shared\\Hyme.Shared.csproj": {
+              "projectPath": "C:\\Users\\Admin\\Desktop\\Github\\hyme-backend\\src\\Hyme.Shared\\Hyme.Shared.csproj"
             }
           }
         }

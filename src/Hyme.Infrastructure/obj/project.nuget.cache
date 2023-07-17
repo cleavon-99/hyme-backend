@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "wG6bRRGidkTYLUZ4AhKm/YFS+uvOWI3Tatg1KTNCtn5hKSQaEzr26yItyc7P+lo6xfix8Yb5PZZViE+UjwcSiA==",
+  "dgSpecHash": "GOZVa3PyycP0115SneGSERwhsUF9+UwruWy9Vdxydl2mCS7cxcDk+WgGGBkTfJNBiWlQLQoh7eL9ThS4UMcn5w==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Admin\\Desktop\\Github\\hyme\\hyme-backend\\HymeSolution\\src\\Hyme.Infrastructure\\Hyme.Infrastructure.csproj",
+  "projectFilePath": "C:\\Users\\Admin\\Desktop\\Github\\hyme-backend\\src\\Hyme.Infrastructure\\Hyme.Infrastructure.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Admin\\.nuget\\packages\\adraffy.ensnormalize\\0.1.3\\adraffy.ensnormalize.0.1.3.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",

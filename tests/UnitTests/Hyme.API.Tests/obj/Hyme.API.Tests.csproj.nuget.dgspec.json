@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Admin\\Desktop\\Github\\hyme\\hyme-backend\\HymeSolution\\tests\\UnitTests\\Hyme.API.Tests\\Hyme.API.Tests.csproj": {}
+    "C:\\Users\\Admin\\Desktop\\Github\\hyme-backend\\tests\\UnitTests\\Hyme.API.Tests\\Hyme.API.Tests.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Admin\\Desktop\\Github\\hyme\\hyme-backend\\HymeSolution\\tests\\UnitTests\\Hyme.API.Tests\\Hyme.API.Tests.csproj": {
+    "C:\\Users\\Admin\\Desktop\\Github\\hyme-backend\\tests\\UnitTests\\Hyme.API.Tests\\Hyme.API.Tests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Admin\\Desktop\\Github\\hyme\\hyme-backend\\HymeSolution\\tests\\UnitTests\\Hyme.API.Tests\\Hyme.API.Tests.csproj",
+        "projectUniqueName": "C:\\Users\\Admin\\Desktop\\Github\\hyme-backend\\tests\\UnitTests\\Hyme.API.Tests\\Hyme.API.Tests.csproj",
         "projectName": "Hyme.API.Tests",
-        "projectPath": "C:\\Users\\Admin\\Desktop\\Github\\hyme\\hyme-backend\\HymeSolution\\tests\\UnitTests\\Hyme.API.Tests\\Hyme.API.Tests.csproj",
+        "projectPath": "C:\\Users\\Admin\\Desktop\\Github\\hyme-backend\\tests\\UnitTests\\Hyme.API.Tests\\Hyme.API.Tests.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Admin\\Desktop\\Github\\hyme\\hyme-backend\\HymeSolution\\tests\\UnitTests\\Hyme.API.Tests\\obj\\",
+        "outputPath": "C:\\Users\\Admin\\Desktop\\Github\\hyme-backend\\tests\\UnitTests\\Hyme.API.Tests\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",

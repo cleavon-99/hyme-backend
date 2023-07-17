@@ -13,16 +13,17 @@ namespace Hyme.Domain.Entities
         public string Name { get; private set; } = string.Empty;
         public WalletAddress WalletAddress { get; private set; }
         public DateTime DateCreated { get; private set; }
-        public DateTime DateLastLogin { get; private set; }
-        public DateTime DateLastLogout { get; private set; }
-        public DateTime DateLastUpdated { get; private set; }
-        public DateTime DateDeleted { get; private set; }
+        public DateTime? DateLastLogin { get; private set; }
+        public DateTime? DateLastLogout { get; private set; }
+        public DateTime? DateLastUpdated { get; private set; }
+        public DateTime? DateDeleted { get; private set; }
         public string Ref { get; private set; } = null!;
 
         public User(
             UserId id, 
-            WalletAddress walletAddress, 
-            DateTime dateCreated)
+            WalletAddress walletAddress,
+            DateTime dateCreated
+            )
         {
             Id = id;
             WalletAddress = walletAddress;

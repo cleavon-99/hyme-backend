@@ -5788,11 +5788,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Admin\\Desktop\\Github\\hyme\\hyme-backend\\HymeSolution\\tests\\UnitTests\\Hyme.Infrastructure.Tests\\Hyme.Infrastructure.Tests.csproj",
+      "projectUniqueName": "C:\\Users\\Admin\\Desktop\\Github\\hyme-backend\\tests\\UnitTests\\Hyme.Infrastructure.Tests\\Hyme.Infrastructure.Tests.csproj",
       "projectName": "Hyme.Infrastructure.Tests",
-      "projectPath": "C:\\Users\\Admin\\Desktop\\Github\\hyme\\hyme-backend\\HymeSolution\\tests\\UnitTests\\Hyme.Infrastructure.Tests\\Hyme.Infrastructure.Tests.csproj",
+      "projectPath": "C:\\Users\\Admin\\Desktop\\Github\\hyme-backend\\tests\\UnitTests\\Hyme.Infrastructure.Tests\\Hyme.Infrastructure.Tests.csproj",
       "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Admin\\Desktop\\Github\\hyme\\hyme-backend\\HymeSolution\\tests\\UnitTests\\Hyme.Infrastructure.Tests\\obj\\",
+      "outputPath": "C:\\Users\\Admin\\Desktop\\Github\\hyme-backend\\tests\\UnitTests\\Hyme.Infrastructure.Tests\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",

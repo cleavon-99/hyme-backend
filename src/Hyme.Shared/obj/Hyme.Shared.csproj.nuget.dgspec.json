@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Admin\\Desktop\\Github\\hyme\\hyme-backend\\HymeSolution\\src\\Hyme.Shared\\Hyme.Shared.csproj": {}
+    "C:\\Users\\Admin\\Desktop\\Github\\hyme-backend\\src\\Hyme.Shared\\Hyme.Shared.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Admin\\Desktop\\Github\\hyme\\hyme-backend\\HymeSolution\\src\\Hyme.Shared\\Hyme.Shared.csproj": {
+    "C:\\Users\\Admin\\Desktop\\Github\\hyme-backend\\src\\Hyme.Shared\\Hyme.Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Admin\\Desktop\\Github\\hyme\\hyme-backend\\HymeSolution\\src\\Hyme.Shared\\Hyme.Shared.csproj",
+        "projectUniqueName": "C:\\Users\\Admin\\Desktop\\Github\\hyme-backend\\src\\Hyme.Shared\\Hyme.Shared.csproj",
         "projectName": "Hyme.Shared",
-        "projectPath": "C:\\Users\\Admin\\Desktop\\Github\\hyme\\hyme-backend\\HymeSolution\\src\\Hyme.Shared\\Hyme.Shared.csproj",
+        "projectPath": "C:\\Users\\Admin\\Desktop\\Github\\hyme-backend\\src\\Hyme.Shared\\Hyme.Shared.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Admin\\Desktop\\Github\\hyme\\hyme-backend\\HymeSolution\\src\\Hyme.Shared\\obj\\",
+        "outputPath": "C:\\Users\\Admin\\Desktop\\Github\\hyme-backend\\src\\Hyme.Shared\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
