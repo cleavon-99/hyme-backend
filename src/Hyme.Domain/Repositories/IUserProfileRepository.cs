@@ -1,4 +1,5 @@
 ﻿using Hyme.Domain.Entities;
+using Hyme.Domain.Primitives;
 using Hyme.Domain.ValueObjects;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ namespace Hyme.Domain.Repositories
 {
     public interface IUserProfileRepository
     {
+        Task<List<User>> GetListAsync(PaginationFilter filter);
         Task<User?> GetByIdAsync(UserId id);
         Task<User?> GetByWalletAddress(WalletAddress walletAddress);
         Task AddAsync(User userProfile);

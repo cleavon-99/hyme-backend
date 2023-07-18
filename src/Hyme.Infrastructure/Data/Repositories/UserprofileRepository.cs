@@ -1,4 +1,5 @@
 ﻿using Hyme.Domain.Entities;
+using Hyme.Domain.Primitives;
 using Hyme.Domain.Repositories;
 using Hyme.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
@@ -38,6 +39,9 @@ namespace Hyme.Infrastructure.Data.Repositories
                 .FirstOrDefaultAsync();
         }
 
-       
+        public Task<List<User>> GetListAsync(PaginationFilter filter)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
