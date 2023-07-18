@@ -18,6 +18,7 @@ namespace Hyme.Infrastructure.Configuration
             builder.Property(u => u.Name).HasMaxLength(50);
             builder.Property(u => u.WalletAddress).HasMaxLength(42);
             builder.HasIndex(u => u.WalletAddress);
+            builder.HasMany(u => u.Roles).WithMany(r => r.Users);
         }
     }
 }
