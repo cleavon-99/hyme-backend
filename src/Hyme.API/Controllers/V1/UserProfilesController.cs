@@ -31,8 +31,28 @@ namespace Hyme.API.Controllers.V1
             _sender = sender;
         }
 
+
         /// <summary>
-        /// Profile of currently login user
+        /// List of users
+        /// </summary>
+        /// <param name="paginationRequest">Page number and page size</param>
+        /// <returns></returns>
+        /// <response code="200">Success</response>
+        /// <response code="400">When page number or papge size cannot be less than 1</response>
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<PagedResponse<UserResponse>>> GetUsers([FromQuery] PaginationRequest paginationRequest)
+        {
+            if (paginationRequest.PageNumber < 1 || paginationRequest.PageSize < 1)
+                return BadRequest("Page number or page size cannot be 0 or negative number");
+
+            PagedResponse<UserResponse> response = await _sender.Send(new GetUsersQuery(paginationRequest.PageNumber, paginationRequest.PageSize));
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Profile of currently loged-in user
         /// </summary>
         /// <returns></returns>
         /// <response code="404">Profile not found</response>
@@ -42,12 +62,12 @@ namespace Hyme.API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<UserProfileResponse>> GetMyProfile()
+        public async Task<ActionResult<UserResponse>> GetMyProfile()
         {
             string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)
                 return Unauthorized();
-            UserProfileResponse? userProfile = await _sender.Send(new GetUserProfleByIdQuery(Guid.Parse(userId)), HttpContext.RequestAborted);
+            UserResponse? userProfile = await _sender.Send(new GetUserProfleByIdQuery(Guid.Parse(userId)), HttpContext.RequestAborted);
             if (userProfile is null)
                 return NotFound();
             return Ok(userProfile);

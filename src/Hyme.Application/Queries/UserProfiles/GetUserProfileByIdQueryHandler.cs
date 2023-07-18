@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Hyme.Application.Queries.UserProfiles
 {
-    public class GetUserProfileByIdQueryHandler : IRequestHandler<GetUserProfleByIdQuery, UserProfileResponse?>
+    public class GetUserProfileByIdQueryHandler : IRequestHandler<GetUserProfleByIdQuery, UserResponse?>
     {
         private readonly IUserProfileRepository _userProfileRepository;
         private readonly IMapper _mapper;
@@ -20,13 +20,13 @@ namespace Hyme.Application.Queries.UserProfiles
             _mapper = mapper;
         }
 
-        public async Task<UserProfileResponse?> Handle(GetUserProfleByIdQuery request, CancellationToken cancellationToken)
+        public async Task<UserResponse?> Handle(GetUserProfleByIdQuery request, CancellationToken cancellationToken)
         {
             User? userProfile = await _userProfileRepository.GetByIdAsync(new UserId(request.Id));
             if (userProfile is null)
                 return null;
 
-            return _mapper.Map<UserProfileResponse>(userProfile);
+            return _mapper.Map<UserResponse>(userProfile);
         }
     }
 }

@@ -12,17 +12,14 @@ namespace Hyme.Domain.Entities
         public DateTime? DateLastLogout { get; private set; }
         public DateTime? DateLastUpdated { get; private set; }
         public DateTime? DateDeleted { get; private set; }
-        
         public readonly List<Role> _roles = new();
         public IReadOnlyCollection<Role> Roles => _roles;
-
         public string Ref { get; private set; } = null!;
 
         public User(
             UserId id, 
             WalletAddress walletAddress,
-            DateTime dateCreated
-            )
+            DateTime dateCreated)
         {
             Id = id;
             WalletAddress = walletAddress;

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Hyme.Application.DTOs.Response
 {
-    public class UserProfileResponse
+    public class UserResponse
     {
         public Guid Id { get; set; }
         public string? Name { get; set; }

@@ -12,8 +12,7 @@ namespace Hyme.Application.DTOs.Response
         public int PageNumber { get; private set; }
         public int PageSize { get; private set; }
         public bool HasPreviousPage { get; private set; }
-        public bool HasNextpage { get; }
-        public bool HasNextPage { get; private set; }
+        public bool HasNextpage { get; private set; }
 
         private PagedResponse(List<T> data, int pageNumber, int pageSize, bool hasPreviousPage, bool hasNextpage)
         {

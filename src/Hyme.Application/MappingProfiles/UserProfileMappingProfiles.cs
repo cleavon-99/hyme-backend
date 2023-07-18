@@ -8,7 +8,7 @@ namespace Hyme.Application.MappingProfiles
     {
         public UserProfileMappingProfiles()
         {
-            CreateMap<User, UserProfileResponse>()
+            CreateMap<User, UserResponse>()
                 .ForMember(u => u.Id, options => options.MapFrom(s => s.Id.Value))
                 .ForMember(u => u.WalletAddress, options => options.MapFrom(s => s.WalletAddress.Value));
         }

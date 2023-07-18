@@ -3,15 +3,15 @@ using Hyme.Domain.Primitives;
 using Hyme.Domain.Repositories;
 using Hyme.Domain.ValueObjects;
 
-namespace Hyme.Infrastructure.Data.Repositories
+namespace Hyme.Infrastructure.Data.Repositories.Mock
 {
     public class MockUserProfileRepository : IUserProfileRepository
     {
         private readonly List<User> _userProfiles = new();
-        
+
         public MockUserProfileRepository()
         {
-            
+
         }
 
 
@@ -33,7 +33,7 @@ namespace Hyme.Infrastructure.Data.Repositories
 
         public Task<List<User>> GetListAsync(PaginationFilter filter)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(_userProfiles.Skip(filter.Skip).Take(filter.PageSize).ToList());
         }
     }
 }
