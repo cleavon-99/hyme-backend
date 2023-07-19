@@ -24,4 +24,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Hyme.API\Hyme.API.csproj" />
+  </ItemGroup>
+
 </Project>

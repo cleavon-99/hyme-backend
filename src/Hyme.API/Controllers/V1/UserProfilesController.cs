@@ -5,7 +5,6 @@ using Hyme.Application.DTOs.Response;
 using Hyme.Application.Queries.UserProfiles;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 

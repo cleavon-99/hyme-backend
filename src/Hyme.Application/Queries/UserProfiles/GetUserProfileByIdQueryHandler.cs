@@ -4,6 +4,7 @@ using Hyme.Domain.Entities;
 using Hyme.Domain.Repositories;
 using Hyme.Domain.ValueObjects;
 using MediatR;
+using System.Security.Claims;
 
 namespace Hyme.Application.Queries.UserProfiles
 {
@@ -23,6 +24,7 @@ namespace Hyme.Application.Queries.UserProfiles
         public async Task<UserResponse?> Handle(GetUserProfleByIdQuery request, CancellationToken cancellationToken)
         {
             User? userProfile = await _userProfileRepository.GetByIdAsync(new UserId(request.Id));
+            
             if (userProfile is null)
                 return null;
 
