@@ -1,2 +1,2 @@
 # Hyme API
-[Visit swagger documentation](https://api.hyme.network/swagger)
+[Visit swagger documentation](https://hyme-development.azurewebsites.net/swagger)
