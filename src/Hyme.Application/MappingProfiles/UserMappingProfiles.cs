@@ -4,9 +4,9 @@ using Hyme.Domain.Entities;
 
 namespace Hyme.Application.MappingProfiles
 {
-    public class UserProfileMappingProfiles : Profile
+    public class UserMappingProfiles : Profile
     {
-        public UserProfileMappingProfiles()
+        public UserMappingProfiles()
         {
             CreateMap<User, UserResponse>()
                 .ForMember(u => u.Id, options => options.MapFrom(s => s.Id.Value))
