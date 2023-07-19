@@ -35,7 +35,7 @@ namespace Hyme.Infrastructure.Services
                 issuer: _jwtSettings.Issuer,
                 audience: _jwtSettings.Audience,
                 claims: claims,
-                expires: DateTime.UtcNow.AddDays(_jwtSettings.ExpiryDays),
+                expires: DateTime.UtcNow.Add(_jwtSettings.TokenLifeSpan),
                 signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256));
             
             string tokenAsString = new JwtSecurityTokenHandler().WriteToken(token);

@@ -14,12 +14,12 @@ using System.Security.Claims;
 
 namespace Hyme.API.Tests.Controllers.V1
 {
-    public class UserProfilesControllerTests
+    public class UsersControllerTests
     {
 
         private readonly Mock<ISender> _sender;
 
-        public UserProfilesControllerTests()
+        public UsersControllerTests()
         {
             _sender = new();    
         }
@@ -29,7 +29,7 @@ namespace Hyme.API.Tests.Controllers.V1
         {
             //Arrange
             PaginationRequest request = new() { PageNumber = 0, PageSize = 0 };
-            var sut = new UserProfilesController(_sender.Object);
+            var sut = new UsersController(_sender.Object);
             sut.ControllerContext.HttpContext = new DefaultHttpContext();
             
             //Act
@@ -45,7 +45,7 @@ namespace Hyme.API.Tests.Controllers.V1
             //Arrange
             PaginationRequest request = new();
             GetUsersQuery query = new(request.PageNumber, request.PageSize);          
-            var sut = new UserProfilesController(_sender.Object);
+            var sut = new UsersController(_sender.Object);
             sut.ControllerContext.HttpContext = new DefaultHttpContext();
             _sender.Setup(s => s.Send(query, sut.HttpContext.RequestAborted));
 
@@ -62,7 +62,7 @@ namespace Hyme.API.Tests.Controllers.V1
             //Arrange
             PaginationRequest request = new();
             GetUsersQuery query = new(request.PageNumber, request.PageSize);
-            var sut = new UserProfilesController(_sender.Object);
+            var sut = new UsersController(_sender.Object);
             sut.ControllerContext.HttpContext = new DefaultHttpContext();
             _sender.Setup(s => s.Send(query, sut.HttpContext.RequestAborted));
 
@@ -78,7 +78,7 @@ namespace Hyme.API.Tests.Controllers.V1
         public async Task GetMyProfile_ShouldReturn401Unauthorize_WhenNoIdFoundInTheClaims()
         {
             //Arrange
-            var sut = new UserProfilesController(_sender.Object);
+            var sut = new UsersController(_sender.Object);
             sut.ControllerContext.HttpContext = new DefaultHttpContext();
 
             //Act
@@ -99,7 +99,7 @@ namespace Hyme.API.Tests.Controllers.V1
                 new Claim(ClaimTypes.NameIdentifier, userId)
             }));
             
-            var sut = new UserProfilesController(_sender.Object);
+            var sut = new UsersController(_sender.Object);
             
             sut.ControllerContext.HttpContext = new DefaultHttpContext() 
             {
@@ -125,7 +125,7 @@ namespace Hyme.API.Tests.Controllers.V1
             {
                 new Claim(ClaimTypes.NameIdentifier, userId)
             }));
-            var sut = new UserProfilesController(_sender.Object);
+            var sut = new UsersController(_sender.Object);
             sut.ControllerContext.HttpContext = new DefaultHttpContext()
             {
                 User = user
@@ -149,7 +149,7 @@ namespace Hyme.API.Tests.Controllers.V1
             {
                 new Claim(ClaimTypes.NameIdentifier, userId)
             }));
-            var sut = new UserProfilesController(_sender.Object);
+            var sut = new UsersController(_sender.Object);
             sut.ControllerContext.HttpContext = new DefaultHttpContext()
             {
                 User = user
@@ -170,7 +170,7 @@ namespace Hyme.API.Tests.Controllers.V1
         {
             //Arrange
             UpdateUserProfileRequest request = new() { Name = "Arjay" };
-            var sut = new UserProfilesController(_sender.Object);
+            var sut = new UsersController(_sender.Object);
             sut.ControllerContext.HttpContext = new DefaultHttpContext();
 
             //Act
@@ -193,7 +193,7 @@ namespace Hyme.API.Tests.Controllers.V1
             {
                 new Claim(ClaimTypes.NameIdentifier, userId.ToString())
             }));
-            var sut = new UserProfilesController(_sender.Object);     
+            var sut = new UsersController(_sender.Object);     
             sut.ControllerContext.HttpContext = new DefaultHttpContext() { User = user};
             _sender.Setup(s => s.Send(command, sut.HttpContext.RequestAborted)).ReturnsAsync(Result.Fail(new UserNotFoundError(userId)));
             //Act
@@ -216,7 +216,7 @@ namespace Hyme.API.Tests.Controllers.V1
             {
                 new Claim(ClaimTypes.NameIdentifier, userId.ToString())
             }));
-            var sut = new UserProfilesController(_sender.Object);
+            var sut = new UsersController(_sender.Object);
             sut.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
             _sender.Setup(s => s.Send(command, sut.HttpContext.RequestAborted)).ReturnsAsync(Result.Fail(new UserNotFoundError(userId)));
             //Act
@@ -239,7 +239,7 @@ namespace Hyme.API.Tests.Controllers.V1
             {
                 new Claim(ClaimTypes.NameIdentifier, userId.ToString())
             }));
-            var sut = new UserProfilesController(_sender.Object);
+            var sut = new UsersController(_sender.Object);
             sut.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
             _sender.Setup(s => s.Send(command, sut.HttpContext.RequestAborted)).ReturnsAsync(Result.Ok());
             //Act

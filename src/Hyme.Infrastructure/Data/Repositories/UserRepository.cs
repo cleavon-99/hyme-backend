@@ -23,25 +23,28 @@ namespace Hyme.Infrastructure.Data.Repositories
 
         public async Task AddAsync(User userProfile)
         {
-            await _context.UserProfiles.AddAsync(userProfile);
+            await _context.Users.AddAsync(userProfile);
         }
 
         public async Task<User?> GetByIdAsync(UserId id)
         {
-            return await _context.UserProfiles.FindAsync(id);
+            return await _context.Users.FindAsync(id);
         }
 
         public async Task<User?> GetByWalletAddress(WalletAddress walletAddress)
         {
-            return await _context.UserProfiles
+            return await _context.Users
                 .Where(u => u.WalletAddress == walletAddress)
                 .Include(u => u.Roles)
                 .FirstOrDefaultAsync();
         }
 
-        public Task<List<User>> GetListAsync(PaginationFilter filter)
+        public async Task<List<User>> GetListAsync(PaginationFilter filter)
         {
-            throw new NotImplementedException();
+            return await _context.Users
+                .Skip(filter.Skip)
+                .Take(filter.PageSize)
+                .ToListAsync();
         }
     }
 }

@@ -6,7 +6,7 @@ using Org.BouncyCastle.Crypto.Tls;
 
 namespace Hyme.Infrastructure.Configuration
 {
-    public class UserprofileConfiguration : IEntityTypeConfiguration<User>
+    public class UserConfiguration : IEntityTypeConfiguration<User>
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
@@ -16,9 +16,14 @@ namespace Hyme.Infrastructure.Configuration
             builder.Property(u => u.WalletAddress)
                 .HasConversion(walletAddress => walletAddress.Value, value => new WalletAddress(value));
             builder.Property(u => u.Name).HasMaxLength(50);
-            builder.Property(u => u.WalletAddress).HasMaxLength(42);
-            builder.HasIndex(u => u.WalletAddress);
-            builder.HasMany(u => u.Roles).WithMany(r => r.Users);
+            builder.Property(u => u.WalletAddress).HasMaxLength(42);  
+            builder.HasMany(u => u.Roles)
+                .WithMany(r => r.Users)
+                .UsingEntity("UsersRoles");
+            builder.HasOne(u => u.Project)
+                .WithOne(p => p.Owner)
+                .HasForeignKey<Project>(p => p.OwnerId);
+            builder.HasIndex(u => u.WalletAddress).IsUnique();
         }
     }
 }

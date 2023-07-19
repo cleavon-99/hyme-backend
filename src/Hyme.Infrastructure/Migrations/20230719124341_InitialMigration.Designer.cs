@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Hyme.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230718150350_InitialMigration")]
+    [Migration("20230719124341_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -24,6 +24,54 @@ namespace Hyme.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("Hyme.Domain.Entities.Project", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Banner")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DateDeleted")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DateLived")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DateModified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Logo")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<Guid>("OwnerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ProjectDescription")
+                        .IsRequired()
+                        .HasMaxLength(5000)
+                        .HasColumnType("character varying(5000)");
+
+                    b.Property<string>("ShortDescription")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerId")
+                        .IsUnique();
+
+                    b.ToTable("Projects");
+                });
 
             modelBuilder.Entity("Hyme.Domain.Entities.Role", b =>
                 {
@@ -37,17 +85,17 @@ namespace Hyme.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Role");
+                    b.ToTable("Roles");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("70ae965a-7334-4e4c-9f55-eae713192add"),
+                            Id = new Guid("734cf06d-1498-47ef-92b5-b2d49a80243e"),
                             Name = "Super Admin"
                         },
                         new
                         {
-                            Id = new Guid("9ed32544-0191-4dfa-88fe-993681b00872"),
+                            Id = new Guid("456cce11-a9b7-4c26-8b20-4c9536e79c89"),
                             Name = "Admin"
                         });
                 });
@@ -77,10 +125,6 @@ namespace Hyme.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<string>("Ref")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("WalletAddress")
                         .IsRequired()
                         .HasMaxLength(42)
@@ -88,12 +132,13 @@ namespace Hyme.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("WalletAddress");
+                    b.HasIndex("WalletAddress")
+                        .IsUnique();
 
-                    b.ToTable("UserProfiles");
+                    b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("RoleUser", b =>
+            modelBuilder.Entity("UsersRoles", b =>
                 {
                     b.Property<Guid>("RolesId")
                         .HasColumnType("uuid");
@@ -105,10 +150,21 @@ namespace Hyme.Infrastructure.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("RoleUser");
+                    b.ToTable("UsersRoles");
                 });
 
-            modelBuilder.Entity("RoleUser", b =>
+            modelBuilder.Entity("Hyme.Domain.Entities.Project", b =>
+                {
+                    b.HasOne("Hyme.Domain.Entities.User", "Owner")
+                        .WithOne("Project")
+                        .HasForeignKey("Hyme.Domain.Entities.Project", "OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("UsersRoles", b =>
                 {
                     b.HasOne("Hyme.Domain.Entities.Role", null)
                         .WithMany()
@@ -121,6 +177,11 @@ namespace Hyme.Infrastructure.Migrations
                         .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Hyme.Domain.Entities.User", b =>
+                {
+                    b.Navigation("Project");
                 });
 #pragma warning restore 612, 618
         }

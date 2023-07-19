@@ -13,6 +13,6 @@ namespace Hyme.Application.Commands.Authentication
         public string Secret { get; set; } = null!;
         public string Issuer { get; set; } = null!;
         public string Audience { get; set; } = null!;
-        public int ExpiryDays { get; set; }
+        public TimeSpan TokenLifeSpan { get; set; }
     }
 }

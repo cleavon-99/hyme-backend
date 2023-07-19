@@ -16,6 +16,8 @@ namespace Hyme.Infrastructure.Data
             base.OnModelCreating(modelBuilder);
         }
 
-        public DbSet<User> UserProfiles { get; set; } = null!;
+        public DbSet<User> Users { get; set; } = null!;
+        public DbSet<Role> Roles { get; set; } = null!;
+        public DbSet<Project> Projects { get; set; } = null!;
     }
 }

@@ -17,7 +17,7 @@ namespace Hyme.API.Controllers.V1
     [Route("userProfiles")]
     [ApiController]
     [Authorize]
-    public class UserProfilesController : ControllerBase
+    public class UsersController : ControllerBase
     {
         private readonly ISender _sender;
 
@@ -25,7 +25,7 @@ namespace Hyme.API.Controllers.V1
         /// 
         /// </summary>
         /// <param name="sender">MediatR</param>
-        public UserProfilesController(ISender sender)
+        public UsersController(ISender sender)
         {
             _sender = sender;
         }
@@ -39,6 +39,7 @@ namespace Hyme.API.Controllers.V1
         /// <response code="200">Success</response>
         /// <response code="400">When page number or papge size cannot be less than 1</response>
         [HttpGet]
+        [Authorize(Roles = "Admin, Super Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<PagedResponse<UserResponse>>> GetUsers([FromQuery] PaginationRequest paginationRequest)
