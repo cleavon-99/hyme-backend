@@ -9,10 +9,10 @@ namespace Hyme.Application.Queries.UserProfiles
 {
     public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, PagedResponse<UserResponse>>
     {
-        private readonly IUserProfileRepository _userProfileRepository;
+        private readonly IUserRepository _userProfileRepository;
         private readonly IMapper _mapper;
 
-        public GetUsersQueryHandler(IUserProfileRepository userProfileRepository, IMapper mapper)
+        public GetUsersQueryHandler(IUserRepository userProfileRepository, IMapper mapper)
         {
             _userProfileRepository = userProfileRepository;
             _mapper = mapper;

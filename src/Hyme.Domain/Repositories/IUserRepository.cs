@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Hyme.Domain.Repositories
 {
-    public interface IUserProfileRepository
+    public interface IUserRepository
     {
         Task<List<User>> GetListAsync(PaginationFilter filter);
         Task<User?> GetByIdAsync(UserId id);

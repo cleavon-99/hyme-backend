@@ -6,11 +6,6 @@ using Hyme.Domain.Repositories;
 using Hyme.Domain.ValueObjects;
 using Hyme.Shared.Errors;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Hyme.Application.Commands.Authentication
 {
@@ -18,13 +13,13 @@ namespace Hyme.Application.Commands.Authentication
     {
         private readonly IWalletValidationService _walletValidationService;
         private readonly ITokenGenerator _tokenGenerator;
-        private readonly IUserProfileRepository _userProfileRepository;
+        private readonly IUserRepository _userProfileRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public ConnectToWalletCommandHandler(
             IWalletValidationService walletValidationService, 
             ITokenGenerator tokenGenerator,
-            IUserProfileRepository userProfileRepository,
+            IUserRepository userProfileRepository,
             IUnitOfWork unitOfWork)
         {
             _walletValidationService = walletValidationService;

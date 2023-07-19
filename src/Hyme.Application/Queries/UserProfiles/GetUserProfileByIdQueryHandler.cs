@@ -10,11 +10,11 @@ namespace Hyme.Application.Queries.UserProfiles
 {
     public class GetUserProfileByIdQueryHandler : IRequestHandler<GetUserProfleByIdQuery, UserResponse?>
     {
-        private readonly IUserProfileRepository _userProfileRepository;
+        private readonly IUserRepository _userProfileRepository;
         private readonly IMapper _mapper;
 
         public GetUserProfileByIdQueryHandler(
-            IUserProfileRepository userProfileRepository,
+            IUserRepository userProfileRepository,
             IMapper mapper)
         {
             _userProfileRepository = userProfileRepository;

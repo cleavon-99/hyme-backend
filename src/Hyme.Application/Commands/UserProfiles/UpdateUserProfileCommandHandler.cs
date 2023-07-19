@@ -4,21 +4,16 @@ using Hyme.Domain.Repositories;
 using Hyme.Domain.ValueObjects;
 using Hyme.Shared.Errors;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Hyme.Application.Commands.UserProfiles
 {
     public class UpdateUserProfileCommandHandler : IRequestHandler<UpdateUserProfileCommand, Result>
     {
-        private readonly IUserProfileRepository _userProfileRepository;
+        private readonly IUserRepository _userProfileRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public UpdateUserProfileCommandHandler(
-            IUserProfileRepository userProfileRepository, 
+            IUserRepository userProfileRepository, 
             IUnitOfWork unitOfWork)
         {
             _userProfileRepository = userProfileRepository;
@@ -30,7 +25,7 @@ namespace Hyme.Application.Commands.UserProfiles
         {
             User? userProfile = await _userProfileRepository.GetByIdAsync(new UserId(request.UserProfileId));
             if (userProfile is null)
-                return Result.Fail(new UserProfileNotFoundError(request.UserProfileId));
+                return Result.Fail(new UserNotFoundError(request.UserProfileId));
 
             userProfile.Update(request.Name);
             await _unitOfWork.SaveChangesAsync(cancellationToken);

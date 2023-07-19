@@ -5,7 +5,7 @@ using Hyme.Domain.ValueObjects;
 
 namespace Hyme.Infrastructure.Data.Repositories.Mock
 {
-    public class MockUserProfileRepository : IUserProfileRepository
+    public class MockUserProfileRepository : IUserRepository
     {
         private readonly List<User> _userProfiles = new();
 

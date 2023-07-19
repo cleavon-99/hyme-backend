@@ -195,7 +195,7 @@ namespace Hyme.API.Tests.Controllers.V1
             }));
             var sut = new UserProfilesController(_sender.Object);     
             sut.ControllerContext.HttpContext = new DefaultHttpContext() { User = user};
-            _sender.Setup(s => s.Send(command, sut.HttpContext.RequestAborted)).ReturnsAsync(Result.Fail(new UserProfileNotFoundError(userId)));
+            _sender.Setup(s => s.Send(command, sut.HttpContext.RequestAborted)).ReturnsAsync(Result.Fail(new UserNotFoundError(userId)));
             //Act
             var result = await sut.UpdateProfile(request);
 
@@ -218,7 +218,7 @@ namespace Hyme.API.Tests.Controllers.V1
             }));
             var sut = new UserProfilesController(_sender.Object);
             sut.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
-            _sender.Setup(s => s.Send(command, sut.HttpContext.RequestAborted)).ReturnsAsync(Result.Fail(new UserProfileNotFoundError(userId)));
+            _sender.Setup(s => s.Send(command, sut.HttpContext.RequestAborted)).ReturnsAsync(Result.Fail(new UserNotFoundError(userId)));
             //Act
             var result = await sut.UpdateProfile(request);
 

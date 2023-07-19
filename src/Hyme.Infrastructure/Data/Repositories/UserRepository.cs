@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace Hyme.Infrastructure.Data.Repositories
 {
-    public class UserprofileRepository : IUserProfileRepository
+    public class UserRepository : IUserRepository
     {
         private readonly ApplicationDbContext _context;
 
-        public UserprofileRepository(ApplicationDbContext context)
+        public UserRepository(ApplicationDbContext context)
         {
             _context = context;
         }
