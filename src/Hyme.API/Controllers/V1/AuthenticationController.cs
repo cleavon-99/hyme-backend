@@ -1,6 +1,7 @@
 ﻿using FluentResults;
 using Hyme.Application.Commands.Authentication;
 using Hyme.Application.DTOs.Response;
+using Hyme.Application.Errors;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -38,11 +39,19 @@ namespace Hyme.API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<AuthenticationResponse>> ConnectToWallet([FromBody]ConnectToWalletCommand walletRequest)
         {
-            //Validate walletRequest all field should not be empty
-
             Result<AuthenticationResponse> result = await _sender.Send(walletRequest, HttpContext.RequestAborted);
             if (result.IsFailed)
+            {
+                if (result.HasError(out IEnumerable<ValidationError> errors))
+                {
+                    foreach (var e in errors)
+                    {
+                        ModelState.AddModelError(e.PropertyName, e.Message);
+                    }
+                    return ValidationProblem(ModelState);
+                }
                 return BadRequest("Invalid signature");
+            }      
             return Ok(result.Value);
         }
     }

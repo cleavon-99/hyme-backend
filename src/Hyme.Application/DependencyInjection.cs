@@ -1,11 +1,11 @@
-﻿using Hyme.Application.Services;
+﻿using FluentResults;
+using FluentValidation;
+using Hyme.Application.Behaviors;
+using Hyme.Application.Commands.Authentication;
+using Hyme.Application.DTOs.Response;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Hyme.Application
 {
@@ -15,6 +15,8 @@ namespace Hyme.Application
         {
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddMediatR(g => g.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+            services.AddScoped(typeof(IPipelineBehavior<,>) , typeof(ValidationBehavior<,>));        
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             return services;
         }
     }

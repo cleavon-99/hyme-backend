@@ -1,4 +1,4 @@
-﻿namespace Hyme.Application.Commands.Authentication
+﻿namespace Hyme.Application.Common
 {
     public class JwtSettings
     {

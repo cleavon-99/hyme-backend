@@ -1,6 +1,6 @@
 using Hyme.API.Configurations;
 using Hyme.Application;
-using Hyme.Application.Commands.Authentication;
+using Hyme.Application.Common;
 using Hyme.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.Versioning;

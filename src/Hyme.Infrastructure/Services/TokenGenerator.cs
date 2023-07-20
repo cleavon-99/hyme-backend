@@ -1,4 +1,4 @@
-﻿using Hyme.Application.Commands.Authentication;
+﻿using Hyme.Application.Common;
 using Hyme.Application.Services;
 using Hyme.Domain.Entities;
 using Microsoft.Extensions.Options;

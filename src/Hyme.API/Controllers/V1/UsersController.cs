@@ -2,6 +2,7 @@
 using Hyme.Application.Commands.UserProfiles;
 using Hyme.Application.DTOs.Request;
 using Hyme.Application.DTOs.Response;
+using Hyme.Application.Errors;
 using Hyme.Application.Queries.UserProfiles;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -93,8 +94,18 @@ namespace Hyme.API.Controllers.V1
 
             Result result = await _sender.Send(new UpdateUserProfileCommand(Guid.Parse(userId), updateRequest.Name));
             if (result.IsFailed)
+            {
+                if (result.HasError(out IEnumerable<ValidationError> errors))
+                {
+                    foreach (var e in errors)
+                    {
+                        ModelState.AddModelError(e.PropertyName, e.Message);
+                    }
+                    return ValidationProblem(ModelState);
+                }
                 return NotFound();
-
+            }
+           
             return NoContent();
         }
 
