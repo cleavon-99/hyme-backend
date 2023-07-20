@@ -7,7 +7,6 @@ using Hyme.Domain.Primitives;
 using Hyme.Domain.Repositories;
 using Hyme.Domain.ValueObjects;
 using Moq;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Hyme.Application.Tests.Queries.Projects
 {

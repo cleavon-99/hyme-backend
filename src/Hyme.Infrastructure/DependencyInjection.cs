@@ -14,10 +14,12 @@ namespace Hyme.Infrastructure
         public static IServiceCollection AddInfractructure(this IServiceCollection services, ConfigurationManager configuration)
         {
             services.AddSingleton<IWalletValidationService, WalletValidationService>();
-            services.AddScoped<IUserRepository, UserRepository>();
             services.AddSingleton<ITokenGenerator, TokenGenerator>();
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IProjectRepository, ProjectRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
