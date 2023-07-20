@@ -23,7 +23,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Hyme.Application\Hyme.Application.csproj" />
     <ProjectReference Include="..\Hyme.Infrastructure\Hyme.Infrastructure.csproj" />
-    <ProjectReference Include="..\Hyme.Shared\Hyme.Shared.csproj" />
   </ItemGroup>
 
 </Project>

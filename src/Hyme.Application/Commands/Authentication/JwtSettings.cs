@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Hyme.Application.Commands.Authentication
+﻿namespace Hyme.Application.Commands.Authentication
 {
     public class JwtSettings
     {
@@ -13,6 +7,6 @@ namespace Hyme.Application.Commands.Authentication
         public string Secret { get; set; } = null!;
         public string Issuer { get; set; } = null!;
         public string Audience { get; set; } = null!;
-        public TimeSpan TokenLifeSpan { get; set; }
+        public string TokenLifeSpan { get; set; } = null!;
     }
 }

@@ -14,7 +14,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Hyme.Domain\Hyme.Domain.csproj" />
-    <ProjectReference Include="..\Hyme.Shared\Hyme.Shared.csproj" />
   </ItemGroup>
 
 </Project>

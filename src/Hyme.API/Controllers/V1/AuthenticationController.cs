@@ -2,7 +2,6 @@
 using Hyme.Application.Commands.Authentication;
 using Hyme.Application.DTOs.Response;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hyme.API.Controllers.V1

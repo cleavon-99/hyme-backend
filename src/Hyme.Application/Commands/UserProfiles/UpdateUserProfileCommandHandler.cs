@@ -1,8 +1,8 @@
 ﻿using FluentResults;
+using Hyme.Application.Errors;
 using Hyme.Domain.Entities;
 using Hyme.Domain.Repositories;
 using Hyme.Domain.ValueObjects;
-using Hyme.Shared.Errors;
 using MediatR;
 
 namespace Hyme.Application.Commands.UserProfiles

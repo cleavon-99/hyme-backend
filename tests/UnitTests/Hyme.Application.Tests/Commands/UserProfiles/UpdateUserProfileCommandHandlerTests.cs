@@ -4,8 +4,8 @@ using Hyme.Domain.Repositories;
 using Hyme.Domain.ValueObjects;
 using Moq;
 using FluentResults.Extensions.FluentAssertions;
-using Hyme.Shared.Errors;
 using Hyme.Domain.Entities;
+using Hyme.Application.Errors;
 
 namespace Hyme.Application.Tests.Commands.UserProfiles
 {

@@ -4,10 +4,10 @@ using Hyme.Application.Services;
 using Hyme.Domain.Repositories;
 using Moq;
 using FluentResults.Extensions.FluentAssertions;
-using Hyme.Shared.Errors;
 using Hyme.Domain.ValueObjects;
 using Hyme.Domain.Entities;
 using Hyme.Application.DTOs.Response;
+using Hyme.Application.Errors;
 
 namespace Hyme.Application.Tests.Commands.Authentication
 {

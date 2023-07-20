@@ -1,10 +1,10 @@
 ﻿using FluentResults;
 using Hyme.Application.DTOs.Response;
+using Hyme.Application.Errors;
 using Hyme.Application.Services;
 using Hyme.Domain.Entities;
 using Hyme.Domain.Repositories;
 using Hyme.Domain.ValueObjects;
-using Hyme.Shared.Errors;
 using MediatR;
 
 namespace Hyme.Application.Commands.Authentication

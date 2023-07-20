@@ -3,7 +3,7 @@ using FluentResults;
 using Hyme.API.Controllers.V1;
 using Hyme.Application.Commands.Authentication;
 using Hyme.Application.DTOs.Response;
-using Hyme.Shared.Errors;
+using Hyme.Application.Errors;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
