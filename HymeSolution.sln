@@ -7,13 +7,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7DEF83F1-191
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{7C7DD788-E0AC-47EE-A8A9-A2B4FAC18C64}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hyme.Domain", "src\Hyme.Domain\Hyme.Domain.csproj", "{F1055AEF-D7CD-4A80-ADE7-D824018CE6D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hyme.Domain", "src\Hyme.Domain\Hyme.Domain.csproj", "{F1055AEF-D7CD-4A80-ADE7-D824018CE6D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hyme.Application", "src\Hyme.Application\Hyme.Application.csproj", "{59C4A726-3173-4924-9AF6-EB7A8F3D0CB9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hyme.Application", "src\Hyme.Application\Hyme.Application.csproj", "{59C4A726-3173-4924-9AF6-EB7A8F3D0CB9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hyme.Infrastructure", "src\Hyme.Infrastructure\Hyme.Infrastructure.csproj", "{621C9D1B-467C-4A10-9B45-5A95CE84F3D0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hyme.Infrastructure", "src\Hyme.Infrastructure\Hyme.Infrastructure.csproj", "{621C9D1B-467C-4A10-9B45-5A95CE84F3D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hyme.API", "src\Hyme.API\Hyme.API.csproj", "{8DE38001-5A61-4A26-8315-482ADC0D5C04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hyme.API", "src\Hyme.API\Hyme.API.csproj", "{8DE38001-5A61-4A26-8315-482ADC0D5C04}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{E182B959-162E-45FB-B334-69CCD67BBF91}"
 EndProject
@@ -21,15 +21,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IntegrationTests", "Integra
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ArchitectureTests", "ArchitectureTests", "{FF8CDE35-DE1F-4210-B1BF-48EB69B0BBC4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hyme.API.Tests", "tests\UnitTests\Hyme.API.Tests\Hyme.API.Tests.csproj", "{BDBF0D0E-CF07-4908-B8FD-A29C4361BB81}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hyme.API.Tests", "tests\UnitTests\Hyme.API.Tests\Hyme.API.Tests.csproj", "{BDBF0D0E-CF07-4908-B8FD-A29C4361BB81}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hyme.Application.Tests", "tests\UnitTests\Hyme.Application.Tests\Hyme.Application.Tests.csproj", "{4E8B20D9-1554-4C26-9ADD-CF269801E6C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hyme.Application.Tests", "tests\UnitTests\Hyme.Application.Tests\Hyme.Application.Tests.csproj", "{4E8B20D9-1554-4C26-9ADD-CF269801E6C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hyme.Infrastructure.Tests", "tests\UnitTests\Hyme.Infrastructure.Tests\Hyme.Infrastructure.Tests.csproj", "{9344E66C-D376-4FAC-B465-19B83D9A9595}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hyme.Infrastructure.Tests", "tests\UnitTests\Hyme.Infrastructure.Tests\Hyme.Infrastructure.Tests.csproj", "{9344E66C-D376-4FAC-B465-19B83D9A9595}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hyme.Domain.Tests", "tests\UnitTests\Hyme.Domain.Tests\Hyme.Domain.Tests.csproj", "{B76250DC-8F94-493A-A32D-AAAB0EA7586E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hyme.Domain.Tests", "tests\UnitTests\Hyme.Domain.Tests\Hyme.Domain.Tests.csproj", "{B76250DC-8F94-493A-A32D-AAAB0EA7586E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hyme.Shared", "src\Hyme.Shared\Hyme.Shared.csproj", "{3747C7DF-90DC-463B-8081-5535BC4436C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hyme.Shared", "src\Hyme.Shared\Hyme.Shared.csproj", "{3747C7DF-90DC-463B-8081-5535BC4436C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Architecture.Tests", "Architecture.Tests\Architecture.Tests.csproj", "{363ED358-3C00-4DA5-92C0-4761038DF281}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -73,6 +75,10 @@ Global
 		{3747C7DF-90DC-463B-8081-5535BC4436C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3747C7DF-90DC-463B-8081-5535BC4436C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3747C7DF-90DC-463B-8081-5535BC4436C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{363ED358-3C00-4DA5-92C0-4761038DF281}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{363ED358-3C00-4DA5-92C0-4761038DF281}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{363ED358-3C00-4DA5-92C0-4761038DF281}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{363ED358-3C00-4DA5-92C0-4761038DF281}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -90,6 +96,7 @@ Global
 		{9344E66C-D376-4FAC-B465-19B83D9A9595} = {E182B959-162E-45FB-B334-69CCD67BBF91}
 		{B76250DC-8F94-493A-A32D-AAAB0EA7586E} = {E182B959-162E-45FB-B334-69CCD67BBF91}
 		{3747C7DF-90DC-463B-8081-5535BC4436C9} = {7DEF83F1-191B-433C-B792-9C8E8F7078BB}
+		{363ED358-3C00-4DA5-92C0-4761038DF281} = {FF8CDE35-DE1F-4210-B1BF-48EB69B0BBC4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7D124089-EF4D-4AA4-92DF-CE24C9C5BE08}
