@@ -5,15 +5,15 @@ using Hyme.Domain.Repositories;
 using Hyme.Domain.ValueObjects;
 using MediatR;
 
-namespace Hyme.Application.Commands.UserProfiles
+namespace Hyme.Application.Commands.Users
 {
-    public class UpdateUserProfileCommandHandler : IRequestHandler<UpdateUserProfileCommand, Result>
+    public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Result>
     {
         private readonly IUserRepository _userProfileRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public UpdateUserProfileCommandHandler(
-            IUserRepository userProfileRepository, 
+        public UpdateUserCommandHandler(
+            IUserRepository userProfileRepository,
             IUnitOfWork unitOfWork)
         {
             _userProfileRepository = userProfileRepository;
@@ -21,7 +21,7 @@ namespace Hyme.Application.Commands.UserProfiles
         }
 
 
-        public async Task<Result> Handle(UpdateUserProfileCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
             User? userProfile = await _userProfileRepository.GetByIdAsync(new UserId(request.UserProfileId));
             if (userProfile is null)

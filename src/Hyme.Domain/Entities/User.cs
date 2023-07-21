@@ -1,4 +1,6 @@
-﻿using Hyme.Domain.ValueObjects;
+﻿using FluentResults;
+using Hyme.Domain.Errors;
+using Hyme.Domain.ValueObjects;
 
 namespace Hyme.Domain.Entities
 {
@@ -25,6 +27,15 @@ namespace Hyme.Domain.Entities
             Id = id;
             WalletAddress = walletAddress;
             DateCreated = dateCreated;
+        }
+
+        public Result<Project> CreateProject(string title, string logo, string banner, string shortDescription, string projectDescription)
+        {
+            if (Project != null)
+                return Result.Fail(new ProjectAlreadyCreatedError());
+
+            Project = Project.Create(new ProjectId(Guid.NewGuid()), Id, title, logo, banner, shortDescription, projectDescription);
+            return Project;
         }
 
         public void Update(string name)

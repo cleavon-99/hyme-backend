@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using FluentResults;
 using Hyme.API.Controllers.V1;
-using Hyme.Application.Commands.UserProfiles;
+using Hyme.Application.Commands.Users;
 using Hyme.Application.DTOs.Request;
 using Hyme.Application.DTOs.Response;
 using Hyme.Application.Errors;
@@ -187,7 +187,7 @@ namespace Hyme.API.Tests.Controllers.V1
             Guid userId = Guid.NewGuid();
             
             UpdateUserProfileRequest request = new() { Name = "Arjay" };
-            UpdateUserProfileCommand command = new(userId, request.Name);
+            UpdateUserCommand command = new(userId, request.Name);
             
             ClaimsPrincipal user = new(new ClaimsIdentity(new Claim[]
             {
@@ -210,7 +210,7 @@ namespace Hyme.API.Tests.Controllers.V1
             Guid userId = Guid.NewGuid();
 
             UpdateUserProfileRequest request = new() { Name = "Arjay" };
-            UpdateUserProfileCommand command = new(userId, request.Name);
+            UpdateUserCommand command = new(userId, request.Name);
 
             ClaimsPrincipal user = new(new ClaimsIdentity(new Claim[]
             {
@@ -233,7 +233,7 @@ namespace Hyme.API.Tests.Controllers.V1
             Guid userId = Guid.NewGuid();
 
             UpdateUserProfileRequest request = new() { Name = "Arjay" };
-            UpdateUserProfileCommand command = new(userId, request.Name);
+            UpdateUserCommand command = new(userId, request.Name);
 
             ClaimsPrincipal user = new(new ClaimsIdentity(new Claim[]
             {

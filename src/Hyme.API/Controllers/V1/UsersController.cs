@@ -1,5 +1,5 @@
 ﻿using FluentResults;
-using Hyme.Application.Commands.UserProfiles;
+using Hyme.Application.Commands.Users;
 using Hyme.Application.DTOs.Request;
 using Hyme.Application.DTOs.Response;
 using Hyme.Application.Errors;
@@ -92,7 +92,7 @@ namespace Hyme.API.Controllers.V1
             if (userId is null)
                 return Unauthorized();
 
-            Result result = await _sender.Send(new UpdateUserProfileCommand(Guid.Parse(userId), updateRequest.Name));
+            Result result = await _sender.Send(new UpdateUserCommand(Guid.Parse(userId), updateRequest.Name));
             if (result.IsFailed)
             {
                 if (result.HasError(out IEnumerable<ValidationError> errors))

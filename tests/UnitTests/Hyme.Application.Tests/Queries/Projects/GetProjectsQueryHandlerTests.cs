@@ -48,9 +48,9 @@ namespace Hyme.Application.Tests.Queries.Projects
             
             PaginationFilter filter = PaginationFilter.Create(query.PageNumber, query.PageSize);
             List<Project> projects = new() {
-                new Project(new ProjectId(Guid.NewGuid()), new UserId(Guid.NewGuid()), "", "", "", "", DateTime.UtcNow),
-                new Project(new ProjectId(Guid.NewGuid()), new UserId(Guid.NewGuid()), "", "", "", "", DateTime.UtcNow),
-                new Project(new ProjectId(Guid.NewGuid()), new UserId(Guid.NewGuid()), "", "", "", "", DateTime.UtcNow)
+                Project.Create(new ProjectId(Guid.NewGuid()), new UserId(Guid.NewGuid()), "", "", "", "", ""),
+                Project.Create(new ProjectId(Guid.NewGuid()), new UserId(Guid.NewGuid()),"", "", "", "", ""),
+                Project.Create(new ProjectId(Guid.NewGuid()), new UserId(Guid.NewGuid()),"", "", "", "", "")
             };
             _projectRepository.Setup(s => s.GetListAsync(It.IsAny<PaginationFilter>())).ReturnsAsync(projects);
             GetProjectsQueryHandler sut = new(_projectRepository.Object, _mapper);
