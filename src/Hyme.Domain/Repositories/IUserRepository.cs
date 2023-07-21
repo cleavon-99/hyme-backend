@@ -13,6 +13,7 @@ namespace Hyme.Domain.Repositories
     {
         Task<List<User>> GetListAsync(PaginationFilter filter);
         Task<User?> GetByIdAsync(UserId id);
+        Task<User?> GetByIdWithProjectAsync(UserId id);
         Task<User?> GetByWalletAddress(WalletAddress walletAddress);
         Task AddAsync(User userProfile);
     }

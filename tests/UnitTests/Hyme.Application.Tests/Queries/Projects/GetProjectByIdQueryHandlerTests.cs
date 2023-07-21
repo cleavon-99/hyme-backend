@@ -63,7 +63,7 @@ namespace Hyme.Application.Tests.Queries.Projects
             Guid id = Guid.NewGuid();
             ProjectId projectId = new(id);
             GetProjectByIdQuery query = new(id);
-            _projectRepository.Setup(s => s.GetByIdAsync(projectId)).ReturnsAsync(new Project(projectId, new UserId(id), "", "", "", "", DateTime.UtcNow));
+            _projectRepository.Setup(s => s.GetByIdAsync(projectId)).ReturnsAsync(Project.Create(projectId, new UserId(id), "title", "", "", "", ""));
             var sut = new GetProjectByIdQueryHandler(_projectRepository.Object, _mapper);
             //Act
             ProjectResponse? project = await sut.Handle(query, CancellationToken.None);

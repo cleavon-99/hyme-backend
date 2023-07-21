@@ -31,6 +31,14 @@ namespace Hyme.Infrastructure.Data.Repositories
             return await _context.Users.FindAsync(id);
         }
 
+        public async Task<User?> GetByIdWithProjectAsync(UserId id)
+        {
+            return await _context.Users
+                .Where(u => u.Id == id)
+                .Include(u => u.Project)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<User?> GetByWalletAddress(WalletAddress walletAddress)
         {
             return await _context.Users

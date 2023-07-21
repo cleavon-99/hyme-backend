@@ -32,6 +32,9 @@ namespace Hyme.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
+                    b.Property<DateTime?>("DateApproved")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("timestamp with time zone");
 
@@ -42,6 +45,9 @@ namespace Hyme.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("DateModified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DateRejected")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Logo")
@@ -61,6 +67,14 @@ namespace Hyme.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.HasKey("Id");
 
@@ -83,18 +97,6 @@ namespace Hyme.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("734cf06d-1498-47ef-92b5-b2d49a80243e"),
-                            Name = "Super Admin"
-                        },
-                        new
-                        {
-                            Id = new Guid("456cce11-a9b7-4c26-8b20-4c9536e79c89"),
-                            Name = "Admin"
-                        });
                 });
 
             modelBuilder.Entity("Hyme.Domain.Entities.User", b =>

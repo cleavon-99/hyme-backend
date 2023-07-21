@@ -1,9 +1,13 @@
-﻿using Hyme.Application.DTOs.Request;
+﻿using Hyme.Application.Commands.Projects;
+using Hyme.Application.DTOs.Request;
 using Hyme.Application.DTOs.Response;
+using Hyme.Application.Errors;
 using Hyme.Application.Queries.Projects;
+using Hyme.Domain.Errors;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Metadata.Ecma335;
+using System.Security.Claims;
 
 namespace Hyme.API.Controllers.V1
 {
@@ -11,7 +15,7 @@ namespace Hyme.API.Controllers.V1
     /// <summary>
     /// 
     /// </summary>
-    [Route("api/projects")]
+    [Route("projects")]
     [ApiController]
     public class ProjectsController : ControllerBase
     {
@@ -64,6 +68,83 @@ namespace Hyme.API.Controllers.V1
             if (project is null)
                 return NotFound();
             return Ok(project);
+        }
+
+
+        /// <summary>
+        /// Create Project
+        /// </summary>
+        /// <param name="projectRequest"></param>
+        /// <returns></returns>
+        /// <response code="401">Not loged in or user isn't registered</response>
+        /// <response code="404">User isn't registered</response>
+        /// <response code="201">Project successfully Created</response>
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public async Task<ActionResult<ProjectResponse>> AddProject([FromBody]ProjectRequest projectRequest)
+        {
+            string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId is null)
+                return Unauthorized();
+
+            var result = await _sender.Send(
+                new AddProjectCommand(
+                    Guid.Parse(userId), 
+                    projectRequest.Title, 
+                    projectRequest.ShortDescription, 
+                    projectRequest.ProjectDescription), 
+                HttpContext.RequestAborted);
+
+            if (result.IsFailed)
+            {
+                if (result.HasError<UserNotFoundError>())
+                    return NotFound();
+
+                if(result.HasError(out IEnumerable<ProjectAlreadyCreatedError> errors))
+                    return BadRequest(errors.FirstOrDefault()!.Message);
+            }
+
+            return CreatedAtRoute(nameof(GetProjectById), new { result.Value.Id}, result.Value);
+        }
+
+
+        /// <summary>
+        /// Approve a project
+        /// </summary>
+        /// <param name="id">Project Id</param>
+        /// <returns></returns>
+        /// <response code="404">Project not found</response>
+        /// <response code="204">Success</response>
+        [HttpPut("{id}/approve")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> ApproveProject(Guid id)
+        {
+            var result = await _sender.Send(new ApproveProjectCommand(id), HttpContext.RequestAborted);
+            if(result.IsFailed)
+                return NotFound();
+
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Reject Project
+        /// </summary>
+        /// <param name="id">Project Id</param>
+        /// <returns></returns>
+        /// <response code="204">Success</response>
+        /// <response code="404">Project not found</response>
+        [HttpPut("{id}/reject")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> RejectProject(Guid id)
+        {
+            var result = await _sender.Send(new RejectProjectCommand(id), HttpContext.RequestAborted);
+            if (result.IsFailed)
+                return NotFound();
+            return NoContent();
         }
 
     }

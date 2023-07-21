@@ -1,21 +1,21 @@
 ﻿using FluentAssertions;
-using Hyme.Application.Commands.UserProfiles;
 using Hyme.Domain.Repositories;
 using Hyme.Domain.ValueObjects;
 using Moq;
 using FluentResults.Extensions.FluentAssertions;
 using Hyme.Domain.Entities;
 using Hyme.Application.Errors;
+using Hyme.Application.Commands.Users;
 
-namespace Hyme.Application.Tests.Commands.UserProfiles
+namespace Hyme.Application.Tests.Commands.Users
 {
-    public class UpdateUserProfileCommandHandlerTests
+    public class UpdateUserCommandHandlerTests
     {
 
         private readonly Mock<IUserRepository> _userRepository;
         private readonly Mock<IUnitOfWork> _unitOfWork;
 
-        public UpdateUserProfileCommandHandlerTests()
+        public UpdateUserCommandHandlerTests()
         {
             _userRepository = new();
             _unitOfWork = new();
@@ -28,8 +28,8 @@ namespace Hyme.Application.Tests.Commands.UserProfiles
             //Arrange
             Guid id = Guid.NewGuid();
             UserId userId = new(id);
-            UpdateUserProfileCommand command = new(id, "Arjay");
-            UpdateUserProfileCommandHandler sut = new(_userRepository.Object, _unitOfWork.Object);
+            UpdateUserCommand command = new(id, "Arjay");
+            UpdateUserCommandHandler sut = new(_userRepository.Object, _unitOfWork.Object);
 
             //Act
             var result = await sut.Handle(command, CancellationToken.None);
@@ -44,8 +44,8 @@ namespace Hyme.Application.Tests.Commands.UserProfiles
             //Arrange
             Guid id = Guid.NewGuid();
 
-            UpdateUserProfileCommand command = new(id, "Arjay");
-            UpdateUserProfileCommandHandler sut = new(_userRepository.Object, _unitOfWork.Object);
+            UpdateUserCommand command = new(id, "Arjay");
+            UpdateUserCommandHandler sut = new(_userRepository.Object, _unitOfWork.Object);
 
             //Act
             var result = await sut.Handle(command, CancellationToken.None);
@@ -63,8 +63,8 @@ namespace Hyme.Application.Tests.Commands.UserProfiles
             UserId userId = new(id);
             User user = new(userId, new WalletAddress("0x000"), DateTime.UtcNow);
             _userRepository.Setup(s => s.GetByIdAsync(userId)).ReturnsAsync(user);
-            UpdateUserProfileCommand command = new(id, "Arjay");
-            UpdateUserProfileCommandHandler sut = new(_userRepository.Object, _unitOfWork.Object);
+            UpdateUserCommand command = new(id, "Arjay");
+            UpdateUserCommandHandler sut = new(_userRepository.Object, _unitOfWork.Object);
 
             //Act
             var result = await sut.Handle(command, CancellationToken.None);
@@ -81,8 +81,8 @@ namespace Hyme.Application.Tests.Commands.UserProfiles
             UserId userId = new(id);
             User user = new(userId, new WalletAddress("0x000"), DateTime.UtcNow);
             _userRepository.Setup(s => s.GetByIdAsync(userId)).ReturnsAsync(user);
-            UpdateUserProfileCommand command = new(id, "Arjay");
-            UpdateUserProfileCommandHandler sut = new(_userRepository.Object, _unitOfWork.Object);
+            UpdateUserCommand command = new(id, "Arjay");
+            UpdateUserCommandHandler sut = new(_userRepository.Object, _unitOfWork.Object);
 
             //Act
             var result = await sut.Handle(command, CancellationToken.None);
@@ -90,7 +90,7 @@ namespace Hyme.Application.Tests.Commands.UserProfiles
             //Assert
             _unitOfWork.Verify(u => u.SaveChangesAsync(CancellationToken.None));
             result.Should().BeSuccess();
-        }     
+        }
 
     }
 }
