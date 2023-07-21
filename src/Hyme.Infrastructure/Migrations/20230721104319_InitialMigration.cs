@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace Hyme.Infrastructure.Migrations
 {
     /// <inheritdoc />
@@ -48,12 +46,16 @@ namespace Hyme.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Logo = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     Banner = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     ShortDescription = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
                     ProjectDescription = table.Column<string>(type: "character varying(5000)", maxLength: 5000, nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     DateModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    DateApproved = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    DateRejected = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     DateDeleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     DateLived = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false)
@@ -91,15 +93,6 @@ namespace Hyme.Infrastructure.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.InsertData(
-                table: "Roles",
-                columns: new[] { "Id", "Name" },
-                values: new object[,]
-                {
-                    { new Guid("456cce11-a9b7-4c26-8b20-4c9536e79c89"), "Admin" },
-                    { new Guid("734cf06d-1498-47ef-92b5-b2d49a80243e"), "Super Admin" }
                 });
 
             migrationBuilder.CreateIndex(

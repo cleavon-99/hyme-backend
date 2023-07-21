@@ -14,15 +14,16 @@ namespace Hyme.Infrastructure.Configuration
     {
         public void Configure(EntityTypeBuilder<Role> builder)
         {
-            List<Role> roles = new()
-            {
-                new Role(new RoleId(Guid.NewGuid()), "Super Admin"),
-                new Role(new RoleId(Guid.NewGuid()), "Admin")
-            };
+            //List<Role> roles = new()
+            //{
+            //    new Role(new RoleId(Guid.NewGuid()), "Super Admin"),
+            //    new Role(new RoleId(Guid.NewGuid()), "Admin")
+            //};
+            //builder.HasData(roles);
             builder.HasKey(r => r.Id);
             builder.Property(r => r.Id).HasConversion(id => id.Value, value => new RoleId(value));
             builder.Property(r => r.Name).HasMaxLength(50);
-            builder.HasData(roles);
+            
         }
     }
 }

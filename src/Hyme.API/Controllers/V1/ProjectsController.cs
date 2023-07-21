@@ -3,6 +3,7 @@ using Hyme.Application.DTOs.Request;
 using Hyme.Application.DTOs.Response;
 using Hyme.Application.Errors;
 using Hyme.Application.Queries.Projects;
+using Hyme.Domain.Errors;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Metadata.Ecma335;
@@ -100,6 +101,9 @@ namespace Hyme.API.Controllers.V1
             {
                 if (result.HasError<UserNotFoundError>())
                     return NotFound();
+
+                if(result.HasError(out IEnumerable<ProjectAlreadyCreatedError> errors))
+                    return BadRequest(errors.FirstOrDefault()!.Message);
             }
 
             return CreatedAtRoute(nameof(GetProjectById), new { result.Value.Id}, result.Value);
