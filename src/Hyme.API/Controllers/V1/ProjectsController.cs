@@ -5,6 +5,7 @@ using Hyme.Application.Errors;
 using Hyme.Application.Queries.Projects;
 using Hyme.Domain.Errors;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Metadata.Ecma335;
 using System.Security.Claims;
@@ -17,6 +18,7 @@ namespace Hyme.API.Controllers.V1
     /// </summary>
     [Route("projects")]
     [ApiController]
+    [Authorize]
     public class ProjectsController : ControllerBase
     {
         private readonly ISender _sender;
@@ -118,6 +120,7 @@ namespace Hyme.API.Controllers.V1
         /// <response code="404">Project not found</response>
         /// <response code="204">Success</response>
         [HttpPut("{id}/approve")]
+        [Authorize(Roles = "Admin, Super Admin")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> ApproveProject(Guid id)
@@ -137,6 +140,7 @@ namespace Hyme.API.Controllers.V1
         /// <response code="204">Success</response>
         /// <response code="404">Project not found</response>
         [HttpPut("{id}/reject")]
+        [Authorize(Roles = "Admin, Super Admin")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> RejectProject(Guid id)

@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Hyme.Shared\Hyme.Shared.csproj" />
+    <PackageReference Include="FluentResults" Version="3.15.2" />
   </ItemGroup>
 
 </Project>

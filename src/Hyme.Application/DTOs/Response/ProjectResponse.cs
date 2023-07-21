@@ -1,4 +1,5 @@
 ﻿using Hyme.Domain.Entities;
+using Hyme.Domain.Primitives;
 using Hyme.Domain.ValueObjects;
 
 namespace Hyme.Application.DTOs.Response
@@ -11,7 +12,8 @@ namespace Hyme.Application.DTOs.Response
         public string Banner { get; set; } = null!;
         public string ShortDescription { get; set; } = null!;
         public string ProjectDescription { get; set; } = null!;
-        public DateTime DateCreated { get; set; }
+        public PublishStatus Status { get; set; }
+        public DateTimeOffset DateCreated { get; set; }
         
     }
 }

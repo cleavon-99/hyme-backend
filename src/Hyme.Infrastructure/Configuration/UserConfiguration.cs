@@ -2,7 +2,6 @@
 using Hyme.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Org.BouncyCastle.Crypto.Tls;
 
 namespace Hyme.Infrastructure.Configuration
 {
