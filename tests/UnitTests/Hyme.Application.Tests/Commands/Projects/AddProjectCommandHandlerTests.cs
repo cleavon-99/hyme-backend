@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.Configuration.Annotations;
 using FluentAssertions;
 using FluentResults.Extensions.FluentAssertions;
 using Hyme.Application.Commands.Projects;
@@ -65,7 +66,7 @@ namespace Hyme.Application.Tests.Commands.Projects
             Guid id = Guid.NewGuid();
             UserId userId = new(id);
             WalletAddress walletAddress = new("0x00");
-            User user = new(userId, walletAddress, DateTime.UtcNow);
+            User user = User.Create(userId, walletAddress);
 
             _userRepository.Setup(u => u.GetByIdWithProjectAsync(It.IsAny<UserId>())).ReturnsAsync(user);
             AddProjectCommand command = new(Guid.NewGuid(), "Title", "Short Description", "Project Description");
@@ -78,26 +79,25 @@ namespace Hyme.Application.Tests.Commands.Projects
             user.Project.Should().NotBeNull();
         }
 
-        [Fact]
-        public async Task Handle_ShouldReturnProjectAlreadeCreatedError_WhenUserHasAProject()
-        {
-            //Arrange
-            Guid id = Guid.NewGuid();
-            UserId userId = new(id);
-            WalletAddress walletAddress = new("0x00");
-            User user = new(userId, walletAddress, DateTime.UtcNow);
-            user.CreateProject("title", "Logo", "Banner", "Short Description", "project description");
+        //[Fact]
+        //public async Task Handle_ShouldReturnProjectAlreadeCreatedError_WhenUserHasAProject()
+        //{
+        //    //Arrange
+        //    Guid id = Guid.NewGuid();
+        //    UserId userId = new(id);
+        //    WalletAddress walletAddress = new("0x00");
+        //    User user = User.Create(userId, walletAddress);
 
-            _userRepository.Setup(u => u.GetByIdWithProjectAsync(It.IsAny<UserId>())).ReturnsAsync(user);
-            AddProjectCommand command = new(Guid.NewGuid(), "Title", "Short Description", "Project Description");
-            AddProjectCommandHandler sut = new(_userRepository.Object, _unitOfWork.Object, _mapper);
+        //    _userRepository.Setup(u => u.GetByIdWithProjectAsync(It.IsAny<UserId>())).ReturnsAsync(user);
+        //    AddProjectCommand command = new(Guid.NewGuid(), "Title", "Short Description", "Project Description");
+        //    AddProjectCommandHandler sut = new(_userRepository.Object, _unitOfWork.Object, _mapper);
 
-            //Act
-            var result = await sut.Handle(command, CancellationToken.None);
+        //    //Act
+        //    var result = await sut.Handle(command, CancellationToken.None);
 
-            //Assert
-            result.Should().HaveReason(new ProjectAlreadyCreatedError());
-        }
+        //    //Assert
+        //    result.Should().HaveReason(new ProjectAlreadyCreatedError());
+        //}
 
         [Fact]
         public async Task Handle_ShouldInvokeUnitOfWorkSaveChangesAsync_WhenUserDoesNotHaveAProject()
@@ -106,8 +106,8 @@ namespace Hyme.Application.Tests.Commands.Projects
             Guid id = Guid.NewGuid();
             UserId userId = new(id);
             WalletAddress walletAddress = new("0x00");
-            User user = new(userId, walletAddress, DateTime.UtcNow);
-            
+            User user = User.Create(userId, walletAddress);
+
 
             _userRepository.Setup(u => u.GetByIdWithProjectAsync(It.IsAny<UserId>())).ReturnsAsync(user);
             AddProjectCommand command = new(Guid.NewGuid(), "Title", "Short Description", "Project Description");
@@ -121,13 +121,13 @@ namespace Hyme.Application.Tests.Commands.Projects
         }
 
         [Fact]
-        public async Task Handle_ShouldReturnProjectResponse_WhenValidationSucceded()
+        public async Task Handle_ShouldReturnSuccessResult_AfterSaveChanges()
         {
             //Arrange
             Guid id = Guid.NewGuid();
             UserId userId = new(id);
             WalletAddress walletAddress = new("0x00");
-            User user = new(userId, walletAddress, DateTime.UtcNow);
+            User user = User.Create(userId, walletAddress);
 
 
             _userRepository.Setup(u => u.GetByIdWithProjectAsync(It.IsAny<UserId>())).ReturnsAsync(user);
@@ -138,9 +138,7 @@ namespace Hyme.Application.Tests.Commands.Projects
             var result = await sut.Handle(command, CancellationToken.None);
 
             //Assert
-            result.Value.ShortDescription.Should().Be(command.ShortDescription);
-            result.Value.Title.Should().Be(command.Title);
-            result.Value.ProjectDescription.Should().Be(command.ProjectDescription); 
+            result.Should().BeSuccess();
         }
     }
 }

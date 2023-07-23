@@ -13,18 +13,18 @@ namespace Hyme.Application.Commands.Authentication
     {
         private readonly IWalletValidationService _walletValidationService;
         private readonly ITokenGenerator _tokenGenerator;
-        private readonly IUserRepository _userProfileRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public ConnectToWalletCommandHandler(
             IWalletValidationService walletValidationService, 
             ITokenGenerator tokenGenerator,
-            IUserRepository userProfileRepository,
+            IUserRepository userRepository,
             IUnitOfWork unitOfWork)
         {
             _walletValidationService = walletValidationService;
             _tokenGenerator = tokenGenerator;
-            _userProfileRepository = userProfileRepository;
+            _userRepository = userRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -37,15 +37,16 @@ namespace Hyme.Application.Commands.Authentication
                 return Result.Fail(new InvalidWalletError());
 
             User? userProfile =
-                await _userProfileRepository.GetByWalletAddress(new WalletAddress(request.WalletAddress));
+                await _userRepository.GetByWalletAddress(new WalletAddress(request.WalletAddress));
 
             if(userProfile is null)
             {
-                userProfile = new(
+                userProfile = User.Create(
                     new UserId(Guid.NewGuid()), 
-                    new WalletAddress(request.WalletAddress), 
-                    DateTime.UtcNow);
-                await _userProfileRepository.AddAsync(userProfile);
+                    new WalletAddress(request.WalletAddress)
+                    );
+
+                await _userRepository.AddAsync(userProfile);
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
             }
 

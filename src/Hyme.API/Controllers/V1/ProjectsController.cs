@@ -19,7 +19,7 @@ namespace Hyme.API.Controllers.V1
     [Route("projects")]
     [ApiController]
     [Authorize]
-    public class ProjectsController : ControllerBase
+    public class ProjectsController : ApiBase
     {
         private readonly ISender _sender;
 
@@ -73,43 +73,44 @@ namespace Hyme.API.Controllers.V1
         }
 
 
-        /// <summary>
-        /// Create Project
-        /// </summary>
-        /// <param name="projectRequest"></param>
-        /// <returns></returns>
-        /// <response code="401">Not loged in or user isn't registered</response>
-        /// <response code="404">User isn't registered</response>
-        /// <response code="201">Project successfully Created</response>
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<ActionResult<ProjectResponse>> AddProject([FromBody]ProjectRequest projectRequest)
-        {
-            string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId is null)
-                return Unauthorized();
+        ///// <summary>
+        ///// Create Project
+        ///// </summary>
+        ///// <param name="projectRequest"></param>
+        ///// <returns></returns>
+        ///// <response code="401">Not loged in or user isn't registered</response>
+        ///// <response code="404">User isn't registered</response>
+        ///// <response code="201">Project successfully Created</response>
+        //[HttpPost]
+        //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        //public async Task<ActionResult<ProjectResponse>> AddProject([FromBody]ProjectRequest projectRequest)
+        //{
+        //    string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        //    if (userId is null)
+        //        return Unauthorized();
 
-            var result = await _sender.Send(
-                new AddProjectCommand(
-                    Guid.Parse(userId), 
-                    projectRequest.Title, 
-                    projectRequest.ShortDescription, 
-                    projectRequest.ProjectDescription), 
-                HttpContext.RequestAborted);
+        //    var result = await _sender.Send(
+        //        new AddProjectCommand(
+        //            Guid.Parse(userId), 
+        //            projectRequest.Title, 
+        //            projectRequest.ShortDescription, 
+        //            projectRequest.ProjectDescription), 
+        //        HttpContext.RequestAborted);
 
-            if (result.IsFailed)
-            {
-                if (result.HasError<UserNotFoundError>())
-                    return NotFound();
+        //    if (result.IsFailed)
+        //    {
+        //        if (result.HasError<ValidationError>(out var errors))
+        //            return Problem(errors);
 
-                if(result.HasError(out IEnumerable<ProjectAlreadyCreatedError> errors))
-                    return BadRequest(errors.FirstOrDefault()!.Message);
-            }
+        //        if (result.HasError<UserNotFoundError>())
+        //            return NotFound();
 
-            return CreatedAtRoute(nameof(GetProjectById), new { result.Value.Id}, result.Value);
-        }
+        //        if(result.HasError<ProjectAlreadyCreatedError>())
+        //            return BadRequest("Project is already Created");
+        //    }
+        //    return CreatedAtRoute(nameof(GetProjectById), new { result.Value.Id}, result.Value);
+        //}
 
 
         /// <summary>

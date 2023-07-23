@@ -61,7 +61,7 @@ namespace Hyme.Application.Tests.Commands.Users
             //Arrange
             Guid id = Guid.NewGuid();
             UserId userId = new(id);
-            User user = new(userId, new WalletAddress("0x000"), DateTime.UtcNow);
+            User user = User.Create(userId, new WalletAddress("0x000"));
             _userRepository.Setup(s => s.GetByIdAsync(userId)).ReturnsAsync(user);
             UpdateUserCommand command = new(id, "Arjay");
             UpdateUserCommandHandler sut = new(_userRepository.Object, _unitOfWork.Object);
@@ -79,7 +79,7 @@ namespace Hyme.Application.Tests.Commands.Users
             //Arrange
             Guid id = Guid.NewGuid();
             UserId userId = new(id);
-            User user = new(userId, new WalletAddress("0x000"), DateTime.UtcNow);
+            User user = User.Create(userId, new WalletAddress("0x000"));
             _userRepository.Setup(s => s.GetByIdAsync(userId)).ReturnsAsync(user);
             UpdateUserCommand command = new(id, "Arjay");
             UpdateUserCommandHandler sut = new(_userRepository.Object, _unitOfWork.Object);

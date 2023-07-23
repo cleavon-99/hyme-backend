@@ -57,12 +57,8 @@ namespace Hyme.Application.Tests.Commands.Projects
             RejectProjectCommand command = new(Guid.NewGuid());
             Project project = Project.Create(
                 new ProjectId(command.ProjectId), 
-                new UserId(Guid.NewGuid()), 
-                "Title", 
-                "Logo", 
-                "Banner", 
-                "Short Description", 
-                "Project Description");
+                new UserId(Guid.NewGuid()) 
+                );
             _projectRepository.Setup(p => p.GetByIdAsync(project.Id)).ReturnsAsync(project);
             RejectProjectCommandHandler sut = new(_projectRepository.Object, _unitOfWork.Object);
 
@@ -81,12 +77,8 @@ namespace Hyme.Application.Tests.Commands.Projects
             RejectProjectCommand command = new(Guid.NewGuid());
             Project project = Project.Create(
                 new ProjectId(command.ProjectId),
-                new UserId(Guid.NewGuid()),
-                "Title",
-                "Logo",
-                "Banner",
-                "Short Description",
-                "Project Description");
+                new UserId(Guid.NewGuid())
+                );
             _projectRepository.Setup(p => p.GetByIdAsync(project.Id)).ReturnsAsync(project);
             RejectProjectCommandHandler sut = new(_projectRepository.Object, _unitOfWork.Object);
 

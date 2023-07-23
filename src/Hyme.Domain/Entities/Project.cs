@@ -5,12 +5,12 @@ namespace Hyme.Domain.Entities
 {
     public class Project
     {
-        public ProjectId Id { get; private set; }    
-        public string Title { get; private set; }
-        public string Logo { get; private set; }
-        public string Banner { get; private set; }
-        public string ShortDescription { get; private set; }
-        public string ProjectDescription { get; private set; }
+        public ProjectId Id { get; private set; }
+        public string Title { get; private set; } = string.Empty;
+        public string Logo { get; private set; } = string.Empty;
+        public string Banner { get; private set; } = string.Empty;
+        public string ShortDescription { get; private set; } = string.Empty;
+        public string ProjectDescription { get; private set; } = string.Empty;
         public PublishStatus Status { get; private set; }
         public DateTime DateCreated { get; private set; }
         public DateTime? DateModified { get; private set; }
@@ -23,37 +23,43 @@ namespace Hyme.Domain.Entities
 
         private Project(
             ProjectId id, 
-            UserId ownerId, 
-            string title,
-            string logo, 
-            string banner, 
-            string shortDescription, 
-            string projectDescription, 
-            DateTime dateCreated)
+            UserId ownerId
+            )
         {
             Id = id;
-            OwnerId = ownerId;
+            OwnerId = ownerId;  
+        }
+
+        public static Project Create(
+            ProjectId id, 
+            UserId ownerId)
+        {
+            return new(id, ownerId)
+            {
+                Status = PublishStatus.Empty,
+                DateCreated = DateTime.UtcNow
+            };
+        }
+
+        public void Update(
+            string title, 
+            string logo,
+            string banner,
+            string shortDescription,
+            string projectDescription)
+        {
             Title = title;
             Logo = logo;
             Banner = banner;
             ShortDescription = shortDescription;
             ProjectDescription = projectDescription;
-            DateCreated = dateCreated;
+            DateModified = DateTime.UtcNow;
         }
 
-        public static Project Create(
-            ProjectId id, 
-            UserId ownerId, 
-            string title, 
-            string logo, 
-            string banner, 
-            string shortDescription, 
-            string projectDescription)
+        public void Delete()
         {
-            return new(id, ownerId, title, logo, banner, shortDescription, projectDescription, DateTime.UtcNow)
-            {
-                Status = PublishStatus.InReview
-            };
+            Status = PublishStatus.Deleted;
+            DateDeleted = DateTime.UtcNow;
         }
 
         public void Approve()

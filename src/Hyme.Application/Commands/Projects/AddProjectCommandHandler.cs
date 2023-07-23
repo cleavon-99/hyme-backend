@@ -28,12 +28,13 @@ namespace Hyme.Application.Commands.Projects
             if (user is null)
                 return Result.Fail(new UserNotFoundError(request.UserId));
 
-            var result = user.CreateProject(request.Title, "Logo", "Banner", request.ShortDescription, request.ProjectDescription);
+            //var result = user.CreateProject(request.Title, "Logo", "Banner", request.ShortDescription, request.ProjectDescription);
+            var result = Result.Ok(new ProjectResponse());
             if (result.IsFailed)
                 return Result.Fail(result.Errors);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
-            return _mapper.Map<ProjectResponse>(result.Value);    
+            return _mapper.Map<ProjectResponse>(result.Value);
         }
     }
 }

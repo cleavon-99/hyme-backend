@@ -10,20 +10,20 @@ namespace Hyme.Application.Queries.UserProfiles
 {
     public class GetUserProfileByIdQueryHandler : IRequestHandler<GetUserProfleByIdQuery, UserResponse?>
     {
-        private readonly IUserRepository _userProfileRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
         public GetUserProfileByIdQueryHandler(
-            IUserRepository userProfileRepository,
+            IUserRepository userRepository,
             IMapper mapper)
         {
-            _userProfileRepository = userProfileRepository;
+            _userRepository = userRepository;
             _mapper = mapper;
         }
 
         public async Task<UserResponse?> Handle(GetUserProfleByIdQuery request, CancellationToken cancellationToken)
         {
-            User? userProfile = await _userProfileRepository.GetByIdAsync(new UserId(request.Id));
+            User? userProfile = await _userRepository.GetByIdAsync(new UserId(request.Id));
             
             if (userProfile is null)
                 return null;

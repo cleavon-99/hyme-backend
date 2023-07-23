@@ -71,7 +71,7 @@ namespace Hyme.Application.Tests.Queries.UserProfiles
             //Arrange
             Guid id = Guid.NewGuid();
             UserId userId = new(id);
-            User user = new(userId, new WalletAddress("0x00"), DateTime.UtcNow);
+            User user = User.Create(userId, new WalletAddress("0x00"));
             _userRepository.Setup(u => u.GetByIdAsync(userId)).ReturnsAsync(user);
             GetUserProfleByIdQuery query = new(id);
             GetUserProfileByIdQueryHandler sut = new(_userRepository.Object, _mapper);

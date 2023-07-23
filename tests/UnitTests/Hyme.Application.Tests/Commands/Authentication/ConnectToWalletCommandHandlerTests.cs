@@ -14,44 +14,53 @@ namespace Hyme.Application.Tests.Commands.Authentication
     public class ConnectToWalletCommandHandlerTests
     {
 
-        private readonly Mock<IWalletValidationService> _walletValidationService;
-        private readonly Mock<ITokenGenerator> _tokenGenerator;
-        private readonly Mock<IUserRepository> _userRepository;
-        private readonly Mock<IUnitOfWork> _unitOfWork;
-
+        private readonly Mock<IWalletValidationService> _mockWalletValidationService;
+        private readonly Mock<ITokenGenerator> _mockTokenGenerator;
+        private readonly Mock<IUserRepository> _mockUserRepository;
+        private readonly Mock<IUnitOfWork> _mockUnitOfWork;
+        private readonly ConnectToWalletCommandHandler _sut;
 
         public ConnectToWalletCommandHandlerTests()
         {
-            _walletValidationService = new();
-            _tokenGenerator = new();
-            _userRepository = new();
-            _unitOfWork = new();
+            _mockWalletValidationService = new();
+            _mockTokenGenerator = new();
+            _mockUserRepository = new();
+            _mockUnitOfWork = new();
+            _sut = new(
+                _mockWalletValidationService.Object,
+                _mockTokenGenerator.Object,
+                _mockUserRepository.Object,
+                _mockUnitOfWork.Object);
         }
 
         [Fact]
         public async Task Handle_ShouldInvokeValidationForWalletAddressAndSignature()
         {
             //Arrange
-            ConnectToWalletCommand command = new("","","");
-            ConnectToWalletCommandHandler sut = new(_walletValidationService.Object, _tokenGenerator.Object, _userRepository.Object, _unitOfWork.Object);
-            
+            ConnectToWalletCommand command = AuthenticationUtilities.ConnectToWalletCommand();
+
             //Act
-            var result = await sut.Handle(command, CancellationToken.None);
+            var result = await _sut.Handle(command, CancellationToken.None);
             
             //Assert
-            _walletValidationService.Verify(w => w.Validate(command.Message, command.Signature, command.WalletAddress));
+            _mockWalletValidationService.Verify(w => w.Validate(
+                command.Message,
+                command.Signature,
+                command.WalletAddress));
         }
 
         [Fact]
         public async Task Handle_ShouldReturnInvalidWalletError_WhenValidationFails()
         {
             //Arrange
-            ConnectToWalletCommand command = new("", "", "");
-            _walletValidationService.Setup(s => s.Validate(command.Message, command.Signature, command.WalletAddress)).Returns(false);
-            ConnectToWalletCommandHandler sut = new(_walletValidationService.Object, _tokenGenerator.Object, _userRepository.Object, _unitOfWork.Object);
+            ConnectToWalletCommand command = AuthenticationUtilities.ConnectToWalletCommand();
+            _mockWalletValidationService.Setup(s => s.Validate(
+                command.Message,
+                command.Signature,
+                command.WalletAddress)).Returns(false);
 
             //Act
-            var result = await sut.Handle(command, CancellationToken.None);
+            var result = await _sut.Handle(command, CancellationToken.None);
 
             //Assert
             result.Should().BeFailure();
@@ -62,58 +71,67 @@ namespace Hyme.Application.Tests.Commands.Authentication
         public async Task Handle_ShouldInvokeGetWalletByAddress_WhenWalletSignatureIsValid()
         {
             //Arrange
-            ConnectToWalletCommand command = new("", "", "");
-            _walletValidationService.Setup(s => s.Validate(command.Message, command.Signature, command.WalletAddress)).Returns(true);
-            ConnectToWalletCommandHandler sut = new(_walletValidationService.Object, _tokenGenerator.Object, _userRepository.Object, _unitOfWork.Object);
+            ConnectToWalletCommand command = AuthenticationUtilities.ConnectToWalletCommand();
+            _mockWalletValidationService.Setup(s => s.Validate(
+                command.Message,
+                command.Signature,
+                command.WalletAddress)).Returns(true);
 
             //Act
-            var result = await sut.Handle(command, CancellationToken.None);
+            var result = await _sut.Handle(command, CancellationToken.None);
 
             //Assert
-            _userRepository.Verify(u => u.GetByWalletAddress(new WalletAddress(command.WalletAddress)));
+            _mockUserRepository.Verify(u => u.GetByWalletAddress(new WalletAddress(command.WalletAddress)));
         }
 
         [Fact]
         public async Task Handle_ShouldAddAndSaveuser_WhenGetByWalletAddressReturnsNull()
         {
             //Arrange
-            ConnectToWalletCommand command = new("", "", "");
-            _walletValidationService.Setup(s => s.Validate(command.Message, command.Signature, command.WalletAddress)).Returns(true);
-            ConnectToWalletCommandHandler sut = new(_walletValidationService.Object, _tokenGenerator.Object, _userRepository.Object, _unitOfWork.Object);
-
+            ConnectToWalletCommand command = AuthenticationUtilities.ConnectToWalletCommand();
+            _mockWalletValidationService.Setup(s => s.Validate(
+                command.Message,
+                command.Signature,
+                command.WalletAddress)).Returns(true);
+          
             //Act
-            var result = await sut.Handle(command, CancellationToken.None);
+            var result = await _sut.Handle(command, CancellationToken.None);
 
             //Assert
-            _userRepository.Verify(u => u.AddAsync(It.IsAny<User>()));
-            _unitOfWork.Verify(u => u.SaveChangesAsync(CancellationToken.None));
+            _mockUserRepository.Verify(u => u.AddAsync(It.IsAny<User>()));
+            _mockUnitOfWork.Verify(u => u.SaveChangesAsync(CancellationToken.None));
         }
 
         [Fact]
         public async Task Handle_ShouldGenerateToken_WhenWalletAddressIsValid()
         {
             //Arrange
-            ConnectToWalletCommand command = new("", "", "");
-            _walletValidationService.Setup(s => s.Validate(command.Message, command.Signature, command.WalletAddress)).Returns(true);
-            ConnectToWalletCommandHandler sut = new(_walletValidationService.Object, _tokenGenerator.Object, _userRepository.Object, _unitOfWork.Object);
+            ConnectToWalletCommand command = AuthenticationUtilities.ConnectToWalletCommand();
+            _mockWalletValidationService.Setup(s => s.Validate(
+                command.Message,
+                command.Signature,
+                command.WalletAddress)).Returns(true);
+           
 
             //Act
-            var result = await sut.Handle(command, CancellationToken.None);
+            var result = await _sut.Handle(command, CancellationToken.None);
 
             //Assert
-            _tokenGenerator.Verify(u => u.GenerateToken(It.IsAny<User>()));
+            _mockTokenGenerator.Verify(u => u.GenerateToken(It.IsAny<User>()));
         }
 
         [Fact]
         public async Task Handle_ShouldReturnSuccessWithAuthResponseValueType_WhenWalletAddressIsValid()
         {
             //Arrange
-            ConnectToWalletCommand command = new("", "", "");
-            _walletValidationService.Setup(s => s.Validate(command.Message, command.Signature, command.WalletAddress)).Returns(true);
-            ConnectToWalletCommandHandler sut = new(_walletValidationService.Object, _tokenGenerator.Object, _userRepository.Object, _unitOfWork.Object);
-
+            ConnectToWalletCommand command = AuthenticationUtilities.ConnectToWalletCommand();
+            _mockWalletValidationService.Setup(s => s.Validate(
+                command.Message,
+                command.Signature,
+                command.WalletAddress)).Returns(true);
+           
             //Act
-            var result = await sut.Handle(command, CancellationToken.None);
+            var result = await _sut.Handle(command, CancellationToken.None);
 
             //Assert
             result.Should().BeSuccess();

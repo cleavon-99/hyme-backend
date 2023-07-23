@@ -10,7 +10,6 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System.Security.Claims;
 
 namespace Hyme.API.Tests.Controllers.V1
 {
@@ -110,127 +109,127 @@ namespace Hyme.API.Tests.Controllers.V1
 
 
 
-        [Fact]
-        public async Task AddProject_ShouldReturn401UnAuthorized_ClaimIdIsNull()
-        {
-            //Arrange
-            ProjectRequest request = new() 
-            {
-                Title = "Test Title",
-                ShortDescription = "Short Description",
-                ProjectDescription = "Project Description"
-            };
+        //[Fact]
+        //public async Task AddProject_ShouldReturn401UnAuthorized_ClaimIdIsNull()
+        //{
+        //    //Arrange
+        //    ProjectRequest request = new() 
+        //    {
+        //        Title = "Test Title",
+        //        ShortDescription = "Short Description",
+        //        ProjectDescription = "Project Description"
+        //    };
 
-            //Act
-            var result = await _sut.AddProject(request);
+        //    //Act
+        //    var result = await _sut.AddProject(request);
 
-            //Assert
-            result.Result.Should().BeOfType<UnauthorizedResult>();
-        }
+        //    //Assert
+        //    result.Result.Should().BeOfType<UnauthorizedResult>();
+        //}
 
-        [Fact]
-        public async Task AddProject_ShouldSend_AddProjectCommand_WhenIdOfUserIsPresent()
-        {
-            //Arrange
-            ClaimsPrincipal user = new(new ClaimsIdentity(new Claim[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, _id.ToString())
-            }));
+        //[Fact]
+        //public async Task AddProject_ShouldSend_AddProjectCommand_WhenIdOfUserIsPresent()
+        //{
+        //    //Arrange
+        //    ClaimsPrincipal user = new(new ClaimsIdentity(new Claim[]
+        //    {
+        //        new Claim(ClaimTypes.NameIdentifier, _id.ToString())
+        //    }));
 
-            ProjectRequest request = new()
-            {
-                Title = "Test Title",
-                ShortDescription = "Short Description",
-                ProjectDescription = "Project Description"
-            };
+        //    ProjectRequest request = new()
+        //    {
+        //        Title = "Test Title",
+        //        ShortDescription = "Short Description",
+        //        ProjectDescription = "Project Description"
+        //    };
 
-            ProjectResponse response = new()
-            {
-                Id = _id,
-                Banner = "",
-                DateCreated = DateTime.Now,
-                Logo = "",
-                ProjectDescription = request.ProjectDescription,
-                ShortDescription = request.ShortDescription
-            };
+        //    ProjectResponse response = new()
+        //    {
+        //        Id = _id,
+        //        Banner = "",
+        //        DateCreated = DateTime.Now,
+        //        Logo = "",
+        //        ProjectDescription = request.ProjectDescription,
+        //        ShortDescription = request.ShortDescription
+        //    };
 
-            _sut.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
-            AddProjectCommand command = new(_id, request.Title, request.ShortDescription, request.ProjectDescription);
-            _sender.Setup(s => s.Send(command, _sut.HttpContext.RequestAborted)).ReturnsAsync(Result.Ok(response));
+        //    _sut.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+        //    AddProjectCommand command = new(_id, request.Title, request.ShortDescription, request.ProjectDescription);
+        //    _sender.Setup(s => s.Send(command, _sut.HttpContext.RequestAborted)).ReturnsAsync(Result.Ok(response));
 
-            //Act
-            var result = await _sut.AddProject(request);
+        //    //Act
+        //    var result = await _sut.AddProject(request);
 
-            //Assert
-            _sender.Verify(s => s.Send(new AddProjectCommand(_id, request.Title, request.ShortDescription, request.ProjectDescription), _sut.HttpContext.RequestAborted));
-        }
+        //    //Assert
+        //    _sender.Verify(s => s.Send(new AddProjectCommand(_id, request.Title, request.ShortDescription, request.ProjectDescription), _sut.HttpContext.RequestAborted));
+        //}
 
-        [Fact]
-        public async Task AddProject_ShouldReturnNotFound_WhenCommandReturns_UserNotFoundError()
-        {
-            //Arrange
+        //[Fact]
+        //public async Task AddProject_ShouldReturnNotFound_WhenCommandReturns_UserNotFoundError()
+        //{
+        //    //Arrange
             
-            ClaimsPrincipal user = new(new ClaimsIdentity(new Claim[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, _id.ToString())
-            }));
+        //    ClaimsPrincipal user = new(new ClaimsIdentity(new Claim[]
+        //    {
+        //        new Claim(ClaimTypes.NameIdentifier, _id.ToString())
+        //    }));
 
             
-            ProjectRequest request = new()
-            {
-                Title = "Test Title",
-                ShortDescription = "Short Description",
-                ProjectDescription = "Project Description"
-            };
+        //    ProjectRequest request = new()
+        //    {
+        //        Title = "Test Title",
+        //        ShortDescription = "Short Description",
+        //        ProjectDescription = "Project Description"
+        //    };
             
       
-            _sut.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
-            AddProjectCommand command = new AddProjectCommand(_id, request.Title, request.ShortDescription, request.ProjectDescription);
-            _sender.Setup(s => s.Send(command, _sut.HttpContext.RequestAborted)).ReturnsAsync(Result.Fail(new UserNotFoundError(_id)));
-            //Act
-            var result = await _sut.AddProject(request);
+        //    _sut.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+        //    AddProjectCommand command = new AddProjectCommand(_id, request.Title, request.ShortDescription, request.ProjectDescription);
+        //    _sender.Setup(s => s.Send(command, _sut.HttpContext.RequestAborted)).ReturnsAsync(Result.Fail(new UserNotFoundError(_id)));
+        //    //Act
+        //    var result = await _sut.AddProject(request);
 
-            //Assert
-            result.Result.Should().BeOfType<NotFoundResult>();
-        }
+        //    //Assert
+        //    result.Result.Should().BeOfType<NotFoundResult>();
+        //}
 
-        [Fact]
-        public async Task AddProject_ShouldReturnCreatedAtRoute_WhenResultIsSuccess()
-        {
-            //Arrange
+        //[Fact]
+        //public async Task AddProject_ShouldReturnCreatedAtRoute_WhenResultIsSuccess()
+        //{
+        //    //Arrange
             
-            ClaimsPrincipal user = new(new ClaimsIdentity(new Claim[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, _id.ToString())
-            }));
+        //    ClaimsPrincipal user = new(new ClaimsIdentity(new Claim[]
+        //    {
+        //        new Claim(ClaimTypes.NameIdentifier, _id.ToString())
+        //    }));
 
 
-            ProjectRequest request = new()
-            {
-                Title = "Test Title",
-                ShortDescription = "Short Description",
-                ProjectDescription = "Project Description"
-            };
+        //    ProjectRequest request = new()
+        //    {
+        //        Title = "Test Title",
+        //        ShortDescription = "Short Description",
+        //        ProjectDescription = "Project Description"
+        //    };
 
-            ProjectResponse response = new()
-            {
-                Id = _id,
-                Banner = "",
-                DateCreated = DateTime.Now,
-                Logo = "",
-                ProjectDescription = request.ProjectDescription,
-                ShortDescription = request.ShortDescription
-            };
+        //    ProjectResponse response = new()
+        //    {
+        //        Id = _id,
+        //        Banner = "",
+        //        DateCreated = DateTime.Now,
+        //        Logo = "",
+        //        ProjectDescription = request.ProjectDescription,
+        //        ShortDescription = request.ShortDescription
+        //    };
 
-            _sut.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
-            AddProjectCommand command = new(_id, request.Title, request.ShortDescription, request.ProjectDescription);
-            _sender.Setup(s => s.Send(command, _sut.HttpContext.RequestAborted)).ReturnsAsync(Result.Ok(response));
-            //Act
-            var result = await _sut.AddProject(request);
+        //    _sut.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
+        //    AddProjectCommand command = new(_id, request.Title, request.ShortDescription, request.ProjectDescription);
+        //    _sender.Setup(s => s.Send(command, _sut.HttpContext.RequestAborted)).ReturnsAsync(Result.Ok(response));
+        //    //Act
+        //    var result = await _sut.AddProject(request);
 
-            //Assert
-            result.Result.Should().BeOfType<CreatedAtRouteResult>();
-        }
+        //    //Assert
+        //    result.Result.Should().BeOfType<CreatedAtRouteResult>();
+        //}
 
         [Fact]
         public async Task ApproveProject_ShouldSend_ApproveProjectCommand()

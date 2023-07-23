@@ -9,21 +9,21 @@ namespace Hyme.Application.Commands.Users
 {
     public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Result>
     {
-        private readonly IUserRepository _userProfileRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public UpdateUserCommandHandler(
-            IUserRepository userProfileRepository,
+            IUserRepository userRepository,
             IUnitOfWork unitOfWork)
         {
-            _userProfileRepository = userProfileRepository;
+            _userRepository = userRepository;
             _unitOfWork = unitOfWork;
         }
 
 
         public async Task<Result> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
-            User? userProfile = await _userProfileRepository.GetByIdAsync(new UserId(request.UserProfileId));
+            User? userProfile = await _userRepository.GetByIdAsync(new UserId(request.UserProfileId));
             if (userProfile is null)
                 return Result.Fail(new UserNotFoundError(request.UserProfileId));
 

@@ -14,28 +14,28 @@ namespace Hyme.Domain.Entities
         public DateTime? DateLastLogout { get; private set; }
         public DateTime? DateLastUpdated { get; private set; }
         public DateTime? DateDeleted { get; private set; }
-        public Project? Project { get; private set; }
-        public readonly List<Role> _roles = new();
+        public Project Project { get; private set; } = null!;
+        
+        private readonly List<Role> _roles = new();
         public IReadOnlyCollection<Role> Roles => _roles;
        
-
-        public User(
+        private User(
             UserId id, 
-            WalletAddress walletAddress,
-            DateTime dateCreated)
+            WalletAddress walletAddress)
         {
             Id = id;
             WalletAddress = walletAddress;
-            DateCreated = dateCreated;
         }
 
-        public Result<Project> CreateProject(string title, string logo, string banner, string shortDescription, string projectDescription)
+        public static User Create(UserId id, WalletAddress walletAddress)
         {
-            if (Project != null)
-                return Result.Fail(new ProjectAlreadyCreatedError());
+            User user = new(id, walletAddress)
+            {
+                DateCreated = DateTime.UtcNow,
+                Project = Project.Create(new ProjectId(Guid.NewGuid()), id)
+            };
 
-            Project = Project.Create(new ProjectId(Guid.NewGuid()), Id, title, logo, banner, shortDescription, projectDescription);
-            return Project;
+            return user;
         }
 
         public void Update(string name)

@@ -36,9 +36,9 @@ namespace Hyme.Application.Tests.Queries.UserProfiles
             PaginationFilter filter = PaginationFilter.Create(query.PageNumber, query.PageSize);
             List<User> users = new() 
             {
-                new User(new UserId(Guid.NewGuid()), new WalletAddress("0x01"), DateTime.UtcNow),
-                new User(new UserId(Guid.NewGuid()), new WalletAddress("0x02"), DateTime.UtcNow),
-                new User(new UserId(Guid.NewGuid()), new WalletAddress("0x03"), DateTime.UtcNow),
+                User.Create(new UserId(Guid.NewGuid()), new WalletAddress("0x01")),
+                User.Create(new UserId(Guid.NewGuid()), new WalletAddress("0x02")),
+                User.Create(new UserId(Guid.NewGuid()), new WalletAddress("0x03")),
             };
 
             _userRepository.Setup(u => u.GetListAsync(filter)).ReturnsAsync(users);
@@ -59,9 +59,9 @@ namespace Hyme.Application.Tests.Queries.UserProfiles
             PaginationFilter filter = PaginationFilter.Create(query.PageNumber, query.PageSize);
             List<User> users = new()
             {
-                new User(new UserId(Guid.NewGuid()), new WalletAddress("0x01"), DateTime.UtcNow),
-                new User(new UserId(Guid.NewGuid()), new WalletAddress("0x02"), DateTime.UtcNow),
-                new User(new UserId(Guid.NewGuid()), new WalletAddress("0x03"), DateTime.UtcNow),
+                User.Create(new UserId(Guid.NewGuid()), new WalletAddress("0x01")),
+                User.Create(new UserId(Guid.NewGuid()), new WalletAddress("0x02")),
+                User.Create(new UserId(Guid.NewGuid()), new WalletAddress("0x03")),
             };
 
             _userRepository.Setup(u => u.GetListAsync(It.IsAny<PaginationFilter>())).ReturnsAsync(users);

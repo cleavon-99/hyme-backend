@@ -56,7 +56,7 @@ namespace Hyme.Application.Tests.Commands.Projects
         {
             //Arrange
             ApproveProjectCommand command = new(Guid.NewGuid());
-            Project project = Project.Create(new ProjectId(command.ProjectId), new UserId(Guid.NewGuid()), "Title", "Logo", "Banner", "shortDescription", "ProjectDescription");
+            Project project = Project.Create(new ProjectId(command.ProjectId), new UserId(Guid.NewGuid()));
             _projectRepository.Setup(p => p.GetByIdAsync(new ProjectId(command.ProjectId))).ReturnsAsync(project);
             
             ApproveProjectCommandHandler sut = new(_projectRepository.Object, _unitOfWork.Object);
@@ -74,7 +74,7 @@ namespace Hyme.Application.Tests.Commands.Projects
         {
             //Arrange
             ApproveProjectCommand command = new(Guid.NewGuid());
-            Project project = Project.Create(new ProjectId(command.ProjectId), new UserId(Guid.NewGuid()), "Title", "Logo", "Banner", "shortDescription", "ProjectDescription");
+            Project project = Project.Create(new ProjectId(command.ProjectId), new UserId(Guid.NewGuid()));
             _projectRepository.Setup(p => p.GetByIdAsync(new ProjectId(command.ProjectId))).ReturnsAsync(project);
 
             ApproveProjectCommandHandler sut = new(_projectRepository.Object, _unitOfWork.Object);

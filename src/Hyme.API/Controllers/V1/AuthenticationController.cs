@@ -7,13 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Hyme.API.Controllers.V1
 {
-
     /// <summary>
     /// 
     /// </summary>
     [Route("authentication")]
     [ApiController]
-    public class AuthenticationController : ControllerBase
+    public class AuthenticationController : ApiBase
     {
         private readonly ISender _sender;
 
@@ -25,7 +24,6 @@ namespace Hyme.API.Controllers.V1
         {
             _sender = sender;
         }
-       
 
         /// <summary>
         /// Token
@@ -43,13 +41,7 @@ namespace Hyme.API.Controllers.V1
             if (result.IsFailed)
             {
                 if (result.HasError(out IEnumerable<ValidationError> errors))
-                {
-                    foreach (var e in errors)
-                    {
-                        ModelState.AddModelError(e.PropertyName, e.Message);
-                    }
-                    return ValidationProblem(ModelState);
-                }
+                    return Problem(errors);
                 return BadRequest("Invalid signature");
             }      
             return Ok(result.Value);
