@@ -7,43 +7,44 @@ using Moq;
 using Hyme.Application.Errors;
 using Hyme.Domain.Entities;
 using Hyme.Domain.Primitives;
+using TestUtilities.Commands;
 
 namespace Hyme.Application.Tests.Commands.Projects
 {
     public class RejectProjectCommandHandlerTests
     {
-        private readonly Mock<IProjectRepository> _projectRepository;
-        private readonly Mock<IUnitOfWork> _unitOfWork;
+        private readonly Mock<IProjectRepository> _mockProjectRepository;
+        private readonly Mock<IUnitOfWork> _mockUnitOfWork;
+        private readonly RejectProjectCommandHandler _sut;
 
         public RejectProjectCommandHandlerTests()
         {
-            _projectRepository = new();
-            _unitOfWork = new();
+            _mockProjectRepository = new();
+            _mockUnitOfWork = new();
+            _sut = new(_mockProjectRepository.Object, _mockUnitOfWork.Object);
         }
 
         [Fact]
         public async Task Handle_ShouldInvokeGetProjectByIdAsync()
         {
             //Arrange
-            RejectProjectCommand command = new(Guid.NewGuid());
-            RejectProjectCommandHandler sut = new(_projectRepository.Object, _unitOfWork.Object);
-
+            RejectProjectCommand command = ProjectCommandsUtilities.RejectProjectCommand();
+           
             //Act
-            var result = await sut.Handle(command, CancellationToken.None);
+            var result = await _sut.Handle(command, CancellationToken.None);
 
             //Assert
-            _projectRepository.Verify(p => p.GetByIdAsync(new ProjectId(command.ProjectId)));
+            _mockProjectRepository.Verify(p => p.GetByIdAsync(new ProjectId(command.ProjectId)));
         }
 
         [Fact]
         public async Task Handle_ShouldReturnProjectNotFoundResult_WhenRepositoryReturnsNull()
         {
             //Arrange
-            RejectProjectCommand command = new(Guid.NewGuid());
-            RejectProjectCommandHandler sut = new(_projectRepository.Object, _unitOfWork.Object);
-
+            RejectProjectCommand command = ProjectCommandsUtilities.RejectProjectCommand();
+           
             //Act
-            var result = await sut.Handle(command, CancellationToken.None);
+            var result = await _sut.Handle(command, CancellationToken.None);
 
             //Assert
             result.Should().HaveReason(new ProjectNotFoundError(command.ProjectId));
@@ -52,18 +53,14 @@ namespace Hyme.Application.Tests.Commands.Projects
         [Fact]
         public async Task Handle_ShouldInvokeRejectProject_WhenRepositoryReturnsAValue()
         {
-            //Arrange
-            
-            RejectProjectCommand command = new(Guid.NewGuid());
-            Project project = Project.Create(
-                new ProjectId(command.ProjectId), 
-                new UserId(Guid.NewGuid()) 
-                );
-            _projectRepository.Setup(p => p.GetByIdAsync(project.Id)).ReturnsAsync(project);
-            RejectProjectCommandHandler sut = new(_projectRepository.Object, _unitOfWork.Object);
+            //Arrange          
+            RejectProjectCommand command = ProjectCommandsUtilities.RejectProjectCommand();
+            Project project = ProjectCommandsUtilities.CreateProject();
+            _mockProjectRepository.Setup(p => p.GetByIdAsync(project.Id)).ReturnsAsync(project);
+
 
             //Act
-            var result = await sut.Handle(command, CancellationToken.None);
+            var result = await _sut.Handle(command, CancellationToken.None);
 
             //Assert
             project.Status.Should().Be(PublishStatus.Rejected);
@@ -74,20 +71,16 @@ namespace Hyme.Application.Tests.Commands.Projects
         public async Task Handle_ShouldInvokeUnitOfWorkSaveChangesAsync_AndReturnsSuccessResult()
         {
             //Arrange
-            RejectProjectCommand command = new(Guid.NewGuid());
-            Project project = Project.Create(
-                new ProjectId(command.ProjectId),
-                new UserId(Guid.NewGuid())
-                );
-            _projectRepository.Setup(p => p.GetByIdAsync(project.Id)).ReturnsAsync(project);
-            RejectProjectCommandHandler sut = new(_projectRepository.Object, _unitOfWork.Object);
-
+            RejectProjectCommand command = ProjectCommandsUtilities.RejectProjectCommand();
+            Project project = ProjectCommandsUtilities.CreateProject();
+            _mockProjectRepository.Setup(p => p.GetByIdAsync(project.Id)).ReturnsAsync(project);
+           
             //Act
-            var result = await sut.Handle(command, CancellationToken.None);
+            var result = await _sut.Handle(command, CancellationToken.None);
 
             //Assert
             project.Status.Should().Be(PublishStatus.Rejected);
-            _unitOfWork.Verify(u => u.SaveChangesAsync(CancellationToken.None));
+            _mockUnitOfWork.Verify(u => u.SaveChangesAsync(CancellationToken.None));
             result.Should().BeSuccess();
         }
 

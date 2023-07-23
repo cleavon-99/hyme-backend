@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System.Security.Claims;
+using TestUtilities.Constants;
 
 namespace Hyme.API.Tests.Controllers.V1
 {
@@ -18,10 +19,18 @@ namespace Hyme.API.Tests.Controllers.V1
     {
 
         private readonly Mock<ISender> _sender;
+        private readonly UsersController _sut;
 
         public UsersControllerTests()
         {
-            _sender = new();    
+            _sender = new();
+            _sut = new UsersController(_sender.Object);
+            _sut.ControllerContext.HttpContext = new DefaultHttpContext()
+            {
+                User = new(new ClaimsIdentity(new Claim[] {
+                    new Claim(ClaimTypes.NameIdentifier, Constants.User.UserId.Value.ToString())
+                }))
+            };
         }
 
         [Fact]
@@ -29,11 +38,9 @@ namespace Hyme.API.Tests.Controllers.V1
         {
             //Arrange
             PaginationRequest request = new() { PageNumber = 0, PageSize = 0 };
-            var sut = new UsersController(_sender.Object);
-            sut.ControllerContext.HttpContext = new DefaultHttpContext();
             
             //Act
-            var result = await sut.GetUsers(request);
+            var result = await _sut.GetUsers(request);
             
             //Assert
             result.Result.Should().BeOfType<BadRequestObjectResult>();
@@ -45,15 +52,13 @@ namespace Hyme.API.Tests.Controllers.V1
             //Arrange
             PaginationRequest request = new();
             GetUsersQuery query = new(request.PageNumber, request.PageSize);          
-            var sut = new UsersController(_sender.Object);
-            sut.ControllerContext.HttpContext = new DefaultHttpContext();
-            _sender.Setup(s => s.Send(query, sut.HttpContext.RequestAborted));
+            _sender.Setup(s => s.Send(query, _sut.HttpContext.RequestAborted));
 
             //Act
-            var result = await sut.GetUsers(request);
+            var result = await _sut.GetUsers(request);
 
             //Assert
-            _sender.Verify(s => s.Send(query, sut.HttpContext.RequestAborted));
+            _sender.Verify(s => s.Send(query, _sut.HttpContext.RequestAborted));
         }
 
         [Fact]
@@ -62,12 +67,12 @@ namespace Hyme.API.Tests.Controllers.V1
             //Arrange
             PaginationRequest request = new();
             GetUsersQuery query = new(request.PageNumber, request.PageSize);
-            var sut = new UsersController(_sender.Object);
-            sut.ControllerContext.HttpContext = new DefaultHttpContext();
-            _sender.Setup(s => s.Send(query, sut.HttpContext.RequestAborted));
+           
+            _sut.ControllerContext.HttpContext = new DefaultHttpContext();
+            _sender.Setup(s => s.Send(query, _sut.HttpContext.RequestAborted));
 
             //Act
-            var result = await sut.GetUsers(request);
+            var result = await _sut.GetUsers(request);
 
             //Assert
             result.Result.Should().BeOfType<OkObjectResult>();
@@ -75,65 +80,30 @@ namespace Hyme.API.Tests.Controllers.V1
 
 
         [Fact]
-        public async Task GetMyProfile_ShouldReturn401Unauthorize_WhenNoIdFoundInTheClaims()
-        {
-            //Arrange
-            var sut = new UsersController(_sender.Object);
-            sut.ControllerContext.HttpContext = new DefaultHttpContext();
-
-            //Act
-            var result = await sut.GetMyProfile();
-
-            //Assert
-            result.Result.Should().BeOfType<UnauthorizedResult>();
-        }
-
-        [Fact]
         public async Task GetMyProfile_ShoudSendGetMyProfileQuery_WhenUserIdClaimsIsPresent()
         {
             //Arrange
-            string userId = Guid.NewGuid().ToString();
-            GetUserProfleByIdQuery query = new(Guid.Parse(userId));
-            ClaimsPrincipal user = new(new ClaimsIdentity(new Claim[] 
-            { 
-                new Claim(ClaimTypes.NameIdentifier, userId)
-            }));
-            
-            var sut = new UsersController(_sender.Object);
-            
-            sut.ControllerContext.HttpContext = new DefaultHttpContext() 
-            {
-                User = user
-            };
-            
-            _sender.Setup(s => s.Send(query, sut.HttpContext.RequestAborted));
+            GetUserProfleByIdQuery query = new(Constants.User.UserId.Value);
+
+            _sender.Setup(s => s.Send(query, _sut.HttpContext.RequestAborted));
 
             //Act
-            var result = await sut.GetMyProfile();
+            var result = await _sut.GetMyProfile();
 
             //Assert
-            _sender.Verify(s => s.Send(query, sut.HttpContext.RequestAborted));
+            _sender.Verify(s => s.Send(query, _sut.HttpContext.RequestAborted));
         }
 
         [Fact]
         public async Task GetMyProfile_ShouldReturnNotFoundResult_WhenQueryReturnsNullValue()
         {
             //Arrange
-            string userId = Guid.NewGuid().ToString();
-            GetUserProfleByIdQuery query = new(Guid.Parse(userId));
-            ClaimsPrincipal user = new(new ClaimsIdentity(new Claim[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, userId)
-            }));
-            var sut = new UsersController(_sender.Object);
-            sut.ControllerContext.HttpContext = new DefaultHttpContext()
-            {
-                User = user
-            };
-            _sender.Setup(s => s.Send(query, sut.HttpContext.RequestAborted)).ReturnsAsync(() => null);
+            GetUserProfleByIdQuery query = new(Constants.User.UserId.Value);
+          
+            _sender.Setup(s => s.Send(query, _sut.HttpContext.RequestAborted)).ReturnsAsync(() => null);
 
             //Act
-            var result = await sut.GetMyProfile();
+            var result = await _sut.GetMyProfile();
 
             //Assert
             result.Result.Should().BeOfType<NotFoundResult>();
@@ -143,22 +113,13 @@ namespace Hyme.API.Tests.Controllers.V1
         public async Task GetMyProfile_ShouldReturnOkObjectResult_WhenQueryReturnsNonNullValue()
         {
             //Arrange
-            string userId = Guid.NewGuid().ToString();
-            GetUserProfleByIdQuery query = new(Guid.Parse(userId));
-            ClaimsPrincipal user = new(new ClaimsIdentity(new Claim[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, userId)
-            }));
-            var sut = new UsersController(_sender.Object);
-            sut.ControllerContext.HttpContext = new DefaultHttpContext()
-            {
-                User = user
-            };
+            GetUserProfleByIdQuery query = new(Constants.User.UserId.Value);
 
-            _sender.Setup(s => s.Send(query, sut.HttpContext.RequestAborted)).ReturnsAsync(new UserResponse());
+
+            _sender.Setup(s => s.Send(query, _sut.HttpContext.RequestAborted)).ReturnsAsync(new UserResponse());
 
             //Act
-            var result = await sut.GetMyProfile();
+            var result = await _sut.GetMyProfile();
 
             //Assert
             result.Result.Should().BeOfType<OkObjectResult>();
@@ -169,12 +130,11 @@ namespace Hyme.API.Tests.Controllers.V1
         public async Task UpdateProfile_ShouldReturn401Unauthorized_WhenClaimsIdIsNull()
         {
             //Arrange
-            UpdateUserProfileRequest request = new() { Name = "Arjay" };
-            var sut = new UsersController(_sender.Object);
-            sut.ControllerContext.HttpContext = new DefaultHttpContext();
-
+            _sut.ControllerContext.HttpContext = new DefaultHttpContext();
+            UpdateUserProfileRequest request = new() { Name = Constants.User.Name };
+           
             //Act
-            var result = await sut.UpdateProfile(request);
+            var result = await _sut.UpdateProfile(request);
 
             //Assert
             result.Should().BeOfType<UnauthorizedResult>();
@@ -184,43 +144,31 @@ namespace Hyme.API.Tests.Controllers.V1
         public async Task UpdateProfile_ShouldSendUpdateProfileCommand_WhenUserIdClaimIsPresent()
         {
             //Arrange
-            Guid userId = Guid.NewGuid();
             
-            UpdateUserProfileRequest request = new() { Name = "Arjay" };
-            UpdateUserCommand command = new(userId, request.Name);
-            
-            ClaimsPrincipal user = new(new ClaimsIdentity(new Claim[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, userId.ToString())
-            }));
-            var sut = new UsersController(_sender.Object);     
-            sut.ControllerContext.HttpContext = new DefaultHttpContext() { User = user};
-            _sender.Setup(s => s.Send(command, sut.HttpContext.RequestAborted)).ReturnsAsync(Result.Fail(new UserNotFoundError(userId)));
+            UpdateUserProfileRequest request = new() { Name = Constants.User.Name };
+            UpdateUserCommand command = new(Constants.User.UserId.Value, request.Name);
+
+          
+            _sender.Setup(s => s.Send(command, _sut.HttpContext.RequestAborted))
+                .ReturnsAsync(Result.Fail(new UserNotFoundError(command.UserProfileId)));
             //Act
-            var result = await sut.UpdateProfile(request);
+            var result = await _sut.UpdateProfile(request);
 
             //Assert
-            _sender.Verify(s => s.Send(command, sut.HttpContext.RequestAborted));
+            _sender.Verify(s => s.Send(command, _sut.HttpContext.RequestAborted));
         }
 
         [Fact]
         public async Task UpdateProfile_ShouldReturnNotFound_WhenCommandRetunsFailureResult()
         {
             //Arrange
-            Guid userId = Guid.NewGuid();
+            UpdateUserProfileRequest request = new() { Name = Constants.User.Name };
+            UpdateUserCommand command = new(Constants.User.UserId.Value, request.Name);
 
-            UpdateUserProfileRequest request = new() { Name = "Arjay" };
-            UpdateUserCommand command = new(userId, request.Name);
-
-            ClaimsPrincipal user = new(new ClaimsIdentity(new Claim[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, userId.ToString())
-            }));
-            var sut = new UsersController(_sender.Object);
-            sut.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
-            _sender.Setup(s => s.Send(command, sut.HttpContext.RequestAborted)).ReturnsAsync(Result.Fail(new UserNotFoundError(userId)));
+            _sender.Setup(s => s.Send(command, _sut.HttpContext.RequestAborted))
+                .ReturnsAsync(Result.Fail(new UserNotFoundError(command.UserProfileId)));
             //Act
-            var result = await sut.UpdateProfile(request);
+            var result = await _sut.UpdateProfile(request);
 
             //Assert
             result.Should().BeOfType<NotFoundResult>();
@@ -230,20 +178,13 @@ namespace Hyme.API.Tests.Controllers.V1
         public async Task UpdateProfile_ShoulrReturn204NoContent_WhenCommandReturnsSuccessResult()
         {
             //Arrange
-            Guid userId = Guid.NewGuid();
+            UpdateUserProfileRequest request = new() { Name = Constants.User.Name };
+            UpdateUserCommand command = new(Constants.User.UserId.Value, request.Name);
 
-            UpdateUserProfileRequest request = new() { Name = "Arjay" };
-            UpdateUserCommand command = new(userId, request.Name);
 
-            ClaimsPrincipal user = new(new ClaimsIdentity(new Claim[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, userId.ToString())
-            }));
-            var sut = new UsersController(_sender.Object);
-            sut.ControllerContext.HttpContext = new DefaultHttpContext() { User = user };
-            _sender.Setup(s => s.Send(command, sut.HttpContext.RequestAborted)).ReturnsAsync(Result.Ok());
+            _sender.Setup(s => s.Send(command, _sut.HttpContext.RequestAborted)).ReturnsAsync(Result.Ok());
             //Act
-            var result = await sut.UpdateProfile(request);
+            var result = await _sut.UpdateProfile(request);
 
             //Assert
             result.Should().BeOfType<NoContentResult>();

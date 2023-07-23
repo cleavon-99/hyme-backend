@@ -18,7 +18,9 @@ namespace Hyme.Infrastructure
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IProjectRepository, ProjectRepository>();
+            services.AddScoped<IWhitelistRepository, WhiteListRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
             
             services.AddDbContext<ApplicationDbContext>(options =>
             {

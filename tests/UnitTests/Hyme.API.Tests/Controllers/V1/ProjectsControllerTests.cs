@@ -10,17 +10,19 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using TestUtilities.Commands;
+using TestUtilities.Constants;
+using TestUtilities.Queries;
 
 namespace Hyme.API.Tests.Controllers.V1
 {
     public class ProjectsControllerTests
     {
-        private readonly Guid _id; 
+
         private readonly Mock<ISender> _sender;
         private readonly ProjectsController _sut;
         public ProjectsControllerTests()
         {
-            _id = Guid.NewGuid();
             _sender = new();
             _sut = new(_sender.Object);
             _sut.ControllerContext.HttpContext = new DefaultHttpContext();
@@ -70,21 +72,23 @@ namespace Hyme.API.Tests.Controllers.V1
         public async Task GetProjectById_ShouldSendGetProjectByIdQuery()
         {
             //Arrange
+            GetProjectByIdQuery query = ProjectQueriesUtilities.GetProjectByIdQuery();
    
             //Act
-            var result = await _sut.GetProjectById(_id);
+            var result = await _sut.GetProjectById(Constants.Project.ProjectId.Value);
 
             //Assert
-            _sender.Verify(s => s.Send(new GetProjectByIdQuery(_id), _sut.HttpContext.RequestAborted));
+            _sender.Verify(s => s.Send(query, _sut.HttpContext.RequestAborted));
         }
 
         [Fact]
         public async Task GetProjectById_ShouldReturnNotFound_WhenQueryReturnsNull()
         {
             //Arrange
-            
+            GetProjectByIdQuery query = ProjectQueriesUtilities.GetProjectByIdQuery();
+
             //Act
-            var result = await _sut.GetProjectById(_id);
+            var result = await _sut.GetProjectById(query.Id);
 
             //Assert
             result.Result.Should().BeOfType<NotFoundResult>();
@@ -94,17 +98,17 @@ namespace Hyme.API.Tests.Controllers.V1
         public async Task GetProjectById_ShouldReturnOkObjectResult_WhenQueryReturnsAValue()
         {
             //Arrange 
-            GetProjectByIdQuery query = new(_id);
-            _sender.Setup(s => s.Send(query, _sut.HttpContext.RequestAborted)).ReturnsAsync(new ProjectResponse() { Id = _id});
+            GetProjectByIdQuery query = ProjectQueriesUtilities.GetProjectByIdQuery();
+            _sender.Setup(s => s.Send(query, _sut.HttpContext.RequestAborted)).ReturnsAsync(new ProjectResponse() { Id = query .Id});
             
             //Act
-            var result = await _sut.GetProjectById(_id);
+            var result = await _sut.GetProjectById(query.Id);
 
             //Assert
             result.Result.Should().BeOfType<OkObjectResult>();
             var okResult = (OkObjectResult)result.Result!;
             ProjectResponse response = (ProjectResponse)okResult.Value!;
-            response.Id.Should().Be(_id);
+            response.Id.Should().Be(query.Id);
         }
 
 
@@ -235,11 +239,12 @@ namespace Hyme.API.Tests.Controllers.V1
         public async Task ApproveProject_ShouldSend_ApproveProjectCommand()
         {
             //Arrange 
-            ApproveProjectCommand command = new(_id);       
-            _sender.Setup(s => s.Send(command, _sut.HttpContext.RequestAborted)).ReturnsAsync(Result.Fail(new ProjectNotFoundError(_id)));
+            ApproveProjectCommand command = ProjectCommandsUtilities.ApproveProjectCommand();       
+            _sender.Setup(s => s.Send(command, _sut.HttpContext.RequestAborted))
+                .ReturnsAsync(Result.Fail(new ProjectNotFoundError(command.ProjectId)));
             
             //Act
-            var result = await _sut.ApproveProject(_id);
+            var result = await _sut.ApproveProject(command.ProjectId);
 
             //Assert
             _sender.Verify(s => s.Send(command, _sut.HttpContext.RequestAborted));
@@ -249,11 +254,12 @@ namespace Hyme.API.Tests.Controllers.V1
         public async Task ApproveProject_ShouldReturnNotFound_WhenCommandReturnsProjectNotFoundError()
         {
             //Arrange 
-            ApproveProjectCommand command = new(_id);
-            _sender.Setup(s => s.Send(command, _sut.HttpContext.RequestAborted)).ReturnsAsync(Result.Fail(new ProjectNotFoundError(_id)));
+            ApproveProjectCommand command = ProjectCommandsUtilities.ApproveProjectCommand();
+            _sender.Setup(s => s.Send(command, _sut.HttpContext.RequestAborted))
+                .ReturnsAsync(Result.Fail(new ProjectNotFoundError(command.ProjectId)));
             
             //Act
-            var result = await _sut.ApproveProject(_id);
+            var result = await _sut.ApproveProject(command.ProjectId);
 
             //Assert
             result.Should().BeOfType<NotFoundResult>();
@@ -263,11 +269,11 @@ namespace Hyme.API.Tests.Controllers.V1
         public async Task ApproveProject_ShouldReturnNoContentResult_WhenCommandReturnsSuccessResult()
         {
             //Arrange      
-            ApproveProjectCommand command = new(_id);
+            ApproveProjectCommand command = ProjectCommandsUtilities.ApproveProjectCommand();
             _sender.Setup(s => s.Send(command, _sut.HttpContext.RequestAborted)).ReturnsAsync(Result.Ok());
             
             //Act
-            var result = await _sut.ApproveProject(_id);
+            var result = await _sut.ApproveProject(command.ProjectId);
 
             //Assert
             result.Should().BeOfType<NoContentResult>();
@@ -277,11 +283,12 @@ namespace Hyme.API.Tests.Controllers.V1
         public async Task RejectProject_ShouldSendRejectProjectCommand()
         {
             //Arrange
-            RejectProjectCommand command = new(_id);
-            _sender.Setup(s => s.Send(command, _sut.HttpContext.RequestAborted)).ReturnsAsync(Result.Fail(new ProjectNotFoundError(_id)));
+            RejectProjectCommand command = ProjectCommandsUtilities.RejectProjectCommand();
+            _sender.Setup(s => s.Send(command, _sut.HttpContext.RequestAborted))
+                .ReturnsAsync(Result.Fail(new ProjectNotFoundError(command.ProjectId)));
             
             //Act
-            var result = await _sut.RejectProject(_id);
+            var result = await _sut.RejectProject(command.ProjectId);
 
             //Assert
             _sender.Verify(s => s.Send(command, _sut.HttpContext.RequestAborted));
@@ -291,11 +298,12 @@ namespace Hyme.API.Tests.Controllers.V1
         public async Task RejectProject_ShouldReturnNotFound_WhenCommandReturnsProjectNotFoundError()
         {
             //Arrange
-            RejectProjectCommand command = new(_id);        
-            _sender.Setup(s => s.Send(command, _sut.HttpContext.RequestAborted)).ReturnsAsync(Result.Fail(new ProjectNotFoundError(_id)));
+            RejectProjectCommand command = ProjectCommandsUtilities.RejectProjectCommand();
+            _sender.Setup(s => s.Send(command, _sut.HttpContext.RequestAborted))
+                .ReturnsAsync(Result.Fail(new ProjectNotFoundError(command.ProjectId)));
             
             //Act
-            var result = await _sut.RejectProject(_id);
+            var result = await _sut.RejectProject(command.ProjectId);
 
             //Assert
             result.Should().BeOfType<NotFoundResult>();
@@ -305,11 +313,11 @@ namespace Hyme.API.Tests.Controllers.V1
         public async Task RejectProject_ShouldReturnNoContentResult_WhenCommandReturnsSuccessResult()
         {
             //Arrange
-            RejectProjectCommand command = new(_id);
+            RejectProjectCommand command = ProjectCommandsUtilities.RejectProjectCommand();
             _sender.Setup(s => s.Send(command, _sut.HttpContext.RequestAborted)).ReturnsAsync(Result.Ok);
             
             //Act
-            var result = await _sut.RejectProject(_id);
+            var result = await _sut.RejectProject(command.ProjectId);
 
             //Assert
             result.Should().BeOfType<NoContentResult>();

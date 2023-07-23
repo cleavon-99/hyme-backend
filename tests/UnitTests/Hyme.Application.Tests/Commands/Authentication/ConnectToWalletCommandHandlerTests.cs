@@ -8,6 +8,7 @@ using Hyme.Domain.ValueObjects;
 using Hyme.Domain.Entities;
 using Hyme.Application.DTOs.Response;
 using Hyme.Application.Errors;
+using TestUtilities.Commands;
 
 namespace Hyme.Application.Tests.Commands.Authentication
 {
@@ -112,7 +113,6 @@ namespace Hyme.Application.Tests.Commands.Authentication
                 command.Signature,
                 command.WalletAddress)).Returns(true);
            
-
             //Act
             var result = await _sut.Handle(command, CancellationToken.None);
 
@@ -129,6 +129,7 @@ namespace Hyme.Application.Tests.Commands.Authentication
                 command.Message,
                 command.Signature,
                 command.WalletAddress)).Returns(true);
+
            
             //Act
             var result = await _sut.Handle(command, CancellationToken.None);

@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Hyme.Application\Hyme.Application.csproj" />
+    <ProjectReference Include="..\TestUtilities\TestUtilities.csproj" />
   </ItemGroup>
 
 </Project>

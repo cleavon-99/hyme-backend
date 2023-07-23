@@ -9,7 +9,7 @@ using Hyme.Domain.Repositories;
 using Hyme.Domain.ValueObjects;
 using Moq;
 
-namespace Hyme.Application.Tests.Queries.UserProfiles
+namespace Hyme.Application.Tests.Queries.Users
 {
     public class GetUsersQueryHandlerTests
     {
@@ -19,10 +19,10 @@ namespace Hyme.Application.Tests.Queries.UserProfiles
 
         public GetUsersQueryHandlerTests()
         {
-            MapperConfiguration mapperConfiguration = new(options => 
+            MapperConfiguration mapperConfiguration = new(options =>
             {
                 options.AddProfile<UserMappingProfiles>();
-            });    
+            });
 
             _mapper = mapperConfiguration.CreateMapper();
             _userRepository = new();
@@ -34,7 +34,7 @@ namespace Hyme.Application.Tests.Queries.UserProfiles
             //Arrange
             GetUsersQuery query = new(1, 20);
             PaginationFilter filter = PaginationFilter.Create(query.PageNumber, query.PageSize);
-            List<User> users = new() 
+            List<User> users = new()
             {
                 User.Create(new UserId(Guid.NewGuid()), new WalletAddress("0x01")),
                 User.Create(new UserId(Guid.NewGuid()), new WalletAddress("0x02")),

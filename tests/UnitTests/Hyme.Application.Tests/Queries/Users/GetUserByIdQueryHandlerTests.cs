@@ -7,26 +7,21 @@ using Hyme.Domain.Entities;
 using Hyme.Domain.Repositories;
 using Hyme.Domain.ValueObjects;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Hyme.Application.Tests.Queries.UserProfiles
+namespace Hyme.Application.Tests.Queries.Users
 {
-    public class GetUserProfileByIdQueryHandlerTests
+    public class GetUserByIdQueryHandlerTests
     {
 
 
         private readonly IMapper _mapper;
         private readonly Mock<IUserRepository> _userRepository;
 
-        public GetUserProfileByIdQueryHandlerTests()
+        public GetUserByIdQueryHandlerTests()
         {
-            MapperConfiguration mapperConfiguration = new(options => 
-            { 
-                options.AddProfile<UserMappingProfiles>();  
+            MapperConfiguration mapperConfiguration = new(options =>
+            {
+                options.AddProfile<UserMappingProfiles>();
             });
             _mapper = mapperConfiguration.CreateMapper();
 
