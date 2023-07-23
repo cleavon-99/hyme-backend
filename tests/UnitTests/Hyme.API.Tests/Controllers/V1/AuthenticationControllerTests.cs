@@ -8,9 +8,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System.Security.Claims;
 using TestUtilities.Commands;
-using TestUtilities.Constants;
 
 namespace Hyme.API.Tests.Controllers.V1
 {
