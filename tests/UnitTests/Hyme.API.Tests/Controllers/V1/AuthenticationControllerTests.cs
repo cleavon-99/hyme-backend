@@ -33,7 +33,8 @@ namespace Hyme.API.Tests.Controllers.V1
             //Arrange   
             ConnectToWalletCommand command = AuthenticationUtilities.ConnectToWalletCommand();
             
-            _mockSender.Setup(s => s.Send(command, _sut.HttpContext.RequestAborted)).ReturnsAsync(Result.Fail(new InvalidWalletError()));
+            _mockSender.Setup(s => s.Send(command, _sut.HttpContext.RequestAborted))
+                .ReturnsAsync(Result.Fail(new InvalidWalletError()));
             
             //Act
             await _sut.ConnectToWallet(command);
@@ -47,7 +48,8 @@ namespace Hyme.API.Tests.Controllers.V1
         {
             //Arrange
             ConnectToWalletCommand command = AuthenticationUtilities.ConnectToWalletCommand();
-            _mockSender.Setup(s => s.Send(command, _sut.HttpContext.RequestAborted)).ReturnsAsync(Result.Fail(new InvalidWalletError()));
+            _mockSender.Setup(s => s.Send(command, _sut.HttpContext.RequestAborted))
+                .ReturnsAsync(Result.Fail(new InvalidWalletError()));
 
             //Act
             var result = await _sut.ConnectToWallet(command);
@@ -61,7 +63,8 @@ namespace Hyme.API.Tests.Controllers.V1
         {
             //Arrange
             ConnectToWalletCommand command = AuthenticationUtilities.ConnectToWalletCommand();
-            _mockSender.Setup(s => s.Send(command, _sut.HttpContext.RequestAborted)).ReturnsAsync(Result.Ok(It.IsAny<AuthenticationResponse>()));
+            _mockSender.Setup(s => s.Send(command, _sut.HttpContext.RequestAborted))
+                .ReturnsAsync(Result.Ok(It.IsAny<AuthenticationResponse>()));
             
             //Act
             var result = await _sut.ConnectToWallet(command);
