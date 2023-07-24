@@ -7,50 +7,52 @@ using Hyme.Domain.Entities;
 using Hyme.Domain.Repositories;
 using Hyme.Domain.ValueObjects;
 using Moq;
+using TestUtilities.Constants;
+using TestUtilities.Repository;
 
 namespace Hyme.Application.Tests.Queries.Projects
 {
     public class GetProjectByIdQueryHandlerTests
     {
 
-        private readonly Mock<IProjectRepository> _projectRepository;
+        private readonly Mock<IProjectRepository> _mockProjectRepository;
         private readonly IMapper _mapper;
+        private readonly GetProjectByIdQueryHandler _sut;
 
         public GetProjectByIdQueryHandlerTests()
-        {
-            _projectRepository = new();
+        { 
+            _mockProjectRepository = new();
             MapperConfiguration mapperConfiguration = new(options => 
             {
                 options.AddProfile<ProjectMappingProfiles>();
             });
 
             _mapper = mapperConfiguration.CreateMapper();
+            _sut = new(_mockProjectRepository.Object, _mapper);
         }
 
         [Fact]
         public async Task Handle_ShouldInvokeRepository_GetByIdAsync()
         {
             //Arrange
-            Guid id = Guid.NewGuid();
-            ProjectId projectId = new(id);
-            GetProjectByIdQuery query = new(id);
-            var sut = new GetProjectByIdQueryHandler(_projectRepository.Object, _mapper);
+            ProjectId projectId = Constants.Project.ProjectId;
+            GetProjectByIdQuery query = new(projectId.Value);
+            
             //Act
-            ProjectResponse? project = await sut.Handle(query, CancellationToken.None);
+            ProjectResponse? project = await _sut.Handle(query, CancellationToken.None);
 
             //Assert
-            _projectRepository.Verify(p => p.GetByIdAsync(projectId));
+            _mockProjectRepository.Verify(p => p.GetByIdAsync(projectId));
         }
 
         [Fact]
         public async Task Handle_ShouldReturnNull_WhenRepositoryReturnsNull()
         {
             //Arrange
-            Guid id = Guid.NewGuid();
-            GetProjectByIdQuery query = new(id);
-            var sut = new GetProjectByIdQueryHandler(_projectRepository.Object, _mapper);
+            ProjectId projectId = Constants.Project.ProjectId;
+            GetProjectByIdQuery query = new(projectId.Value);
             //Act
-            ProjectResponse? project = await sut.Handle(query, CancellationToken.None);
+            ProjectResponse? project = await _sut.Handle(query, CancellationToken.None);
 
             //Assert
             project.Should().BeNull();
@@ -60,17 +62,16 @@ namespace Hyme.Application.Tests.Queries.Projects
         public async Task Handle_ShouldReturnProjectResponse_WhenRepositoryReturnsAValue()
         {
             //Arrange
-            Guid id = Guid.NewGuid();
-            ProjectId projectId = new(id);
-            GetProjectByIdQuery query = new(id);
-            _projectRepository.Setup(s => s.GetByIdAsync(projectId)).ReturnsAsync(Project.Create(projectId, new UserId(id)));
-            var sut = new GetProjectByIdQueryHandler(_projectRepository.Object, _mapper);
+            Project project = ProjectRepositoryUtilities.CreateProject();
+            GetProjectByIdQuery query = new(project.Id.Value);
+            _mockProjectRepository.Setup(s => s.GetByIdAsync(project.Id)).ReturnsAsync(project);
+            var sut = new GetProjectByIdQueryHandler(_mockProjectRepository.Object, _mapper);
             //Act
-            ProjectResponse? project = await sut.Handle(query, CancellationToken.None);
+            ProjectResponse? projectResponse = await sut.Handle(query, CancellationToken.None);
 
             //Assert
-            project.Should().NotBeNull();
-            project!.Id.Should().Be(id);
+            projectResponse.Should().NotBeNull();
+            projectResponse!.Id.Should().Be(project.Id.Value);
         }
     }
 }

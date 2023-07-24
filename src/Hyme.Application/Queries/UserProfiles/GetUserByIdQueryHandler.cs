@@ -8,12 +8,12 @@ using System.Security.Claims;
 
 namespace Hyme.Application.Queries.UserProfiles
 {
-    public class GetUserProfileByIdQueryHandler : IRequestHandler<GetUserProfleByIdQuery, UserResponse?>
+    public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, UserResponse?>
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public GetUserProfileByIdQueryHandler(
+        public GetUserByIdQueryHandler(
             IUserRepository userRepository,
             IMapper mapper)
         {
@@ -21,7 +21,7 @@ namespace Hyme.Application.Queries.UserProfiles
             _mapper = mapper;
         }
 
-        public async Task<UserResponse?> Handle(GetUserProfleByIdQuery request, CancellationToken cancellationToken)
+        public async Task<UserResponse?> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
             User? userProfile = await _userRepository.GetByIdAsync(new UserId(request.Id));
             

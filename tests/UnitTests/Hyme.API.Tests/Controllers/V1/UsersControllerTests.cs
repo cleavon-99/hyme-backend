@@ -83,7 +83,7 @@ namespace Hyme.API.Tests.Controllers.V1
         public async Task GetMyProfile_ShoudSendGetMyProfileQuery_WhenUserIdClaimsIsPresent()
         {
             //Arrange
-            GetUserProfleByIdQuery query = new(Constants.User.UserId.Value);
+            GetUserByIdQuery query = new(Constants.User.UserId.Value);
 
             _sender.Setup(s => s.Send(query, _sut.HttpContext.RequestAborted));
 
@@ -98,7 +98,7 @@ namespace Hyme.API.Tests.Controllers.V1
         public async Task GetMyProfile_ShouldReturnNotFoundResult_WhenQueryReturnsNullValue()
         {
             //Arrange
-            GetUserProfleByIdQuery query = new(Constants.User.UserId.Value);
+            GetUserByIdQuery query = new(Constants.User.UserId.Value);
           
             _sender.Setup(s => s.Send(query, _sut.HttpContext.RequestAborted)).ReturnsAsync(() => null);
 
@@ -113,7 +113,7 @@ namespace Hyme.API.Tests.Controllers.V1
         public async Task GetMyProfile_ShouldReturnOkObjectResult_WhenQueryReturnsNonNullValue()
         {
             //Arrange
-            GetUserProfleByIdQuery query = new(Constants.User.UserId.Value);
+            GetUserByIdQuery query = new(Constants.User.UserId.Value);
 
 
             _sender.Setup(s => s.Send(query, _sut.HttpContext.RequestAborted)).ReturnsAsync(new UserResponse());

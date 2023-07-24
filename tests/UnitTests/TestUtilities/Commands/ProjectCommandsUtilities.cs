@@ -7,6 +7,5 @@ namespace TestUtilities.Commands
     {
         public static ApproveProjectCommand ApproveProjectCommand() => new(Constants.Constants.Project.ProjectId.Value);
         public static RejectProjectCommand RejectProjectCommand() => new(Constants.Constants.Project.ProjectId.Value);
-        public static Project CreateProject() => Project.Create(Constants.Constants.Project.ProjectId, Constants.Constants.User.UserId);
     }
 }

@@ -6,8 +6,8 @@ using Hyme.Application.Queries.UserProfiles;
 using Hyme.Domain.Entities;
 using Hyme.Domain.Primitives;
 using Hyme.Domain.Repositories;
-using Hyme.Domain.ValueObjects;
 using Moq;
+using TestUtilities.Repository;
 
 namespace Hyme.Application.Tests.Queries.Users
 {
@@ -33,15 +33,9 @@ namespace Hyme.Application.Tests.Queries.Users
         {
             //Arrange
             GetUsersQuery query = new(1, 20);
-            PaginationFilter filter = PaginationFilter.Create(query.PageNumber, query.PageSize);
-            List<User> users = new()
-            {
-                User.Create(new UserId(Guid.NewGuid()), new WalletAddress("0x01")),
-                User.Create(new UserId(Guid.NewGuid()), new WalletAddress("0x02")),
-                User.Create(new UserId(Guid.NewGuid()), new WalletAddress("0x03")),
-            };
-
-            _userRepository.Setup(u => u.GetListAsync(filter)).ReturnsAsync(users);
+ 
+            List<User> users = UserRepositoryUtilities.GetUsers();
+            _userRepository.Setup(u => u.GetListAsync(It.IsAny<PaginationFilter>())).ReturnsAsync(users);
             GetUsersQueryHandler sut = new(_userRepository.Object, _mapper);
 
             //Act
@@ -57,12 +51,7 @@ namespace Hyme.Application.Tests.Queries.Users
             //Arrange
             GetUsersQuery query = new(1, 20);
             PaginationFilter filter = PaginationFilter.Create(query.PageNumber, query.PageSize);
-            List<User> users = new()
-            {
-                User.Create(new UserId(Guid.NewGuid()), new WalletAddress("0x01")),
-                User.Create(new UserId(Guid.NewGuid()), new WalletAddress("0x02")),
-                User.Create(new UserId(Guid.NewGuid()), new WalletAddress("0x03")),
-            };
+            List<User> users = UserRepositoryUtilities.GetUsers();
 
             _userRepository.Setup(u => u.GetListAsync(It.IsAny<PaginationFilter>())).ReturnsAsync(users);
             GetUsersQueryHandler sut = new(_userRepository.Object, _mapper);
@@ -71,7 +60,7 @@ namespace Hyme.Application.Tests.Queries.Users
             PagedResponse<UserResponse> result = await sut.Handle(query, CancellationToken.None);
 
             //Assert
-            result.Data.Count.Should().Be(3);
+            result.Data.Count.Should().Be(users.Count);
             result.PageNumber.Should().Be(query.PageNumber);
             result.PageSize.Should().Be(query.PageSize);
         }

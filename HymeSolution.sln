@@ -27,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hyme.Infrastructure.Tests",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hyme.Domain.Tests", "tests\UnitTests\Hyme.Domain.Tests\Hyme.Domain.Tests.csproj", "{B76250DC-8F94-493A-A32D-AAAB0EA7586E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestUtilities", "tests\UnitTests\TestUtilities\TestUtilities.csproj", "{7A1A1B50-C92B-4480-A205-EABE57232AD9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestUtilities", "tests\UnitTests\TestUtilities\TestUtilities.csproj", "{7A1A1B50-C92B-4480-A205-EABE57232AD9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

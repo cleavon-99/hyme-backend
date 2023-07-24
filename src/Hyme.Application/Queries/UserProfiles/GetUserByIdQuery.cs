@@ -8,6 +8,6 @@ using System.Threading.Tasks;
 
 namespace Hyme.Application.Queries.UserProfiles
 {
-    public record GetUserProfleByIdQuery(Guid Id) : IRequest<UserResponse?>;
+    public record GetUserByIdQuery(Guid Id) : IRequest<UserResponse?>;
     
 }

@@ -15,7 +15,7 @@ namespace Hyme.API.Controllers.V1
     /// <summary>
     /// 
     /// </summary>
-    [Route("userProfiles")]
+    [Route("users")]
     [ApiController]
     [Authorize]
     public class UsersController : ControllerBase
@@ -68,7 +68,7 @@ namespace Hyme.API.Controllers.V1
             string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)
                 return Unauthorized();
-            UserResponse? userProfile = await _sender.Send(new GetUserProfleByIdQuery(Guid.Parse(userId)), HttpContext.RequestAborted);
+            UserResponse? userProfile = await _sender.Send(new GetUserByIdQuery(Guid.Parse(userId)), HttpContext.RequestAborted);
             if (userProfile is null)
                 return NotFound();
             return Ok(userProfile);

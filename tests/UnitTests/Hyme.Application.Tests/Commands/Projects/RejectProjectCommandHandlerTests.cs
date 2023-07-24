@@ -8,6 +8,7 @@ using Hyme.Application.Errors;
 using Hyme.Domain.Entities;
 using Hyme.Domain.Primitives;
 using TestUtilities.Commands;
+using TestUtilities.Repository;
 
 namespace Hyme.Application.Tests.Commands.Projects
 {
@@ -55,7 +56,7 @@ namespace Hyme.Application.Tests.Commands.Projects
         {
             //Arrange          
             RejectProjectCommand command = ProjectCommandsUtilities.RejectProjectCommand();
-            Project project = ProjectCommandsUtilities.CreateProject();
+            Project project = ProjectRepositoryUtilities.CreateProject();
             _mockProjectRepository.Setup(p => p.GetByIdAsync(project.Id)).ReturnsAsync(project);
 
 
@@ -72,7 +73,7 @@ namespace Hyme.Application.Tests.Commands.Projects
         {
             //Arrange
             RejectProjectCommand command = ProjectCommandsUtilities.RejectProjectCommand();
-            Project project = ProjectCommandsUtilities.CreateProject();
+            Project project = ProjectRepositoryUtilities.CreateProject();
             _mockProjectRepository.Setup(p => p.GetByIdAsync(project.Id)).ReturnsAsync(project);
            
             //Act

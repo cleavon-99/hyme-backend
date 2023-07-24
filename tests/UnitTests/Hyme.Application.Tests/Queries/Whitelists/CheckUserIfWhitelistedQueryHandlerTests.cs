@@ -55,7 +55,7 @@ namespace Hyme.Application.Tests.Queries.Whitelists
         {
             //Arrange
             CheckUserIfWhitelistedQuery query = WhitelistUtitlities.CheckUserIfWhitelistedQuery();
-            User user = UserRepository.GetUser();
+            User user = UserRepositoryUtilities.GetUser();
             _mockUserRepository.Setup(u => u.GetByIdAsync(new UserId(query.Id)))
                 .ReturnsAsync(user);
 
@@ -71,7 +71,7 @@ namespace Hyme.Application.Tests.Queries.Whitelists
         {
             //Arrange
             CheckUserIfWhitelistedQuery query = WhitelistUtitlities.CheckUserIfWhitelistedQuery();
-            User user = UserRepository.GetUser();
+            User user = UserRepositoryUtilities.GetUser();
             _mockUserRepository.Setup(u => u.GetByIdAsync(new UserId(query.Id)))
                 .ReturnsAsync(user);
 
@@ -87,7 +87,7 @@ namespace Hyme.Application.Tests.Queries.Whitelists
         {
             //Arrange
             CheckUserIfWhitelistedQuery query = WhitelistUtitlities.CheckUserIfWhitelistedQuery();
-            User user = UserRepository.GetUser();
+            User user = UserRepositoryUtilities.GetUser();
             _mockUserRepository.Setup(u => u.GetByIdAsync(new UserId(query.Id)))
                 .ReturnsAsync(user);
             _mockWhiteListRepository.Setup(u => u.FindAsync(user.WalletAddress))

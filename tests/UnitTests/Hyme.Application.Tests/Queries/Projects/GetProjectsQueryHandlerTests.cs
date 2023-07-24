@@ -7,22 +7,25 @@ using Hyme.Domain.Primitives;
 using Hyme.Domain.Repositories;
 using Hyme.Domain.ValueObjects;
 using Moq;
+using TestUtilities.Repository;
 
 namespace Hyme.Application.Tests.Queries.Projects
 {
     public class GetProjectsQueryHandlerTests
     {
 
-        private readonly Mock<IProjectRepository> _projectRepository;
+        private readonly Mock<IProjectRepository> _mockProjectRepository;
         private readonly IMapper _mapper;
+        private readonly GetProjectsQueryHandler _sut;
 
         public GetProjectsQueryHandlerTests()
         {
-            _projectRepository = new();
+            _mockProjectRepository = new();
             MapperConfiguration mapperConfiguration = new(options => {
                 options.AddProfile<ProjectMappingProfiles>();
             });
             _mapper = mapperConfiguration.CreateMapper();
+            _sut = new(_mockProjectRepository.Object, _mapper);
         }
 
         [Fact]
@@ -30,14 +33,12 @@ namespace Hyme.Application.Tests.Queries.Projects
         {
             //Arrange
             GetProjectsQuery query = new(1, 20);
-            PaginationFilter filter = PaginationFilter.Create(query.PageNumber, query.PageSize);
-            GetProjectsQueryHandler sut = new(_projectRepository.Object, _mapper);
-            
+        
             //Act
-            var result = await sut.Handle(query, CancellationToken.None);
+            var result = await _sut.Handle(query, CancellationToken.None);
 
             //Assert
-            _projectRepository.Verify(p => p.GetListAsync(It.IsAny<PaginationFilter>()));
+            _mockProjectRepository.Verify(p => p.GetListAsync(It.IsAny<PaginationFilter>()));
         }
 
         [Fact]
@@ -45,15 +46,9 @@ namespace Hyme.Application.Tests.Queries.Projects
         {
             //Arrange
             GetProjectsQuery query = new(1, 20);
-            
-            PaginationFilter filter = PaginationFilter.Create(query.PageNumber, query.PageSize);
-            List<Project> projects = new() {
-                Project.Create(new ProjectId(Guid.NewGuid()), new UserId(Guid.NewGuid())),
-                Project.Create(new ProjectId(Guid.NewGuid()), new UserId(Guid.NewGuid())),
-                Project.Create(new ProjectId(Guid.NewGuid()), new UserId(Guid.NewGuid()))
-            };
-            _projectRepository.Setup(s => s.GetListAsync(It.IsAny<PaginationFilter>())).ReturnsAsync(projects);
-            GetProjectsQueryHandler sut = new(_projectRepository.Object, _mapper);
+            List<Project> projects = ProjectRepositoryUtilities.CreateProjects();
+            _mockProjectRepository.Setup(s => s.GetListAsync(It.IsAny<PaginationFilter>())).ReturnsAsync(projects);
+            GetProjectsQueryHandler sut = new(_mockProjectRepository.Object, _mapper);
 
             //Act
             var result = await sut.Handle(query, CancellationToken.None);
