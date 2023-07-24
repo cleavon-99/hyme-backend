@@ -322,5 +322,65 @@ namespace Hyme.API.Tests.Controllers.V1
             //Assert
             result.Should().BeOfType<NoContentResult>();
         }
+
+
+        [Fact]
+        public async Task UpdateGeneralInfo_ShouldSend_UpdateProjectGeneralInfoCommand()
+        {
+            //Arrange
+            UpdateProjectInfoCommand command = ProjectCommandsUtilities.UpdateProjectInfoCommand();
+            _sender.Setup(s => s.Send(command, _sut.HttpContext.RequestAborted)).ReturnsAsync(Result.Ok);
+
+            //Act
+            var result = await _sut.UpdateGeneralInfo(command.ProjectId, new ProjectRequest() 
+            { 
+                Title = command.Title, 
+                ShortDescription = command.ShortDescription, 
+                ProjectDescription = command.ProjectDescription
+            });
+
+            //Assert
+            _sender.Verify(s => s.Send(command, CancellationToken.None));    
+        }
+
+        [Fact]
+        public async Task UpdateGeneralInfo_ShouldReturnNotFoundResult_WhenCommandHasProjectNotFoundError()
+        {
+            //Arrange
+            UpdateProjectInfoCommand command = ProjectCommandsUtilities.UpdateProjectInfoCommand();
+
+            _sender.Setup(s => s.Send(command, CancellationToken.None)).ReturnsAsync(Result.Fail(new ProjectNotFoundError(command.ProjectId)));
+
+            //Act
+            var result = await _sut.UpdateGeneralInfo(command.ProjectId, new ProjectRequest()
+            {
+                Title = command.Title,
+                ShortDescription = command.ShortDescription,
+                ProjectDescription = command.ProjectDescription
+            });
+
+            //Assert
+            result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async Task UpdateGeneralInfo_ShouldReturnNoContent_WhenCommandReturnsSuccessResult()
+        {
+            //Arrange
+            UpdateProjectInfoCommand command = ProjectCommandsUtilities.UpdateProjectInfoCommand();
+
+            _sender.Setup(s => s.Send(command, CancellationToken.None)).ReturnsAsync(Result.Ok());
+
+            //Act
+            var result = await _sut.UpdateGeneralInfo(command.ProjectId, new ProjectRequest()
+            {
+                Title = command.Title,
+                ShortDescription = command.ShortDescription,
+                ProjectDescription = command.ProjectDescription
+            });
+
+            //Assert
+            result.Should().BeOfType<NoContentResult>();
+        }
     }
 }

@@ -53,6 +53,28 @@ namespace Hyme.API.Controllers.V1
             return Ok(projects);
         }
 
+        /// <summary>
+        /// Update general Info
+        /// </summary>
+        /// <param name="id">project id</param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <response code="404">Project not found</response>
+        /// <response code="204">Success</response>
+        [HttpPut("{id}/general")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> UpdateGeneralInfo(Guid id, [FromBody]ProjectRequest request)
+        {
+            var result = await _sender.Send(new UpdateProjectInfoCommand(id, request.Title, request.ShortDescription, request.ProjectDescription), HttpContext.RequestAborted);
+            if (result.IsFailed)
+            {
+                if (result.HasError<ProjectNotFoundError>())
+                    return NotFound();
+            }
+            return NoContent();
+        }
+
 
         /// <summary>
         /// Retrieve project by Id

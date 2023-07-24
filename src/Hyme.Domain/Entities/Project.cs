@@ -41,16 +41,12 @@ namespace Hyme.Domain.Entities
             };
         }
 
-        public void Update(
+        public void UpdateInfo(
             string title, 
-            string logo,
-            string banner,
             string shortDescription,
             string projectDescription)
         {
             Title = title;
-            Logo = logo;
-            Banner = banner;
             ShortDescription = shortDescription;
             ProjectDescription = projectDescription;
             DateModified = DateTime.UtcNow;
