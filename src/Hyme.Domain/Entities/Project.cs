@@ -1,5 +1,6 @@
 ﻿using Hyme.Domain.Primitives;
 using Hyme.Domain.ValueObjects;
+using Microsoft.VisualBasic;
 
 namespace Hyme.Domain.Entities
 {
@@ -51,6 +52,13 @@ namespace Hyme.Domain.Entities
         public void UpdateTrailer(string trailerName)
         {
             Trailer = trailerName;
+            DateModified = DateTime.UtcNow;
+        }
+
+        public void UpdateBanner(string bannerName)
+        {
+            Banner = bannerName;
+            DateModified = DateTime.UtcNow;
         }
 
         public void UpdateInfo(
