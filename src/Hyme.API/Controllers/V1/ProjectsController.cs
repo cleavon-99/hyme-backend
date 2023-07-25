@@ -1,14 +1,12 @@
-﻿using Hyme.Application.Commands.Projects;
+﻿using Hyme.API.Extensions;
+using Hyme.Application.Commands.Projects;
 using Hyme.Application.DTOs.Request;
 using Hyme.Application.DTOs.Response;
 using Hyme.Application.Errors;
 using Hyme.Application.Queries.Projects;
-using Hyme.Domain.Errors;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection.Metadata.Ecma335;
-using System.Security.Claims;
 
 namespace Hyme.API.Controllers.V1
 {
@@ -71,6 +69,9 @@ namespace Hyme.API.Controllers.V1
             {
                 if (result.HasError<ProjectNotFoundError>())
                     return NotFound();
+
+                if (result.HasError<ValidationError>(out var validationErrors))
+                    return Problem(validationErrors);
             }
             return NoContent();
         }
@@ -174,5 +175,21 @@ namespace Hyme.API.Controllers.V1
             return NoContent();
         }
 
+
+        [HttpPut("{id}/general/logo")]
+        public async Task<ActionResult> UpdateProjectLogo(Guid id, [FromForm(Name = "image")]IFormFile image)
+        {
+            string fileName = $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}";
+            byte[] logo = await image.ToByteArrayAsync();
+            var result = await _sender.Send(new UpdateProjectLogoCommand(id, logo, fileName), HttpContext.RequestAborted);
+            if(result.IsFailed)
+            {
+                if (result.HasError<ProjectNotFoundError>())
+                    return NotFound();
+            }
+
+            return NoContent();
+        }
+        
     }
 }

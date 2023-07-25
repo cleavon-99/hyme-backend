@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using Azure.Storage.Blobs.Models;
+using FluentAssertions;
 using FluentResults;
 using Hyme.API.Controllers.V1;
 using Hyme.Application.Commands.Projects;
@@ -10,6 +11,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using System.Text;
 using TestUtilities.Commands;
 using TestUtilities.Constants;
 using TestUtilities.Queries;
@@ -378,6 +380,52 @@ namespace Hyme.API.Tests.Controllers.V1
                 ShortDescription = command.ShortDescription,
                 ProjectDescription = command.ProjectDescription
             });
+
+            //Assert
+            result.Should().BeOfType<NoContentResult>();
+        }
+
+        [Fact]
+        public async Task UpdateProjectLogo_ShouldCallMediatorUpdateProjectLogoCommand()
+        {
+            //Arrange
+            UpdateProjectLogoCommand command = new(Guid.NewGuid(), Array.Empty<byte>(), "Filename");
+            var file = new FormFile(new MemoryStream(Encoding.UTF8.GetBytes("This is a dummy file")), 0, 0, "Data", "image.jpeg");
+            _sender.Setup(s => s.Send(It.IsAny<UpdateProjectLogoCommand>(), CancellationToken.None)).ReturnsAsync(Result.Ok());
+            //Act
+            var result = await _sut.UpdateProjectLogo(command.ProjectId, file);
+
+            //Assert
+            _sender.Verify(s => s.Send(It.IsAny<UpdateProjectLogoCommand>(), _sut.HttpContext.RequestAborted));
+        }
+
+
+        [Fact]
+        public async Task UpdateProjectLogo_ShouldReturnNotFound_WhenCommandReturnsProjectNotFoundError()
+        {
+            //Arrange
+            UpdateProjectLogoCommand command = new(Guid.NewGuid(), Array.Empty<byte>(), "Filename");
+            var file = new FormFile(new MemoryStream(Encoding.UTF8.GetBytes("This is a dummy file")), 0, 0, "Data", "image.jpeg");
+            _sender.Setup(s => s.Send(It.IsAny<UpdateProjectLogoCommand>(), CancellationToken.None))
+                .ReturnsAsync(Result.Fail(new ProjectNotFoundError(command.ProjectId)));
+            //Act
+            var result = await _sut.UpdateProjectLogo(command.ProjectId, file);
+
+            //Assert
+            result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async Task UpdateProjectLogo_ShouldReturnNoContent_WhenCommandReturnsSuccess()
+        {
+            //Arrange
+            UpdateProjectLogoCommand command = new(Guid.NewGuid(), Array.Empty<byte>(), "Filename");
+            var file = new FormFile(new MemoryStream(Encoding.UTF8.GetBytes("This is a dummy file")), 0, 0, "Data", "image.jpeg");
+            _sender.Setup(s => s.Send(It.IsAny<UpdateProjectLogoCommand>(), CancellationToken.None))
+                .ReturnsAsync(Result.Ok());
+            
+            //Act
+            var result = await _sut.UpdateProjectLogo(command.ProjectId, file);
 
             //Assert
             result.Should().BeOfType<NoContentResult>();

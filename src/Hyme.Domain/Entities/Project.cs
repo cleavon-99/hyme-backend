@@ -9,6 +9,7 @@ namespace Hyme.Domain.Entities
         public string Title { get; private set; } = string.Empty;
         public string Logo { get; private set; } = string.Empty;
         public string Banner { get; private set; } = string.Empty;
+        public string Trailer { get; private set; } = string.Empty;
         public string ShortDescription { get; private set; } = string.Empty;
         public string ProjectDescription { get; private set; } = string.Empty;
         public PublishStatus Status { get; private set; }
@@ -39,6 +40,17 @@ namespace Hyme.Domain.Entities
                 Status = PublishStatus.Empty,
                 DateCreated = DateTime.UtcNow
             };
+        }
+
+        public void UpdateLogo(string logoName)
+        {
+            Logo = logoName;
+            DateModified = DateTime.UtcNow;
+        }
+
+        public void UpdateTrailer(string trailerName)
+        {
+            Trailer = trailerName;
         }
 
         public void UpdateInfo(

@@ -2,11 +2,6 @@
 using Hyme.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Hyme.Infrastructure.Configuration
 {
@@ -16,8 +11,7 @@ namespace Hyme.Infrastructure.Configuration
         {
             builder.HasKey(r => r.Id);
             builder.Property(r => r.Id).HasConversion(id => id.Value, value => new RoleId(value));
-            builder.Property(r => r.Name).HasMaxLength(50);
-            
+            builder.Property(r => r.Name).HasMaxLength(50);         
         }
     }
 }

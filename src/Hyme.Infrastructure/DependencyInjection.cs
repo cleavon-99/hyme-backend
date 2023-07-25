@@ -1,4 +1,5 @@
-﻿using Hyme.Application.Services;
+﻿using Azure.Storage.Blobs;
+using Hyme.Application.Services;
 using Hyme.Domain.Repositories;
 using Hyme.Infrastructure.Data;
 using Hyme.Infrastructure.Data.Repositories;
@@ -20,8 +21,8 @@ namespace Hyme.Infrastructure
             services.AddScoped<IProjectRepository, ProjectRepository>();
             services.AddScoped<IWhitelistRepository, WhiteListRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-            
+            services.AddSingleton(option => new BlobServiceClient(configuration["AzureBlobStorageConnection"]));
+            services.AddSingleton<IBlobService, BlobService>();
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));

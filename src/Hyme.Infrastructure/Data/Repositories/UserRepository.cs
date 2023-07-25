@@ -3,11 +3,6 @@ using Hyme.Domain.Primitives;
 using Hyme.Domain.Repositories;
 using Hyme.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Hyme.Infrastructure.Data.Repositories
 {
