@@ -11,5 +11,6 @@ namespace Hyme.Application.Services
         Task UploadImageAsync(byte[] image, string fileName);
         Task UploadVideoAsync(byte[] video, string fileName);
         Task DeleteImageAsync(string fileName);
+        Task DeleteVideoAsync(string fileName);
     }
 }

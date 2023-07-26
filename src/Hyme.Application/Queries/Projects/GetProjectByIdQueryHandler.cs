@@ -1,9 +1,13 @@
 ﻿using AutoMapper;
+using FluentResults;
+using Hyme.Application.Common;
 using Hyme.Application.DTOs.Response;
+using Hyme.Application.Extensions;
 using Hyme.Domain.Entities;
 using Hyme.Domain.Repositories;
 using Hyme.Domain.ValueObjects;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 
 namespace Hyme.Application.Queries.Projects
 {
@@ -23,7 +27,12 @@ namespace Hyme.Application.Queries.Projects
             Project? project = await _projectRepository.GetByIdAsync(new ProjectId(request.Id));
             if (project is null)
                 return null;
-            return _mapper.Map<ProjectResponse>(project);
+
+            ProjectResponse response = _mapper.Map<ProjectResponse>(project);
+            response.Logo = response.Logo.ToLink(LinkType.Image);
+            response.Banner = response.Banner.ToLink(LinkType.Image);
+            response.Trailer = response.Trailer.ToLink(LinkType.Video);
+            return response;
         }
     }
 }

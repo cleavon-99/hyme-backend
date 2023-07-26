@@ -60,6 +60,7 @@ namespace Hyme.Infrastructure.Migrations
                     Title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Logo = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     Banner = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Trailer = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     ShortDescription = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
                     ProjectDescription = table.Column<string>(type: "character varying(5000)", maxLength: 5000, nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false),

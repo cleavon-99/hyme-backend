@@ -30,7 +30,7 @@ namespace Hyme.API.Controllers.V1
         {
             _sender = sender;
         }
-
+       
 
         /// <summary>
         /// List of users
@@ -73,6 +73,7 @@ namespace Hyme.API.Controllers.V1
                 return NotFound();
             return Ok(userProfile);
         }
+
 
         /// <summary>
         /// Complete user profile

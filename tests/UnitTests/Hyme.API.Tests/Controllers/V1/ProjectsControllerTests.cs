@@ -430,5 +430,101 @@ namespace Hyme.API.Tests.Controllers.V1
             //Assert
             result.Should().BeOfType<NoContentResult>();
         }
+
+        [Fact]
+        public async Task UpdateProjectBanner_ShouldCall_UpdateProjectBannerCommand()
+        {
+            //Arrange
+            UpdateProjectBannerCommand command = new(Guid.NewGuid(), Array.Empty<byte>(), "Banner.png");
+            var file = new FormFile(new MemoryStream(Encoding.UTF8.GetBytes("This is a dummy file")), 0, 0, "Data", command.FileName);
+            _sender.Setup(s => s.Send(It.IsAny<UpdateProjectBannerCommand>(), CancellationToken.None))
+                .ReturnsAsync(Result.Fail(new ProjectNotFoundError(command.ProjectId)));
+
+            //Act
+            var result = await _sut.UpdateProjectBanner(command.ProjectId, file);
+
+            //Assert
+            _sender.Verify(s => s.Send(It.IsAny<UpdateProjectBannerCommand>(), CancellationToken.None));
+        }
+
+        [Fact]
+        public async Task UpdateProjectBanner_ShouldReturnNotFoundResult_WhenResultReturnsFailureResult()
+        {
+            //Arrange
+            UpdateProjectBannerCommand command = new(Guid.NewGuid(), Array.Empty<byte>(), "Banner.png");
+            var file = new FormFile(new MemoryStream(Encoding.UTF8.GetBytes("This is a dummy file")), 0, 0, "Data", command.FileName);
+            _sender.Setup(s => s.Send(It.IsAny<UpdateProjectBannerCommand>(), CancellationToken.None))
+                .ReturnsAsync(Result.Fail(new ProjectNotFoundError(command.ProjectId)));
+
+            //Act
+            var result = await _sut.UpdateProjectBanner(command.ProjectId, file);
+
+            //Assert
+            result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async Task UpdateProjectBanner_ShouldReturnNoContentResult_WhenResultReturnsSuccessResult()
+        {
+            //Arrange
+            UpdateProjectBannerCommand command = new(Guid.NewGuid(), Array.Empty<byte>(), "Banner.png");
+            var file = new FormFile(new MemoryStream(Encoding.UTF8.GetBytes("This is a dummy file")), 0, 0, "Data", command.FileName);
+            _sender.Setup(s => s.Send(It.IsAny<UpdateProjectBannerCommand>(), CancellationToken.None))
+                .ReturnsAsync(Result.Ok());
+
+            //Act
+            var result = await _sut.UpdateProjectBanner(command.ProjectId, file);
+
+            //Assert
+            result.Should().BeOfType<NoContentResult>();
+        }
+
+        [Fact]
+        public async Task UpdateProjecTrailer_ShouldSendUpdateProjectCommand()
+        {
+            //Arrange
+            UpdateProjectTrailerCommand command = new(Guid.NewGuid(), Array.Empty<byte>(), "Banner.png");
+            var file = new FormFile(new MemoryStream(Encoding.UTF8.GetBytes("This is a dummy file")), 0, 0, "Data", command.FileName);
+            _sender.Setup(s => s.Send(It.IsAny<UpdateProjectTrailerCommand>(), CancellationToken.None))
+                .ReturnsAsync(Result.Ok());
+
+            //Act
+            var result = await _sut.UpdateProjectTrailer(command.ProjectId, file);
+
+            //Assert
+            _sender.Verify(s => s.Send(It.IsAny<UpdateProjectTrailerCommand>(), CancellationToken.None));
+        }
+
+        [Fact]
+        public async Task UpdateProjecTrailer_ShouldReturnNotFound_WhenUpdateCommandReturnsProjectNotFoundResult()
+        {
+            //Arrange
+            UpdateProjectTrailerCommand command = new(Guid.NewGuid(), Array.Empty<byte>(), "Banner.png");
+            var file = new FormFile(new MemoryStream(Encoding.UTF8.GetBytes("This is a dummy file")), 0, 0, "Data", command.FileName);
+            _sender.Setup(s => s.Send(It.IsAny<UpdateProjectTrailerCommand>(), CancellationToken.None))
+                .ReturnsAsync(Result.Fail(new ProjectNotFoundError(command.ProjectId)));
+
+            //Act
+            var result = await _sut.UpdateProjectTrailer(command.ProjectId, file);
+
+            //Assert
+            result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async Task UpdateProjecTrailer_ShouldReturnNoContentResult_WhenUpdateCommandReturnsSuccessResult()
+        {
+            //Arrange
+            UpdateProjectTrailerCommand command = new(Guid.NewGuid(), Array.Empty<byte>(), "Banner.png");
+            var file = new FormFile(new MemoryStream(Encoding.UTF8.GetBytes("This is a dummy file")), 0, 0, "Data", command.FileName);
+            _sender.Setup(s => s.Send(It.IsAny<UpdateProjectTrailerCommand>(), CancellationToken.None))
+                .ReturnsAsync(Result.Ok());
+
+            //Act
+            var result = await _sut.UpdateProjectTrailer(command.ProjectId, file);
+
+            //Assert
+            result.Should().BeOfType<NoContentResult>();
+        }
     }
 }

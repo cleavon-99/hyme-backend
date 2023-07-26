@@ -14,6 +14,7 @@ namespace Hyme.Infrastructure.Configuration
             builder.Property(p => p.Logo).HasMaxLength(50);
             builder.Property(p => p.Title).HasMaxLength(100);
             builder.Property(p => p.Banner).HasMaxLength(50);
+            builder.Property(p => p.Trailer).HasMaxLength(50);
             builder.Property(p => p.ShortDescription).HasMaxLength(1000);
             builder.Property(p => p.ProjectDescription).HasMaxLength(5000);
             builder.Property(p => p.OwnerId).HasConversion(id => id.Value, value => new UserId(value));

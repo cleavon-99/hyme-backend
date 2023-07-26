@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Hyme.Application.Common;
 using Hyme.Application.DTOs.Response;
+using Hyme.Application.Extensions;
 using Hyme.Domain.Entities;
 using Hyme.Domain.Primitives;
 using Hyme.Domain.Repositories;
@@ -28,6 +30,12 @@ namespace Hyme.Application.Queries.Projects
             PaginationFilter filter = PaginationFilter.Create(request.PageNumber, request.PageSize);
             List<Project> projects = await _projectRepository.GetListAsync(filter);
             List<ProjectResponse> projectsReponse = _mapper.Map<List<ProjectResponse>>(projects);
+            foreach (var project in projectsReponse)
+            {
+                project.Logo = project.Logo.ToLink(LinkType.Image);
+                project.Banner = project.Banner.ToLink(LinkType.Image);
+                project.Trailer = project.Trailer.ToLink(LinkType.Video);
+            }
             return PagedResponse<ProjectResponse>.Create(projectsReponse, request.PageNumber, request.PageSize);
         }
     }

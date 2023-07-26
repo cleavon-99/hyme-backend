@@ -23,6 +23,11 @@ namespace Hyme.Infrastructure.Services
             await _originalImageContainer.DeleteBlobAsync(fileName);
         }
 
+        public async Task DeleteVideoAsync(string fileName)
+        {
+            await _originalVideoContainer.DeleteBlobAsync(fileName);
+        }
+
         public async Task UploadImageAsync(byte[] image, string fileName)
         {
             await _originalImageContainer.UploadBlobAsync(fileName, new BinaryData(image));
