@@ -7,6 +7,7 @@ using Hyme.Application.Queries.Projects;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Hyme.API.Controllers.V1
 {
@@ -51,8 +52,6 @@ namespace Hyme.API.Controllers.V1
             return Ok(projects);
         }
 
-       
-
 
         /// <summary>
         /// Retrieve project by Id
@@ -72,7 +71,30 @@ namespace Hyme.API.Controllers.V1
             return Ok(project);
         }
 
-        
+        /// <summary>
+        /// Get my project
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="401">Not logged in</response>
+        /// <response code="404">Not Found</response>
+        /// <response code="200">Success</response>
+        [HttpGet("myProject")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<ProjectResponse>> GetMyProject()
+        {
+            string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId is null)
+                return Unauthorized();
+
+            ProjectResponse? response = await _sender.Send(new GetProjectByOwnerIdQuery(Guid.Parse(userId)));
+            if (response is null)
+                return NotFound();
+            return Ok(response);
+        }
+
+
 
         ///// <summary>
         ///// Create Project

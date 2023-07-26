@@ -11,10 +11,12 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using System.Security.Claims;
 using System.Text;
 using TestUtilities.Commands;
 using TestUtilities.Constants;
 using TestUtilities.Queries;
+using static TestUtilities.Constants.Constants;
 
 namespace Hyme.API.Tests.Controllers.V1
 {
@@ -525,6 +527,89 @@ namespace Hyme.API.Tests.Controllers.V1
 
             //Assert
             result.Should().BeOfType<NoContentResult>();
+        }
+
+        [Fact]
+        public async Task GetMyProject_ShouldReturn401UnAuthorize_WhenNoCurrentlyLoggedInUser()
+        {
+            //Arrange
+            //Act
+            var result = await _sut.GetMyProject();
+
+            //Assert
+            result.Result.Should().BeOfType<UnauthorizedResult>();
+        }
+
+
+        [Fact]
+        public async Task GetMyProject_ShouldSendGetProjectByOwnerIdQuery_WhenThereIsCurrentlyLoggedInUser()
+        {
+            //Arrange
+            Guid id = User.UserId.Value;
+            GetProjectByOwnerIdQuery query = new(id);
+
+            _sut.ControllerContext.HttpContext = new DefaultHttpContext() 
+            {
+                User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] 
+                { 
+                    new Claim(ClaimTypes.NameIdentifier, query.Id.ToString())
+                }))
+            };
+
+            //Act
+            var result = await _sut.GetMyProject();
+
+            //Assert
+            _sender.Verify(s => s.Send(query, CancellationToken.None));
+        }
+
+        [Fact]
+        public async Task GetMyProject_ShouldReturnNotFoundResult_WhenQueryReturnsNull()
+        {
+            //Arrange
+            Guid id = User.UserId.Value;
+            GetProjectByOwnerIdQuery query = new(id);
+
+            _sut.ControllerContext.HttpContext = new DefaultHttpContext()
+            {
+                User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, query.Id.ToString())
+                }))
+            };
+
+            _sender.Setup(s => s.Send(query, CancellationToken.None)).ReturnsAsync(() => null);
+
+            //Act
+            var result = await _sut.GetMyProject();
+
+            //Assert
+            result.Result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async Task GetMyProject_ShouldReturnOkObjectResult_WhenQueryReturnsAValue()
+        {
+            //Arrange
+            Guid id = User.UserId.Value;
+            GetProjectByOwnerIdQuery query = new(id);
+            ProjectResponse response = new() { Id = id };
+            _sut.ControllerContext.HttpContext = new DefaultHttpContext()
+            {
+                User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, query.Id.ToString())
+                }))
+            };
+
+            _sender.Setup(s => s.Send(query, CancellationToken.None)).ReturnsAsync(response);
+
+            //Act
+            var result = await _sut.GetMyProject();
+
+            //Assert
+            OkObjectResult okObjectResult = (OkObjectResult)result.Result!;
+            okObjectResult.Value.Should().BeOfType<ProjectResponse>();
         }
     }
 }

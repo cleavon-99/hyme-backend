@@ -20,6 +20,13 @@ namespace Hyme.Infrastructure.Data.Repositories
             return await _context.Projects.FindAsync(id);
         }
 
+        public async Task<Project?> GetByOwnerIdAsync(UserId ownerId)
+        {
+            return await _context.Projects
+                .Where(p => p.OwnerId == ownerId)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<List<Project>> GetListAsync(PaginationFilter filter)
         {
             return await _context.Projects
