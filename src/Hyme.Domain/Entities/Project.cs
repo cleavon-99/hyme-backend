@@ -23,6 +23,9 @@ namespace Hyme.Domain.Entities
         public UserId OwnerId { get; private set; }
         public User Owner { get; private set; } = null!;
 
+        private readonly List<NFT> _nfts = new();
+        public IReadOnlyCollection<NFT> NFTs => _nfts;
+
         private Project(
             ProjectId id, 
             UserId ownerId
@@ -30,6 +33,14 @@ namespace Hyme.Domain.Entities
         {
             Id = id;
             OwnerId = ownerId;  
+        }
+       
+
+        public NFT AddNFT(string title, string description, string image)
+        {
+            NFT nft = new(new NFTId(Guid.NewGuid()), Id, title, description, image);
+            _nfts.Add(nft);
+            return nft;
         }
 
         public static Project Create(

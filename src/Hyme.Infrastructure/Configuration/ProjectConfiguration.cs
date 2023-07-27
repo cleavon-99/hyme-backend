@@ -18,6 +18,7 @@ namespace Hyme.Infrastructure.Configuration
             builder.Property(p => p.ShortDescription).HasMaxLength(1000);
             builder.Property(p => p.ProjectDescription).HasMaxLength(5000);
             builder.Property(p => p.OwnerId).HasConversion(id => id.Value, value => new UserId(value));
+            builder.HasMany(p => p.NFTs).WithOne().HasForeignKey(n => n.ProjectId);
         }
     }
 }

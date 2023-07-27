@@ -1,11 +1,12 @@
-﻿using Azure.Storage.Blobs.Models;
-using FluentAssertions;
+﻿using FluentAssertions;
 using FluentResults;
 using Hyme.API.Controllers.V1;
+using Hyme.Application.Commands.NFTs;
 using Hyme.Application.Commands.Projects;
 using Hyme.Application.DTOs.Request;
 using Hyme.Application.DTOs.Response;
 using Hyme.Application.Errors;
+using Hyme.Application.Queries.NFTs;
 using Hyme.Application.Queries.Projects;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -610,6 +611,110 @@ namespace Hyme.API.Tests.Controllers.V1
             //Assert
             OkObjectResult okObjectResult = (OkObjectResult)result.Result!;
             okObjectResult.Value.Should().BeOfType<ProjectResponse>();
+        }
+
+        [Fact]
+        public async Task AddNFT_ShouldSendAddNFTCommand()
+        {
+            //Arrange
+            AddNFTCommand command = new(Guid.NewGuid(), "Title", "Description", "add.png", Array.Empty<byte>());
+            var file = new FormFile(new MemoryStream(Encoding.UTF8.GetBytes("This is a dummy file")), 0, 0, "Data", command.FileName);
+            _sender.Setup(s => s.Send(It.IsAny<AddNFTCommand>(), CancellationToken.None)).ReturnsAsync(Result.Fail(new ProjectNotFoundError(command.ProjectId)));
+            NFTRequest request = new()
+            {
+                Title = command.Title,
+                Description = command.Description,
+                Image = file
+            };
+            //Act
+            var result = await _sut.AddNFT(command.ProjectId, request);
+
+            //Assert
+            _sender.Verify(s => s.Send(It.IsAny<AddNFTCommand>(), CancellationToken.None));
+        }
+
+        [Fact]
+        public async Task AddNFT_ShouldReturnNotFound_WhenSenderReturnsFailureResult()
+        {
+            //Arrange
+            AddNFTCommand command = new(Guid.NewGuid(), "Title", "Description", "add.png", Array.Empty<byte>());
+            var file = new FormFile(new MemoryStream(Encoding.UTF8.GetBytes("This is a dummy file")), 0, 0, "Data", command.FileName);
+            NFTRequest request = new()
+            {
+                Title = command.Title,
+                Description = command.Description,
+                Image = file
+            };
+
+            _sender.Setup(s => s.Send(It.IsAny<AddNFTCommand>(), CancellationToken.None)).ReturnsAsync(Result.Fail(new ProjectNotFoundError(command.ProjectId)));
+
+            //Act
+            var result = await _sut.AddNFT(command.ProjectId, request);
+
+            //Assert
+            result.Result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async Task AddNFT_ShouldReturnOkObjectResult_WhenSenderReturnsSuccessResult()
+        {
+            //Arrange
+            AddNFTCommand command = new(Guid.NewGuid(), "Title", "Description", "add.png", Array.Empty<byte>());
+            var file = new FormFile(new MemoryStream(Encoding.UTF8.GetBytes("This is a dummy file")), 0, 0, "Data", command.FileName);
+            NFTRequest request = new()
+            {
+                Title = command.Title,
+                Description = command.Description,
+                Image = file
+            };
+
+            _sender.Setup(s => s.Send(It.IsAny<AddNFTCommand>(), CancellationToken.None)).ReturnsAsync(Result.Ok());
+
+            //Act
+            var result = await _sut.AddNFT(command.ProjectId, request);
+
+            //Assert
+            result.Result.Should().BeOfType<OkObjectResult>();
+        }
+
+
+        [Fact]
+        public async Task GetNFTs_ShouldReturnBadRequestObjectResult_WhenPageNumberOrPageSizeIsLessThan1()
+        {
+            //Arrange
+            GetProjectNFTsQuery query = new(Guid.NewGuid(), 0, 0);
+
+            //Act
+            var result = await _sut.GetNfts(query.ProjectId, new PaginationRequest() { PageNumber = query.PageNumber, PageSize = query.PageSize });
+
+            //Assert
+            result.Result.Should().BeOfType<BadRequestObjectResult>();
+        }
+
+        [Fact]
+        public async Task GetNFTs_ShouldSend_GetNFTsQuery()
+        {
+            //Arrange
+            GetProjectNFTsQuery query = new(Guid.NewGuid(), 1, 20);
+
+            //Act
+            var result = await _sut.GetNfts(query.ProjectId, new PaginationRequest() {PageNumber = query.PageNumber, PageSize = query.PageSize });
+
+            //Assert
+            _sender.Verify(s => s.Send(query, CancellationToken.None));
+        }
+
+        [Fact]
+        public async Task GetNFTs_ShouldReturnOkObjectResult_WhenPageNumberOrPageSizeIsValid()
+        {
+            //Arrange
+            GetProjectNFTsQuery query = new(Guid.NewGuid(), 1, 20);
+
+            //Act
+            var result = await _sut.GetNfts(query.ProjectId, new PaginationRequest() { PageNumber = query.PageNumber, PageSize = query.PageSize });
+
+            //Assert
+            result.Result.Should().BeOfType<OkObjectResult>();
         }
     }
 }

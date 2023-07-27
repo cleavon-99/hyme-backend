@@ -1,8 +1,11 @@
-﻿using Hyme.API.Extensions;
+﻿using FluentResults;
+using Hyme.API.Extensions;
+using Hyme.Application.Commands.NFTs;
 using Hyme.Application.Commands.Projects;
 using Hyme.Application.DTOs.Request;
 using Hyme.Application.DTOs.Response;
 using Hyme.Application.Errors;
+using Hyme.Application.Queries.NFTs;
 using Hyme.Application.Queries.Projects;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -78,7 +81,7 @@ namespace Hyme.API.Controllers.V1
         /// <response code="401">Not logged in</response>
         /// <response code="404">Not Found</response>
         /// <response code="200">Success</response>
-        [HttpGet("myProject")]
+        [HttpGet("myproject")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -135,6 +138,36 @@ namespace Hyme.API.Controllers.V1
         //    return CreatedAtRoute(nameof(GetProjectById), new { result.Value.Id}, result.Value);
         //}
 
+
+        [HttpGet("{id}/nft")]
+        public async Task<ActionResult<PagedResponse<NFTResponse>>> GetNfts(Guid id, [FromQuery] PaginationRequest request)
+        {
+            if (request.PageNumber < 1 || request.PageSize < 1)
+                return BadRequest("Page Number or page size cannot be less than 1");
+            PagedResponse<NFTResponse> nfts = await _sender.Send(new GetProjectNFTsQuery(id, request.PageNumber, request.PageSize));
+            return Ok(nfts);
+        }
+
+
+        /// <summary>
+        /// Add NFT
+        /// </summary>
+        /// <param name="id">Project Id</param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost("{id}/nft")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<NFTResponse>> AddNFT(Guid id, [FromForm]NFTRequest request)
+        {
+            string fileName = $"{Guid.NewGuid()}{Path.GetExtension(request.Image.FileName)}";
+            byte[] image = await request.Image.ToByteArrayAsync();
+            Result<NFTResponse> result = await _sender.Send(new AddNFTCommand(id, request.Title, request.Description, fileName, image));
+            if (result.IsFailed)
+                return NotFound();
+
+            return Ok(result.Value);
+        }
 
         /// <summary>
         /// Approve a project

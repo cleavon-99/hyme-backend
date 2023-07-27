@@ -20,5 +20,7 @@ namespace Hyme.Infrastructure.Data
         public DbSet<Role> Roles { get; set; } = null!;
         public DbSet<Project> Projects { get; set; } = null!;
         public DbSet<Whitelist> Whitelists { get; set; } = null!;
+        public DbSet<NFT> NFTs { get; set; } = null!;
+
     }
 }

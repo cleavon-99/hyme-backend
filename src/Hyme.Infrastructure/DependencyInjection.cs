@@ -21,6 +21,7 @@ namespace Hyme.Infrastructure
             services.AddScoped<IProjectRepository, ProjectRepository>();
             services.AddScoped<IWhitelistRepository, WhiteListRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<INFTRepository, NFTRepository>();
             services.AddSingleton(option => new BlobServiceClient(configuration["AzureBlobStorageConnection"]));
             services.AddSingleton<IBlobService, BlobService>();
             services.AddDbContext<ApplicationDbContext>(options =>
