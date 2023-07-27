@@ -15,7 +15,12 @@ namespace Hyme.Infrastructure.Data.Repositories
             _context = context;
         }
 
-        public async Task<List<NFT>> GetNFTsAsync(ProjectId id, PaginationFilter filter)
+        public async Task<NFT?> GetByIdAsync(NFTId id)
+        {
+            return await _context.NFTs.FindAsync(id);
+        }
+
+        public async Task<List<NFT>> GetNFTsAsync(ProjectId projectId, PaginationFilter filter)
         {
             return await _context.NFTs
                 .Skip(filter.Skip)

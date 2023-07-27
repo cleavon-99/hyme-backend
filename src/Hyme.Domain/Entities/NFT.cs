@@ -9,8 +9,8 @@ namespace Hyme.Domain.Entities
         public string Description { get; private set; }
         public string Image { get; private set; }
         public DateTime DateCreated { get; private set; }
-        public DateTime DateModified { get; private set; }
-        public DateTime DateDeleted { get; private set; }
+        public DateTime? DateModified { get; private set; }
+        public DateTime? DateDeleted { get; private set; }
         public ProjectId ProjectId { get; private set; }
 
         public NFT(NFTId id, ProjectId projectId, string title, string description, string image)
@@ -30,6 +30,17 @@ namespace Hyme.Domain.Entities
             };
 
             return nft;
+        }
+
+        public void Delete()
+        {
+            DateDeleted = DateTime.UtcNow;
+        }
+
+        public void Update(string title, string description)
+        {
+            Title = title;
+            Description = description;
         }
 
     }

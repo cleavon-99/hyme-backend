@@ -6,6 +6,7 @@ namespace Hyme.Domain.Repositories
 {
     public interface INFTRepository
     {
-        Task<List<NFT>> GetNFTsAsync(ProjectId id, PaginationFilter filter);
+        Task<List<NFT>> GetNFTsAsync(ProjectId projectId, PaginationFilter filter);
+        Task<NFT?> GetByIdAsync(NFTId id);
     }
 }

@@ -10,7 +10,6 @@ using Hyme.Application.Queries.Projects;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Org.BouncyCastle.Bcpg.OpenPgp;
 using System.Security.Claims;
 
 namespace Hyme.API.Controllers.V1
