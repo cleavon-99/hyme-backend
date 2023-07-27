@@ -100,5 +100,10 @@ namespace Hyme.Domain.Entities
             Status = PublishStatus.Rejected;
             DateRejected = DateTime.UtcNow;
         }
+
+        public void Publish()
+        {
+            Status = PublishStatus.InReview;
+        }
     }
 }

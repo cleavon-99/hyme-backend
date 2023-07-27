@@ -8,6 +8,7 @@ using Hyme.Application.DTOs.Response;
 using Hyme.Application.Errors;
 using Hyme.Application.Queries.NFTs;
 using Hyme.Application.Queries.Projects;
+using Hyme.Domain.ValueObjects;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +18,7 @@ using System.Text;
 using TestUtilities.Commands;
 using TestUtilities.Constants;
 using TestUtilities.Queries;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using static TestUtilities.Constants.Constants;
 
 namespace Hyme.API.Tests.Controllers.V1
@@ -715,6 +717,90 @@ namespace Hyme.API.Tests.Controllers.V1
 
             //Assert
             result.Result.Should().BeOfType<OkObjectResult>();
+        }
+
+
+        [Fact]
+        public async Task PublishMyProject_ShouldReturn401Unauthorized_WhenNoIdFoundInClaims()
+        {
+            //Arrange
+            //Act
+            var result = await _sut.PublishMyProject();
+
+            //Assert
+            result.Should().BeOfType<UnauthorizedResult>();
+        }
+
+        [Fact]
+        public async Task PublishMyProject_ShouldSendPublishMyprojectCommand()
+        {
+            //Arrange
+            UserId userId = Constants.User.UserId;
+            _sut.ControllerContext.HttpContext = new DefaultHttpContext()
+            {
+                User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, userId.Value.ToString())
+                }))
+            };
+
+            PublishProjectCommand command = new(userId.Value);
+            _sender.Setup(s => s.Send(command, CancellationToken.None))
+               .ReturnsAsync(Result.Fail(new ProjectNotFoundError(userId.Value)));
+
+            //Act
+            var result = await _sut.PublishMyProject();
+
+            //Assert
+            _sender.Verify(s => s.Send(command, CancellationToken.None));
+        }
+
+        [Fact]
+        public async Task PublishMyProject_ShouldReturnNotFound_WhenCommandReturnsFailureResult()
+        {
+            //Arrange
+            UserId userId = Constants.User.UserId;
+            _sut.ControllerContext.HttpContext = new DefaultHttpContext()
+            {
+                User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, userId.Value.ToString())
+                }))
+            };
+
+            PublishProjectCommand command = new(userId.Value);
+            _sender.Setup(s => s.Send(command, CancellationToken.None))
+                .ReturnsAsync(Result.Fail(new ProjectNotFoundError(userId.Value)));
+
+            //Act
+            var result = await _sut.PublishMyProject();
+
+            //Assert
+            result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async Task PublishMyProject_ShouldReturnNoContentResult_WhenCommandReturnsSuccessResult()
+        {
+            //Arrange
+            UserId userId = Constants.User.UserId;
+            _sut.ControllerContext.HttpContext = new DefaultHttpContext()
+            {
+                User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, userId.Value.ToString())
+                }))
+            };
+
+            PublishProjectCommand command = new(userId.Value);
+            _sender.Setup(s => s.Send(command, CancellationToken.None))
+                .ReturnsAsync(Result.Ok());
+
+            //Act
+            var result = await _sut.PublishMyProject();
+
+            //Assert
+            result.Should().BeOfType<NoContentResult>();
         }
     }
 }

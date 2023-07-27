@@ -10,6 +10,7 @@ using Hyme.Application.Queries.Projects;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Bcpg.OpenPgp;
 using System.Security.Claims;
 
 namespace Hyme.API.Controllers.V1
@@ -98,6 +99,30 @@ namespace Hyme.API.Controllers.V1
         }
 
 
+        /// <summary>
+        /// Publish my project
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="204">Success</response>
+        /// <response code="404">Project not found</response>
+        /// <response code="401">User is not logged in</response>
+        [HttpPost("myproject/publish")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<ActionResult> PublishMyProject()
+        {
+            string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId is null)
+                return Unauthorized();
+
+            var result = await _sender.Send(new PublishProjectCommand(Guid.Parse(userId)), HttpContext.RequestAborted);
+            if (result.IsFailed)
+                return NotFound();
+
+            return NoContent();
+        }
+
 
         ///// <summary>
         ///// Create Project
@@ -138,8 +163,17 @@ namespace Hyme.API.Controllers.V1
         //    return CreatedAtRoute(nameof(GetProjectById), new { result.Value.Id}, result.Value);
         //}
 
-
+        /// <summary>
+        /// Retrieve project NFTs
+        /// </summary>
+        /// <param name="id">roject Id</param>
+        /// <param name="request">Pagination Request</param>
+        /// <returns></returns>
+        /// <response code="400">Page number or pagesize cannot be less than 1</response>
+        /// <response code="200">Success</response>
         [HttpGet("{id}/nft")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<PagedResponse<NFTResponse>>> GetNfts(Guid id, [FromQuery] PaginationRequest request)
         {
             if (request.PageNumber < 1 || request.PageSize < 1)
