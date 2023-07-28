@@ -892,5 +892,140 @@ namespace Hyme.API.Tests.Controllers.V1
             //Assert
             result.Should().BeOfType<NoContentResult>();
         }
+
+        [Fact]
+        public async Task DeleteLogo_ShouldSendDeleteLogoCommand()
+        {
+            //Arrange
+            Guid projectd = Guid.NewGuid();
+            DeleteLogoCommand command = new(projectd);
+            _sender.Setup(s => s.Send(command, CancellationToken.None)).ReturnsAsync(Result.Fail(""));
+
+            //Act
+            var result = await _sut.DeleteLogo(projectd);
+
+            //Assert
+            _sender.Verify(s => s.Send(command, CancellationToken.None));
+        }
+
+        [Fact]
+        public async Task DeleteLogo_ShouldReturnNotFound_WhenCommandReturnsFailureResult()
+        {
+            //Arrange
+            Guid projectd = Guid.NewGuid();
+            DeleteLogoCommand command = new(projectd);
+            _sender.Setup(s => s.Send(command, CancellationToken.None)).ReturnsAsync(Result.Fail(""));
+
+            //Act
+            var result = await _sut.DeleteLogo(projectd);
+
+            //Assert
+            result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async Task DeleteLogo_ShouldReturnNoContentResult_WhenCommandReturnsSuccessResult()
+        {
+            //Arrange
+            Guid projectd = Guid.NewGuid();
+            DeleteLogoCommand command = new(projectd);
+            _sender.Setup(s => s.Send(command, CancellationToken.None)).ReturnsAsync(Result.Ok());
+
+            //Act
+            var result = await _sut.DeleteLogo(projectd);
+
+            //Assert
+            result.Should().BeOfType<NoContentResult>();
+        }
+
+        [Fact]
+        public async Task DeleteBanner_ShouldSendDeleteBannerCommand()
+        {
+            //Arrange
+            Guid projectd = Guid.NewGuid();
+            DeleteBannerCommand command = new(projectd);
+            _sender.Setup(s => s.Send(command, CancellationToken.None)).ReturnsAsync(Result.Fail(""));
+
+            //Act
+            var result = await _sut.DeleteBanner(projectd);
+
+            //Assert
+            _sender.Verify(s => s.Send(command, CancellationToken.None));
+        }
+
+        [Fact]
+        public async Task DeleteBanner_ShouldReturnNotFound_WhenCommandReturnsFailureResult()
+        {
+            //Arrange
+            Guid projectd = Guid.NewGuid();
+            DeleteBannerCommand command = new(projectd);
+            _sender.Setup(s => s.Send(command, CancellationToken.None)).ReturnsAsync(Result.Fail(""));
+
+            //Act
+            var result = await _sut.DeleteBanner(projectd);
+
+            //Assert
+            result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async Task DeleteBanner_ShouldReturnNoContentResult_WhenCommandReturnsSuccessResult()
+        {
+            //Arrange
+            Guid projectd = Guid.NewGuid();
+            DeleteBannerCommand command = new(projectd);
+            _sender.Setup(s => s.Send(command, CancellationToken.None)).ReturnsAsync(Result.Ok());
+
+            //Act
+            var result = await _sut.DeleteBanner(projectd);
+
+            //Assert
+            result.Should().BeOfType<NoContentResult>();
+        }
+
+        [Fact]
+        public async Task DeleteTrailer_ShouldSendDeleteTrailerCommand()
+        {
+            //Arrange
+            Guid projectd = Guid.NewGuid();
+            DeleteTrailerCommand command = new(projectd);
+            _sender.Setup(s => s.Send(command, CancellationToken.None)).ReturnsAsync(Result.Fail(""));
+
+            //Act
+            var result = await _sut.DeleteTrailer(projectd);
+
+            //Assert
+            _sender.Verify(s => s.Send(command, CancellationToken.None));
+        }
+
+        [Fact]
+        public async Task DeleteTrailer_ShouldReturnNotFound_WhenCommandReturnsFailureResult()
+        {
+            //Arrange
+            Guid projectd = Guid.NewGuid();
+            DeleteTrailerCommand command = new(projectd);
+            _sender.Setup(s => s.Send(command, CancellationToken.None)).ReturnsAsync(Result.Fail(""));
+
+            //Act
+            var result = await _sut.DeleteTrailer(projectd);
+
+            //Assert
+            result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async Task DeleteTrailer_ShouldReturnNoContentResult_WhenCommandReturnsSuccessResult()
+        {
+            //Arrange
+            Guid projectd = Guid.NewGuid();
+            DeleteTrailerCommand command = new(projectd);
+            _sender.Setup(s => s.Send(command, CancellationToken.None)).ReturnsAsync(Result.Ok());
+
+            //Act
+            var result = await _sut.DeleteTrailer(projectd);
+
+            //Assert
+            result.Should().BeOfType<NoContentResult>();
+        }
     }
 }

@@ -31,6 +31,8 @@ namespace Hyme.Application.Commands.Projects
             if (project is null)
                 return Result.Fail(new ProjectNotFoundError(request.ProjectId));
 
+            if (string.IsNullOrWhiteSpace(project.Banner))
+                return Result.Fail("No Banner to delete");
             await _blobService.DeleteImageAsync(project.Banner);
             project.DeleteBanner();
             await _unitOfWork.SaveChangesAsync(cancellationToken);

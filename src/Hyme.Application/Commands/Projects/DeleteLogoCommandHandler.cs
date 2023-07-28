@@ -30,6 +30,9 @@ namespace Hyme.Application.Commands.Projects
             if (project is null)
                 return Result.Fail(new ProjectNotFoundError(request.ProjectId));
 
+            if (string.IsNullOrWhiteSpace(project.Logo))
+                return Result.Fail("No logo tobe deleted");
+
             await _blobService.DeleteImageAsync(project.Logo);
             project.DeleteLogo();
             await _unitOfWork.SaveChangesAsync(cancellationToken);

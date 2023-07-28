@@ -30,6 +30,8 @@ namespace Hyme.Application.Commands.Projects
             if (project is null)
                 return Result.Fail(new ProjectNotFoundError(request.ProjectId));
 
+            if (string.IsNullOrWhiteSpace(project.Trailer))
+                return Result.Fail("No trailer to be deleted");
             await _blobService.DeleteVideoAsync(project.Trailer);
             project.DeleteTrailer();
             await _unitOfWork.SaveChangesAsync(cancellationToken);
