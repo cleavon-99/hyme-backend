@@ -324,6 +324,20 @@ namespace Hyme.API.Controllers.V1
 
 
         /// <summary>
+        /// Remove Logo
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete("{id}/logo")]
+        public async Task<ActionResult> DeleteLogo(Guid id)
+        {
+            Result result = await _sender.Send(new DeleteLogoCommand(id));
+            if (result.IsFailed)
+                return NotFound();
+            return NoContent();
+        }
+
+        /// <summary>
         /// Update project banner
         /// </summary>
         /// <param name="id">Project Id</param>
@@ -346,6 +360,20 @@ namespace Hyme.API.Controllers.V1
         }
 
         /// <summary>
+        /// Remove Banner
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete("{id}/banner")]
+        public async Task<ActionResult> DeleteBanner(Guid id)
+        {
+            Result result = await _sender.Send(new DeleteBannerCommand(id));
+            if (result.IsFailed)
+                return NotFound();
+            return NoContent();
+        }
+
+        /// <summary>
         /// Update project trailer
         /// </summary>
         /// <param name="id">Project Id</param>
@@ -362,6 +390,20 @@ namespace Hyme.API.Controllers.V1
             byte[] trailer = await video.ToByteArrayAsync();
             var result = await _sender.Send(new UpdateProjectTrailerCommand(id, trailer, fileName));
             if(result.IsFailed) 
+                return NotFound();
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Remove trailer
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete("{id}/trailer")]
+        public async Task<ActionResult> DeleteTrailer(Guid id)
+        {
+            Result result = await _sender.Send(new DeleteTrailerCommand(id));
+            if (result.IsFailed)
                 return NotFound();
             return NoContent();
         }

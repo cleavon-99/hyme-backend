@@ -113,6 +113,12 @@ namespace Hyme.Domain.Entities
             DateModified = DateTime.UtcNow;
         }
 
+        public void DeleteTrailer()
+        {
+            Trailer = string.Empty;
+            DateModified = DateTime.UtcNow; 
+        }
+
         public void Publish()
         {
             Status = PublishStatus.InReview;
