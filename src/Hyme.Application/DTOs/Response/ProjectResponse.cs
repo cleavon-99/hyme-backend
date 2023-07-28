@@ -13,7 +13,7 @@ namespace Hyme.Application.DTOs.Response
         public string Trailer { get; set; } = null!;
         public string ShortDescription { get; set; } = null!;
         public string ProjectDescription { get; set; } = null!;
-        public PublishStatus Status { get; set; }
+        public ProjectStatus Status { get; set; }
         public DateTimeOffset DateCreated { get; set; }
         
     }

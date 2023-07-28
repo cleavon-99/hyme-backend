@@ -64,7 +64,7 @@ namespace Hyme.Application.Tests.Commands.Projects
             var result = await _sut.Handle(command, CancellationToken.None);
 
             //Assert
-            project.Status.Should().Be(PublishStatus.Rejected);
+            project.Status.Should().Be(ProjectStatus.Rejected);
             project.DateRejected.Should().NotBeNull();
         }
 
@@ -80,7 +80,7 @@ namespace Hyme.Application.Tests.Commands.Projects
             var result = await _sut.Handle(command, CancellationToken.None);
 
             //Assert
-            project.Status.Should().Be(PublishStatus.Rejected);
+            project.Status.Should().Be(ProjectStatus.Rejected);
             _mockUnitOfWork.Verify(u => u.SaveChangesAsync(CancellationToken.None));
             result.Should().BeSuccess();
         }

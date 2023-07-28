@@ -70,7 +70,7 @@ namespace Hyme.Application.Tests.Commands.Projects
             var result = await _sut.Handle(command, CancellationToken.None);
 
             //Assert
-            project.Status.Should().Be(PublishStatus.InReview);
+            project.Status.Should().Be(ProjectStatus.InReview);
         }
 
         [Fact]

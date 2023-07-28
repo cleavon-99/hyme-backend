@@ -13,7 +13,7 @@ namespace Hyme.Domain.Entities
         public string Trailer { get; private set; } = string.Empty;
         public string ShortDescription { get; private set; } = string.Empty;
         public string ProjectDescription { get; private set; } = string.Empty;
-        public PublishStatus Status { get; private set; }
+        public ProjectStatus Status { get; private set; }
         public DateTime DateCreated { get; private set; }
         public DateTime? DateModified { get; private set; }
         public DateTime? DateApproved { get; private set; }
@@ -49,7 +49,7 @@ namespace Hyme.Domain.Entities
         {
             return new(id, ownerId)
             {
-                Status = PublishStatus.Empty,
+                Status = ProjectStatus.Empty,
                 DateCreated = DateTime.UtcNow
             };
         }
@@ -85,19 +85,19 @@ namespace Hyme.Domain.Entities
 
         public void Delete()
         {
-            Status = PublishStatus.Deleted;
+            Status = ProjectStatus.Deleted;
             DateDeleted = DateTime.UtcNow;
         }
 
         public void Approve()
         {
-            Status = PublishStatus.Approved;
+            Status = ProjectStatus.Approved;
             DateApproved = DateTime.UtcNow;
         }
 
         public void Reject()
         {
-            Status = PublishStatus.Rejected;
+            Status = ProjectStatus.Rejected;
             DateRejected = DateTime.UtcNow;
         }
 
@@ -121,7 +121,7 @@ namespace Hyme.Domain.Entities
 
         public void Publish()
         {
-            Status = PublishStatus.InReview;
+            Status = ProjectStatus.InReview;
         }
     }
 }

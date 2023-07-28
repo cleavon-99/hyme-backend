@@ -1,6 +1,6 @@
 ﻿namespace Hyme.Domain.Primitives
 {
-    public enum PublishStatus
+    public enum ProjectStatus
     {
         Empty,
         InReview,
