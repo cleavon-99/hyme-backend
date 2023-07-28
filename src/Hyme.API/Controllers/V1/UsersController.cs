@@ -3,7 +3,7 @@ using Hyme.Application.Commands.Users;
 using Hyme.Application.DTOs.Request;
 using Hyme.Application.DTOs.Response;
 using Hyme.Application.Errors;
-using Hyme.Application.Queries.UserProfiles;
+using Hyme.Application.Queries.Users;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -87,7 +87,7 @@ namespace Hyme.API.Controllers.V1
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> UpdateProfile([FromBody]UpdateUserProfileRequest updateRequest)
+        public async Task<ActionResult> UpdateProfile([FromBody]UpdateUserRequest updateRequest)
         {
             string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId is null)

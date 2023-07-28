@@ -101,6 +101,18 @@ namespace Hyme.Domain.Entities
             DateRejected = DateTime.UtcNow;
         }
 
+        public void DeleteLogo()
+        {
+            Logo = string.Empty;
+            DateModified = DateTime.UtcNow;
+        }
+        
+        public void DeleteBanner()
+        {
+            Banner = string.Empty;
+            DateModified = DateTime.UtcNow;
+        }
+
         public void Publish()
         {
             Status = PublishStatus.InReview;

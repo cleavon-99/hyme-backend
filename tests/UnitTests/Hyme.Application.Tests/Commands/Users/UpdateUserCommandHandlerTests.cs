@@ -39,7 +39,7 @@ namespace Hyme.Application.Tests.Commands.Users
         }
 
         [Fact]
-        public async Task Handle_ShouldReturnFailureWithUserProfileNotFoundError_WhenRepositoryReturnsNullValue()
+        public async Task Handle_ShouldReturnFailureWithUserNotFoundError_WhenRepositoryReturnsNullValue()
         {
             //Arrange
             Guid id = Guid.NewGuid();
@@ -56,7 +56,7 @@ namespace Hyme.Application.Tests.Commands.Users
         }
 
         [Fact]
-        public async Task Handle_ShouldInvokeUserProfileUpdate_WhenRepostoryReturnsNonNullValue()
+        public async Task Handle_ShouldInvokeUserUpdate_WhenRepostoryReturnsNonNullValue()
         {
             //Arrange
             Guid id = Guid.NewGuid();

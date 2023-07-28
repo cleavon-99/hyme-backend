@@ -23,9 +23,9 @@ namespace Hyme.Application.Commands.Users
 
         public async Task<Result> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
-            User? userProfile = await _userRepository.GetByIdAsync(new UserId(request.UserProfileId));
+            User? userProfile = await _userRepository.GetByIdAsync(new UserId(request.UserId));
             if (userProfile is null)
-                return Result.Fail(new UserNotFoundError(request.UserProfileId));
+                return Result.Fail(new UserNotFoundError(request.UserId));
 
             userProfile.Update(request.Name);
             await _unitOfWork.SaveChangesAsync(cancellationToken);

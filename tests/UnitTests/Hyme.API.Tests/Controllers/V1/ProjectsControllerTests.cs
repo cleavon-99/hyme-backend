@@ -18,7 +18,6 @@ using System.Text;
 using TestUtilities.Commands;
 using TestUtilities.Constants;
 using TestUtilities.Queries;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using static TestUtilities.Constants.Constants;
 
 namespace Hyme.API.Tests.Controllers.V1
@@ -798,6 +797,97 @@ namespace Hyme.API.Tests.Controllers.V1
 
             //Act
             var result = await _sut.PublishMyProject();
+
+            //Assert
+            result.Should().BeOfType<NoContentResult>();
+        }
+
+        [Fact]
+        public async Task DeleteNFT_ShouldSendDeleteNFTCommand()
+        {
+
+            //Arrage
+            DeleteNFTCommand command = new(Guid.NewGuid());
+            _sender.Setup(s => s.Send(command, CancellationToken.None)).ReturnsAsync(Result.Fail(new NFTNotFoundError(command.NFTId)));
+
+
+            //Act
+            var result = await _sut.DeleteNFT(command.NFTId);
+
+            //Assert
+            _sender.Verify(s => s.Send(command, CancellationToken.None));
+        }
+
+        [Fact]
+        public async Task DeleteNFT_ShouldReturnNotFound_WhenCommandReturnsFailureResult()
+        {
+
+            //Arrage
+            DeleteNFTCommand command = new(Guid.NewGuid());
+            _sender.Setup(s => s.Send(command, CancellationToken.None)).ReturnsAsync(Result.Fail(new NFTNotFoundError(command.NFTId)));
+
+            //Act
+            var result = await _sut.DeleteNFT(command.NFTId);
+
+            //Assert
+            result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async Task DeleteNFT_ShouldReturnNoContentResult_WhenCommandReturnsSuccessResult()
+        {
+
+            //Arrage
+            DeleteNFTCommand command = new(Guid.NewGuid());
+            _sender.Setup(s => s.Send(command, CancellationToken.None)).ReturnsAsync(Result.Ok());
+
+            //Act
+            var result = await _sut.DeleteNFT(command.NFTId);
+
+            //Assert
+            result.Should().BeOfType<NoContentResult>();
+        }
+
+        [Fact]
+        public async Task UpdateNFT_ShouldSend_UpdateNFTCommand()
+        {
+            //Arrange
+            Guid nftId = Guid.NewGuid();
+            UpdateNFTCommand command = new(nftId, "Title", "Description");
+            _sender.Setup(s => s.Send(command, CancellationToken.None)).ReturnsAsync(Result.Ok());
+
+            //Act
+            await _sut.UpdateNFT(nftId, new UpdateNFTRequest() { Title = command.Title, Description = command.Description});
+
+            //Assert
+            _sender.Verify(n => n.Send(command, CancellationToken.None));
+        }
+
+        [Fact]
+        public async Task UpdateNFT_ShouldReturnNotFound_WhenCommandReturnsFailureResult()
+        {
+            //Arrange
+            Guid nftId = Guid.NewGuid();
+            UpdateNFTCommand command = new(nftId, "Title", "Description");
+            _sender.Setup(s => s.Send(command, CancellationToken.None)).ReturnsAsync(Result.Fail(new NFTNotFoundError(command.NFTId)));
+
+            //Act
+            var result = await _sut.UpdateNFT(nftId, new UpdateNFTRequest() { Title = command.Title, Description = command.Description });
+
+            //Assert
+            result.Should().BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async Task UpdateNFT_ShouldReturnNoContentResult_WhenCommandReturnsSuccessResult()
+        {
+            //Arrange
+            Guid nftId = Guid.NewGuid();
+            UpdateNFTCommand command = new(nftId, "Title", "Description");
+            _sender.Setup(s => s.Send(command, CancellationToken.None)).ReturnsAsync(Result.Ok());
+
+            //Act
+            var result = await _sut.UpdateNFT(nftId, new UpdateNFTRequest() { Title = command.Title, Description = command.Description });
 
             //Assert
             result.Should().BeOfType<NoContentResult>();

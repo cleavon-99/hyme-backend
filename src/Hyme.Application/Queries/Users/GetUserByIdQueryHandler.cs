@@ -4,9 +4,8 @@ using Hyme.Domain.Entities;
 using Hyme.Domain.Repositories;
 using Hyme.Domain.ValueObjects;
 using MediatR;
-using System.Security.Claims;
 
-namespace Hyme.Application.Queries.UserProfiles
+namespace Hyme.Application.Queries.Users
 {
     public class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, UserResponse?>
     {
@@ -24,7 +23,7 @@ namespace Hyme.Application.Queries.UserProfiles
         public async Task<UserResponse?> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
         {
             User? userProfile = await _userRepository.GetByIdAsync(new UserId(request.Id));
-            
+
             if (userProfile is null)
                 return null;
 

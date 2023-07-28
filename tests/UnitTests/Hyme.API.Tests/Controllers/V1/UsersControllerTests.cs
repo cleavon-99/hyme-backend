@@ -5,7 +5,7 @@ using Hyme.Application.Commands.Users;
 using Hyme.Application.DTOs.Request;
 using Hyme.Application.DTOs.Response;
 using Hyme.Application.Errors;
-using Hyme.Application.Queries.UserProfiles;
+using Hyme.Application.Queries.Users;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -131,7 +131,7 @@ namespace Hyme.API.Tests.Controllers.V1
         {
             //Arrange
             _sut.ControllerContext.HttpContext = new DefaultHttpContext();
-            UpdateUserProfileRequest request = new() { Name = Constants.User.Name };
+            UpdateUserRequest request = new() { Name = Constants.User.Name };
            
             //Act
             var result = await _sut.UpdateProfile(request);
@@ -145,12 +145,12 @@ namespace Hyme.API.Tests.Controllers.V1
         {
             //Arrange
             
-            UpdateUserProfileRequest request = new() { Name = Constants.User.Name };
+            UpdateUserRequest request = new() { Name = Constants.User.Name };
             UpdateUserCommand command = new(Constants.User.UserId.Value, request.Name);
 
           
             _sender.Setup(s => s.Send(command, _sut.HttpContext.RequestAborted))
-                .ReturnsAsync(Result.Fail(new UserNotFoundError(command.UserProfileId)));
+                .ReturnsAsync(Result.Fail(new UserNotFoundError(command.UserId)));
             //Act
             var result = await _sut.UpdateProfile(request);
 
@@ -162,11 +162,11 @@ namespace Hyme.API.Tests.Controllers.V1
         public async Task UpdateProfile_ShouldReturnNotFound_WhenCommandRetunsFailureResult()
         {
             //Arrange
-            UpdateUserProfileRequest request = new() { Name = Constants.User.Name };
+            UpdateUserRequest request = new() { Name = Constants.User.Name };
             UpdateUserCommand command = new(Constants.User.UserId.Value, request.Name);
 
             _sender.Setup(s => s.Send(command, _sut.HttpContext.RequestAborted))
-                .ReturnsAsync(Result.Fail(new UserNotFoundError(command.UserProfileId)));
+                .ReturnsAsync(Result.Fail(new UserNotFoundError(command.UserId)));
             //Act
             var result = await _sut.UpdateProfile(request);
 
@@ -178,7 +178,7 @@ namespace Hyme.API.Tests.Controllers.V1
         public async Task UpdateProfile_ShoulrReturn204NoContent_WhenCommandReturnsSuccessResult()
         {
             //Arrange
-            UpdateUserProfileRequest request = new() { Name = Constants.User.Name };
+            UpdateUserRequest request = new() { Name = Constants.User.Name };
             UpdateUserCommand command = new(Constants.User.UserId.Value, request.Name);
 
 

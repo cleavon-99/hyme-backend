@@ -5,7 +5,7 @@ using Hyme.Domain.Primitives;
 using Hyme.Domain.Repositories;
 using MediatR;
 
-namespace Hyme.Application.Queries.UserProfiles
+namespace Hyme.Application.Queries.Users
 {
     public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, PagedResponse<UserResponse>>
     {

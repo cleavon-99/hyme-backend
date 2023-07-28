@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Hyme.Application.DTOs.Request
 {
-    public class UpdateUserProfileRequest
+    public class UpdateUserRequest
     {
         public string Name { get; set; } = null!;
     }

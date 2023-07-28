@@ -2,7 +2,7 @@
 using FluentAssertions;
 using Hyme.Application.DTOs.Response;
 using Hyme.Application.MappingProfiles;
-using Hyme.Application.Queries.UserProfiles;
+using Hyme.Application.Queries.Users;
 using Hyme.Domain.Entities;
 using Hyme.Domain.Repositories;
 using Hyme.Domain.ValueObjects;

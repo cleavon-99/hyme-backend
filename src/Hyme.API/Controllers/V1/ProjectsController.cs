@@ -170,7 +170,7 @@ namespace Hyme.API.Controllers.V1
         /// <returns></returns>
         /// <response code="400">Page number or pagesize cannot be less than 1</response>
         /// <response code="200">Success</response>
-        [HttpGet("{id}/nft")]
+        [HttpGet("{id}/nfts")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<PagedResponse<NFTResponse>>> GetNfts(Guid id, [FromQuery] PaginationRequest request)
@@ -188,7 +188,7 @@ namespace Hyme.API.Controllers.V1
         /// <param name="id">Project Id</param>
         /// <param name="request"></param>
         /// <returns></returns>
-        [HttpPost("{id}/nft")]
+        [HttpPost("{id}/nfts")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<NFTResponse>> AddNFT(Guid id, [FromForm]NFTRequest request)
@@ -200,6 +200,42 @@ namespace Hyme.API.Controllers.V1
                 return NotFound();
 
             return Ok(result.Value);
+        }
+
+        /// <summary>
+        /// Update NFT
+        /// </summary>
+        /// <param name="id">NFT Id</param>
+        /// <param name="request">Title, Request</param>
+        /// <returns></returns>
+        [HttpPut("nfts/{id}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> UpdateNFT(Guid id, [FromBody]UpdateNFTRequest request)
+        {
+            Result result = await _sender.Send(new UpdateNFTCommand(id, request.Title, request.Description), HttpContext.RequestAborted);
+            if(result.IsFailed) 
+                return NotFound();
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Delete NFT
+        /// </summary>
+        /// <param name="id">NFT Id</param>
+        /// <returns></returns>
+        /// <response code="404">NFT not found</response>
+        /// <response code="204">Success</response>
+        [HttpDelete("nfts/{id}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> DeleteNFT(Guid id)
+        {
+            Result result = await _sender.Send(new DeleteNFTCommand(id), HttpContext.RequestAborted);
+            if (result.IsFailed)
+                return NotFound();
+
+            return NoContent();
         }
 
         /// <summary>
