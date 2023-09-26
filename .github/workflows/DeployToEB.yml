@@ -1,0 +1,38 @@
+name: Deploy to Elastic Beanstalk
+
+on:
+  push:
+    branches: 
+     - master
+     - dev
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:     
+      - name: Git setup
+        uses: actions/checkout@v2
+      
+      - name: Dotnet run
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '5.0' # SDK Version to use; x will use the latest version of the 3.1 channel
+      
+      - name: Publish prod
+        run: cd hyme-backend; dotnet restore; dotnet publish -r win10-x64 --configuration "Release" --self-contained "true" -o ../site;
+
+      - name: Generate deployment package 
+        run: cd site; zip ../site.zip *; cd ..; zip hyme-backend.zip site.zip aws-windows-deployment-manifest.json
+
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v16
+        with:
+          aws_access_key: AKIAT262YEJITMXAAVXY
+          aws_secret_key: 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
+          application_name: HymeAPI
+          environment_name: testHYME
+          version_label: ${{ github.run_id }}
+          region: eu-central-1
+          deployment_package: hyme-backend.zip
