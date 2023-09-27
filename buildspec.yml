@@ -5,13 +5,13 @@ phases:
       dotnet: 6.0
   pre_build:
     commands:
-      - dotnet restore WebApplication2/WebApplication2.csproj
+      - dotnet restore src/Hyme.API/Hyme.API.csproj
   build:
     commands:
-      - dotnet build WebApplication2/WebApplication2.csproj
+      - dotnet build src/Hyme.API/Hyme.API.csproj
   post_build:
     commands:
-      - dotnet publish -c Release -o ./app/ WebApplication2/WebApplication2.csproj
+      - dotnet publish -c Release -o ./app/ src/Hyme.API/Hyme.API.csproj
 artifacts:
   files:
     - '**/*'
