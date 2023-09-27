@@ -33,10 +33,10 @@ jobs:
       uses: aws-actions/configure-aws-credentials@v2 # More information on this action can be found below in the 'AWS Credentials' section
       with:
          aws_access_key: AKIAT262YEJITMXAAVXY
-          aws_secret_key: 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
-          application_name: HymeAPI
-          environment_name: testHYME
-          version_label: ${{ github.run_id }}
-          region: eu-central-1
+         aws_secret_key: Tjh/wU+SFdzyRj66yZX0zDom2QZ4ldekScAK00Lx
+         application_name: HymeAPI
+         environment_name: testHYME
+         version_label: ${{ github.run_id }}
+         region: eu-central-1
     - name: Deploy to EB
       run: eb deploy dotnet-env-dev --staged
