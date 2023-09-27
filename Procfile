@@ -1,1 +1,1 @@
-web: dotnet ./app/hyme-backend.dll
+web: dotnet ./app/Program.dll
