@@ -1,0 +1,17 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      dotnet: 6.0
+  pre_build:
+    commands:
+      - dotnet restore WebApplication2/WebApplication2.csproj
+  build:
+    commands:
+      - dotnet build WebApplication2/WebApplication2.csproj
+  post_build:
+    commands:
+      - dotnet publish -c Release -o ./app/ WebApplication2/WebApplication2.csproj
+artifacts:
+  files:
+    - '**/*'
