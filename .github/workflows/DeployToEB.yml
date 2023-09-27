@@ -26,7 +26,7 @@ jobs:
       - name: Generate deployment package 
         run: cd site; zip ../site.zip *; cd ..; zip hyme-backend.zip site.zip aws-windows-deployment-manifest.json
 
-      - name: Deploy to EB
+      - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v16
         with:
           aws_access_key: AKIAT262YEJITMXAAVXY
