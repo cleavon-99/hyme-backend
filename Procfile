@@ -1,1 +1,1 @@
-web: dotnet ./app/Program.dll
+web: dotnet ./app/HymeSolution.dll
