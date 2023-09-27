@@ -17,7 +17,7 @@ jobs:
     - name: Publish
       run: dotnet publish -c Release -o ./app/ src/Hyme.API/Hyme.API.csproj
     - name: Generate deployment package
-      run: cd site; zip -r ../deploy.zip . -x '*.git*'; cd ..
+      run: cd src/Hyme.API/Hyme.API.csproj; zip -r ../deploy.zip . -x '*.git*'; cd ..
     - name: Upload .NET to artifact
       uses: actions/upload-artifact@v3
       with:
