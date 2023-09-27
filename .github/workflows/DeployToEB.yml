@@ -1,38 +1,42 @@
-name: Deploy to Elastic Beanstalk
-
+name: Deploy .NET to EBS
 on:
   push:
-    branches: 
-     - master
-     - dev
-  workflow_dispatch:
-
+    branches:
+    - main
+    - development
 jobs:
-  build:
+  build_deploy:
+    name: Build & Deploy
     runs-on: ubuntu-latest
-
-    steps:     
-      - name: Git setup
-        uses: actions/checkout@v2
-      
-      - name: Dotnet run
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '5.0' # SDK Version to use; x will use the latest version of the 3.1 channel
-      
-      - name: Publish prod
-        run: cd hyme-backend; dotnet restore; dotnet publish -r win10-x64 --configuration "Release" --self-contained "true" -o ../site;
-
-      - name: Generate deployment package 
-        run: cd site; zip ../site.zip *; cd ..; zip hyme-backend.zip site.zip aws-windows-deployment-manifest.json
-
-      - name: Deploy to Elastic Beanstalk
-        uses: einaregilsson/beanstalk-deploy@v16
-        with:
-          aws_access_key: AKIAT262YEJITMXAAVXY
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v2
+    - uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '6.0.x'
+    - name: Publish
+      run: dotnet publish WebApi -o site
+    - name: Generate deployment package
+      run: cd site; zip -r ../deploy.zip . -x '*.git*'; cd ..
+    - name: Upload .NET to artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: dotnet-zip
+        path: deploy.zip
+    - name: Setup EB CLI
+      run: |
+        python --version
+        pip --version
+        pip install awsebcli --upgrade --user
+        eb --version
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2 # More information on this action can be found below in the 'AWS Credentials' section
+      with:
+         aws_access_key: AKIAT262YEJITMXAAVXY
           aws_secret_key: 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
           application_name: HymeAPI
           environment_name: testHYME
           version_label: ${{ github.run_id }}
           region: eu-central-1
-          deployment_package: hyme-backend.zip
+    - name: Deploy to EB
+      run: eb deploy dotnet-env-dev --staged
