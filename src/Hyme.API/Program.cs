@@ -69,5 +69,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.MapGet("/", () => "TEST-HYME API DEPLOYMENT TO AWS ELASTIC BEANSTALK! :)");
 app.Run();
