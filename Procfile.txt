@@ -1,1 +1,1 @@
-web: dotnet ./src/Hyme.API/obj/Debug/net7.0/ref/Hyme.API.dll
+web: dotnet .app/HymeSolution.dll
