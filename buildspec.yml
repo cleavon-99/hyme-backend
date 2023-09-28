@@ -1,17 +1,9 @@
 version: 0.2
 phases:
-  install:
-    runtime-versions:
-      dotnet: 7.0
-  pre_build:
-    commands:
-      - dotnet restore ./src/Hyme.API/Hyme.API.csproj
   build:
-    commands:
-      - dotnet build ./src/Hyme.API/Hyme.API.csproj --configuration Release --no-restore
-  post_build:
-    commands:
-      - dotnet publish -c Release -o ./src/Hyme.API/Hyme.API.csproj --no-build --output ./publish
+    commands:      
+      - dotnet publish -c release -o ./build_output ./src/Hyme.API/Hyme.API.csproj
 artifacts:
   files:
     - '**/*'
+base-directory: 'build_output'
