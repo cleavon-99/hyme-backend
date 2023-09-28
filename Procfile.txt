@@ -1,1 +1,1 @@
-web: dotnet ./app/HymeSolution.dll
+web: dotnet ./app/Hyme.API.dll
