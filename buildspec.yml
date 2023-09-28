@@ -2,16 +2,16 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      dotnet: 3.1
+      dotnet: 3.0
   pre_build:
     commands:
-      - dotnet restore src/Hyme.API/Program.cs
+      - dotnet restore src/Hyme.API/Hyme.API.csproj
   build:
     commands:
-      - dotnet build src/Hyme.API/Program.cs
+      - dotnet build src/Hyme.API/Hyme.API.csproj
   post_build:
     commands:
-      - dotnet publish -c Release -o ./app/ src/Hyme.API/Program.cs
+      - dotnet publish -c Release -o ./app/ src/Hyme.API/Hyme.API.csproj
 artifacts:
   files:
     - '**/*'
