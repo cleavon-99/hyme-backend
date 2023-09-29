@@ -7,9 +7,11 @@ phases:
   pre_build:
     commands: 
       - dotnet restore
+      
   build:
     commands:      
       - dotnet build -c Release
+      
   post_build:
     commands:
       - dotnet publish -c Release -r linux-x64 -o ./build_output ./src/Hyme.API/Hyme.API.csproj --self-contained false
@@ -17,5 +19,5 @@ phases:
 artifacts:
   files:
     - '**/*'
-  base-directory: 'build_output'
+  base-directory: ./build_output
   discard-paths: no
