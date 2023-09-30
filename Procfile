@@ -1,1 +1,1 @@
-web: dotnet ./build_output/Hyme.API.dll
+web: dotnet ./app/Hyme.API.dll
